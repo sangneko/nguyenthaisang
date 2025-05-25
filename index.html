@@ -1,79 +1,151 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Gửi Confession</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Thời tiết & Độ ẩm toàn cầu</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f2f2f2;
-      padding: 40px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #c9d6ff, #e2e2e2);
       text-align: center;
+      padding: 40px;
     }
-
-    form {
-      background: white;
+    .weather-box {
+      margin: 20px auto;
       padding: 20px;
-      border-radius: 10px;
       max-width: 400px;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
-
-    input, textarea, button {
-      width: 100%;
-      margin: 10px 0;
+    #time {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    input, button {
       padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      margin: 10px;
+      width: 80%;
       font-size: 16px;
     }
-
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
+    #suggestionList div {
+      padding: 8px;
       cursor: pointer;
+      border-bottom: 1px solid #ccc;
+      background: #f9f9f9;
     }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
-    #resultMsg {
-      margin-top: 15px;
-      font-weight: bold;
+    #suggestionList div:hover {
+      background: #e0e0e0;
     }
   </style>
 </head>
 <body>
+  <h1>🌦️ Thời tiết & Độ ẩm hiện tại</h1>
 
-  <h1>Gửi Confession Ẩn Danh</h1>
+  <!-- Khu vực bạn đang sống -->
+  <div id="localWeather" class="weather-box">
+    <h2>📍 Khu vực của bạn</h2>
+    <p id="time"></p>
+    <p id="location">Đang xác định vị trí...</p>
+    <p id="temperature"></p>
+    <p id="humidity"></p>
+  </div>
 
-  <form id="confessionForm"
-        action="https://script.google.com/macros/s/AKfycbxKY3H7_cPZm4qGAAFx_CgpERhybXRxdkjatYdHakPQxMSgHsRt6-O9Hdfja6VTcJ3w/exec"
-        method="POST"
-        target="hidden_iframe"
-        onsubmit="handleSubmit(); return false;">
-    
-    <input type="text" name="nickname" placeholder="Biệt danh (có thể để trống)">
-    <textarea name="message" placeholder="Nhập lời nhắn của bạn..." required></textarea>
-    <button type="submit">Gửi</button>
-    <div id="resultMsg"></div>
-  </form>
-
-  <iframe name="hidden_iframe" style="display:none;"></iframe>
+  <!-- Tìm kiếm thành phố khác -->
+  <div class="weather-box">
+    <h2>🔎 Tra cứu thành phố khác</h2>
+    <input type="text" id="cityInput" placeholder="Nhập tên thành phố (ví dụ: Tokyo)" oninput="suggestCities()">
+    <div id="suggestionList"></div>
+    <button onclick="getCityWeather()">Xem thời tiết</button>
+    <div id="cityWeather">
+      <p id="cityTime"></p>
+      <p id="cityTemp"></p>
+      <p id="cityHumidity"></p>
+    </div>
+  </div>
 
   <script>
-    function handleSubmit() {
-      document.getElementById("resultMsg").textContent = "Đang gửi...";
-      setTimeout(() => {
-        document.getElementById("resultMsg").textContent = "🎉 Gửi thành công! Cảm ơn bạn.";
-        document.getElementById("confessionForm").reset();
-      }, 1500);
+    const apiKey = "adbf510244ceece337b1b07bf6317d4c"; // 🔑 Thay bằng API Key từ openweathermap.org
+
+    // Hiển thị thời gian thực
+    function updateTime() {
+      const now = new Date();
+      document.getElementById("time").textContent = "⏰ " + now.toLocaleString();
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // Lấy thời tiết theo vị trí
+    function getLocalWeather() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=vi`)
+            .then(res => res.json())
+            .then(data => {
+              document.getElementById("location").textContent = `📍 ${data.name}, ${data.sys.country}`;
+              document.getElementById("temperature").textContent = `🌡️ Nhiệt độ: ${data.main.temp}°C`;
+              document.getElementById("humidity").textContent = `💧 Độ ẩm: ${data.main.humidity}%`;
+            });
+        }, () => {
+          document.getElementById("location").textContent = "Không thể lấy vị trí.";
+        });
+      } else {
+        document.getElementById("location").textContent = "Trình duyệt không hỗ trợ định vị.";
+      }
+    }
+
+    getLocalWeather();
+
+    // Lấy thời tiết theo tên thành phố
+    function getCityWeather() {
+      const city = document.getElementById("cityInput").value;
+      if (!city) return;
+
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`)
+        .then(res => res.json())
+        .then(data => {
+          const now = new Date((data.dt + data.timezone) * 1000);
+          document.getElementById("cityTime").textContent = `🕒 Giờ địa phương: ${now.toUTCString()}`;
+          document.getElementById("cityTemp").textContent = `🌡️ Nhiệt độ: ${data.main.temp}°C`;
+          document.getElementById("cityHumidity").textContent = `💧 Độ ẩm: ${data.main.humidity}%`;
+        })
+        .catch(() => {
+          document.getElementById("cityTime").textContent = "Không tìm thấy thành phố.";
+          document.getElementById("cityTemp").textContent = "";
+          document.getElementById("cityHumidity").textContent = "";
+        });
+    }
+
+    // Danh sách gợi ý thành phố phổ biến
+    const cityList = [
+      "Hanoi", "Ho Chi Minh City", "Da Nang", "Can Tho", "Tokyo", "Seoul", "Bangkok", "New York", "London", "Paris", "Sydney", "Moscow", "Dubai"
+    ];
+
+    function suggestCities() {
+      const input = document.getElementById("cityInput").value.toLowerCase();
+      const suggestionBox = document.getElementById("suggestionList");
+      suggestionBox.innerHTML = "";
+
+      if (!input) return;
+
+      const suggestions = cityList.filter(city =>
+        city.toLowerCase().startsWith(input)
+      ).slice(0, 5);
+
+      suggestions.forEach(city => {
+        const div = document.createElement("div");
+        div.textContent = city;
+        div.onclick = () => {
+          document.getElementById("cityInput").value = city;
+          suggestionBox.innerHTML = "";
+          getCityWeather();
+        };
+        suggestionBox.appendChild(div);
+      });
     }
   </script>
-
 </body>
 </html>
