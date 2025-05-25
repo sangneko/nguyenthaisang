@@ -3,116 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <title>Thời tiết & Độ ẩm toàn cầu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
   <style>
     body {
-      font-family: 'Roboto', Arial, sans-serif;
-      background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #c9d6ff, #e2e2e2);
       text-align: center;
-      padding: 40px 20px;
-      color: #1a1a1a;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    h1 {
-      margin-bottom: 30px;
-      font-weight: 700;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.15);
-      color: #0B3D91;
+      padding: 40px;
     }
     .weather-box {
       margin: 20px auto;
-      padding: 25px 30px;
-      max-width: 420px;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 8px 15px rgba(11, 61, 145, 0.2);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      opacity: 0;
-      animation: fadeInUp 0.8s forwards;
+      padding: 20px;
+      max-width: 400px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
-    .weather-box:nth-child(2) {
-      animation-delay: 0.4s;
-    }
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(25px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    #time, #location, #temperature, #humidity,
-    #cityTime, #cityTemp, #cityHumidity {
-      font-size: 1.15em;
-      margin: 8px 0;
-      user-select: none;
+    #time {
+      font-size: 1.2em;
+      margin-bottom: 10px;
     }
     input, button {
-      padding: 12px 15px;
-      margin: 10px 0 15px 0;
-      width: 85%;
-      font-size: 1.1em;
-      border-radius: 12px;
-      border: 2px solid #0B3D91;
-      outline: none;
-      transition: all 0.3s ease;
-      box-sizing: border-box;
-    }
-    input:focus {
-      border-color: #0F6AC0;
-      box-shadow: 0 0 8px #0F6AC0AA;
-    }
-    button {
-      background-color: #0B3D91;
-      color: white;
-      cursor: pointer;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      box-shadow: 0 5px 12px rgba(11, 61, 145, 0.4);
-    }
-    button:hover {
-      background-color: #0F6AC0;
-      box-shadow: 0 7px 20px rgba(15, 106, 192, 0.7);
-      transform: translateY(-2px);
+      padding: 10px;
+      margin: 10px;
+      width: 80%;
+      font-size: 16px;
     }
     #suggestionList div {
-      padding: 12px 15px;
+      padding: 8px;
       cursor: pointer;
-      border-bottom: 1px solid #d0d0d0;
-      background: #f0f4ff;
-      transition: background-color 0.2s ease;
-      border-radius: 0 0 10px 10px;
-      user-select: none;
+      border-bottom: 1px solid #ccc;
+      background: #f9f9f9;
     }
     #suggestionList div:hover {
-      background: #c6d9ff;
-    }
-    #suggestionList {
-      max-width: 420px;
-      margin: 0 auto 15px auto;
-      border-radius: 0 0 12px 12px;
-      box-shadow: 0 5px 15px rgba(11, 61, 145, 0.2);
-      background: white;
-      overflow: hidden;
-    }
-
-    /* Responsive */
-    @media (max-width: 480px) {
-      body {
-        padding: 20px 10px;
-      }
-      .weather-box {
-        max-width: 90vw;
-        padding: 20px;
-      }
-      input, button {
-        width: 100%;
-      }
+      background: #e0e0e0;
     }
   </style>
 </head>
@@ -120,124 +43,28 @@
   <h1>🌦️ Thời tiết & Độ ẩm hiện tại</h1>
 
   <!-- Khu vực bạn đang sống -->
-  <div id="localWeather" class="weather-box" aria-live="polite" aria-atomic="true" role="region">
+  <div id="localWeather" class="weather-box">
     <h2>📍 Khu vực của bạn</h2>
-    <p id="time">Đang tải thời gian...</p>
+    <p id="time"></p>
     <p id="location">Đang xác định vị trí...</p>
     <p id="temperature"></p>
     <p id="humidity"></p>
   </div>
 
   <!-- Tìm kiếm thành phố khác -->
-  <div class="weather-box" aria-live="polite" aria-atomic="true" role="region">
+  <div class="weather-box">
     <h2>🔎 Tra cứu thành phố khác</h2>
-    <input type="text" id="cityInput" placeholder="Nhập tên thành phố (ví dụ: Tokyo)" autocomplete="off" oninput="suggestCities()" aria-label="Nhập tên thành phố"/>
-    <div id="suggestionList" role="listbox" aria-label="Danh sách gợi ý thành phố"></div>
-    <button onclick="getCityWeather()" aria-label="Xem thời tiết thành phố">Xem thời tiết</button>
-    <div id="cityWeather" style="min-height: 80px;">
+    <input type="text" id="cityInput" placeholder="Nhập tên thành phố (ví dụ: Tokyo)" oninput="suggestCities()">
+    <div id="suggestionList"></div>
+    <button onclick="getCityWeather()">Xem thời tiết</button>
+    <div id="cityWeather">
       <p id="cityTime"></p>
       <p id="cityTemp"></p>
       <p id="cityHumidity"></p>
     </div>
   </div>
 
-  <script>
-    const apiKey = "adbf510244ceece337b1b07bf6317d4c"; // 🔑 Thay bằng API Key từ openweathermap.org
-
-    // Hiển thị thời gian thực
-    function updateTime() {
-      const now = new Date();
-      document.getElementById("time").textContent = "⏰ " + now.toLocaleString();
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
-
-    // Lấy thời tiết theo vị trí
-    function getLocalWeather() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-
-          fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=vi`)
-            .then(res => res.json())
-            .then(data => {
-              document.getElementById("location").textContent = `📍 ${data.name}, ${data.sys.country}`;
-              document.getElementById("temperature").textContent = `🌡️ Nhiệt độ: ${data.main.temp}°C`;
-              document.getElementById("humidity").textContent = `💧 Độ ẩm: ${data.main.humidity}%`;
-            })
-            .catch(() => {
-              document.getElementById("location").textContent = "Không thể lấy dữ liệu thời tiết.";
-            });
-        }, () => {
-          document.getElementById("location").textContent = "Không thể lấy vị trí.";
-        });
-      } else {
-        document.getElementById("location").textContent = "Trình duyệt không hỗ trợ định vị.";
-      }
-    }
-    getLocalWeather();
-
-    // Danh sách gợi ý thành phố phổ biến
-    const cityList = [
-      "Hanoi", "Ho Chi Minh City", "Da Nang", "Can Tho", "Tokyo", "Seoul", "Bangkok", "New York", "London", "Paris", "Sydney", "Moscow", "Dubai"
-    ];
-
-    function suggestCities() {
-      const input = document.getElementById("cityInput").value.toLowerCase();
-      const suggestionBox = document.getElementById("suggestionList");
-      suggestionBox.innerHTML = "";
-
-      if (!input) return;
-
-      const suggestions = cityList.filter(city =>
-        city.toLowerCase().startsWith(input)
-      ).slice(0, 5);
-
-      suggestions.forEach(city => {
-        const div = document.createElement("div");
-        div.textContent = city;
-        div.setAttribute("role", "option");
-        div.onclick = () => {
-          document.getElementById("cityInput").value = city;
-          suggestionBox.innerHTML = "";
-          getCityWeather();
-        };
-        suggestionBox.appendChild(div);
-      });
-    }
-
-    // Gọi API để lấy thời tiết thành phố
-    function getCityWeather() {
-      const city = document.getElementById("cityInput").value.trim();
-      if (!city) return;
-
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`)
-        .then(res => {
-          if (!res.ok) throw new Error("Không tìm thấy thành phố");
-          return res.json();
-        })
-        .then(data => {
-          const localTime = new Date((data.dt + data.timezone) * 1000);
-          document.getElementById("cityTime").textContent = `🕒 Giờ địa phương: ${localTime.toUTCString()}`;
-          document.getElementById("cityTemp").textContent = `🌡️ Nhiệt độ: ${data.main.temp}°C`;
-          document.getElementById("cityHumidity").textContent = `💧 Độ ẩm: ${data.main.humidity}%`;
-
-          // Gửi lịch sử tìm kiếm về backend
-          fetch('http://localhost:3000/api/search-history', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({city: city, timestamp: new Date().toISOString()})
-          }).catch(err => {
-            console.warn("Không thể lưu lịch sử tìm kiếm:", err);
-          });
-        })
-        .catch(() => {
-          document.getElementById("cityTime").textContent = "Không tìm thấy thành phố.";
-          document.getElementById("cityTemp").textContent = "";
-          document.getElementById("cityHumidity").textContent = "";
-        });
-    }
-  </script>
+  <script src="cities.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
