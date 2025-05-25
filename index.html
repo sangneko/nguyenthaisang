@@ -1,167 +1,149 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Tin Nhanh Mỗi Ngày</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Gửi Confession</title>
   <style>
-    * {
+    body {
+      background: linear-gradient(to right, #fbd3e9, #bbd2c5);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .confession-form {
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-width: 500px;
+      width: 100%;
       box-sizing: border-box;
     }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #e0eafc, #cfdef3);
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #0057b8;
-      color: white;
-      padding: 20px;
+
+    .confession-form h2 {
       text-align: center;
+      color: #ff6f91;
+      margin-bottom: 20px;
+      font-weight: 700;
     }
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      padding: 20px;
-      background-color: #f8f9fa;
+
+    .confession-form label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: 600;
     }
-    select, input[type="date"], input[type="text"] {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      min-width: 200px;
-    }
-    #news-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-    .card h3 {
-      margin: 15px;
-      font-size: 18px;
-      color: #0057b8;
-    }
-    .card p {
-      margin: 0 15px 15px;
-      color: #555;
-    }
-    .card a {
-      text-decoration: none;
-      font-weight: bold;
-      margin: 10px 15px;
-      color: #0057b8;
-    }
-    .card img {
+
+    .confession-form input,
+    .confession-form textarea {
       width: 100%;
-      height: 180px;
-      object-fit: cover;
+      padding: 10px 12px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      font-family: inherit;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    .confession-form input:focus,
+    .confession-form textarea:focus {
+      border-color: #ff6f91;
+      outline: none;
+    }
+
+    .confession-form textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .confession-form button {
+      width: 100%;
+      background-color: #ff6f91;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+    }
+
+    .confession-form button:hover {
+      background-color: #ff4e7a;
+    }
+
+    .thank-you {
+      display: none;
+      text-align: center;
+      color: #2b2b2b;
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Tin Nhanh Mỗi Ngày</h1>
-  <p>Tự động cập nhật từ các báo lớn Việt Nam</p>
-</header>
+  <form class="confession-form" onsubmit="submitConfession(event)">
+    <h2>📝 Gửi Confession</h2>
 
-<div class="filters">
-  <select id="sourceSelector">
-    <option value="vnexpress">VnExpress</option>
-    <option value="tuoitre">Tuổi Trẻ</option>
-    <option value="thanhnien">Thanh Niên</option>
-    <option value="zingnews">Zing News</option>
-    <option value="dantri">Dân Trí</option>
-    <option value="vietnamnet">Vietnamnet</option>
-  </select>
-  <input type="date" id="dateFilter">
-  <input type="text" id="searchBox" placeholder="Tìm kiếm từ khóa...">
-</div>
+    <label for="nickname">Tên hoặc biệt danh (tuỳ chọn):</label>
+    <input type="text" id="nickname" name="nickname" placeholder="Ví dụ: Mèo nhỏ, Crush lớp bên...">
 
-<div id="news-container"></div>
+    <label for="message">Nội dung Confession:</label>
+    <textarea id="message" name="message" required placeholder="Tâm sự của bạn... ❤️"></textarea>
 
-<script>
-  const rssFeeds = {
-    vnexpress: "https://vnexpress.net/rss/tin-moi-nhat.rss",
-    tuoitre: "https://tuoitre.vn/rss/tin-moi-nhat.rss",
-    thanhnien: "https://thanhnien.vn/rss/home.rss",
-    zingnews: "https://zingnews.vn/rss/tin-moi.rss",
-    dantri: "https://dantri.com.vn/rss/home.rss",
-    vietnamnet: "https://vietnamnet.vn/rss/home.rss"
-  };
+    <button type="submit">Gửi ❤️</button>
+    
+    <div class="thank-you" id="thankYou">💌 Cảm ơn bạn đã gửi lời nhắn! 💌</div>
+  </form>
 
-  async function fetchNews(sourceKey) {
-    const rssUrl = rssFeeds[sourceKey];
-    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+  <script>
+    function submitConfession(event) {
+      event.preventDefault();
 
-    const res = await fetch(apiUrl);
-    const data = await res.json();
-    displayNews(data.items);
-  }
+      const nickname = document.getElementById('nickname').value.trim();
+      const message = document.getElementById('message').value.trim();
 
-  function displayNews(items) {
-    const container = document.getElementById("news-container");
-    container.innerHTML = "";
+      if (!message) {
+        alert("Vui lòng nhập nội dung confession!");
+        return;
+      }
 
-    const dateFilter = document.getElementById("dateFilter").value;
-    const searchKeyword = document.getElementById("searchBox").value.toLowerCase();
+      const data = { nickname, message };
 
-    const filteredItems = items.filter(item => {
-      const pubDate = item.pubDate.slice(0, 10);
-      const matchesDate = !dateFilter || pubDate === dateFilter;
-      const matchesKeyword = !searchKeyword || item.title.toLowerCase().includes(searchKeyword) || item.description.toLowerCase().includes(searchKeyword);
-      return matchesDate && matchesKeyword;
-    });
-
-    if (filteredItems.length === 0) {
-      container.innerHTML = "<p style='text-align:center;'>Không tìm thấy tin phù hợp.</p>";
-      return;
+      fetch("https://script.google.com/macros/s/AKfycbxKY3H7_cPZm4qGAAFx_CgpERhybXRxdkjatYdHakPQxMSgHsRt6-O9Hdfja6VTcJ3w/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.result === "success") {
+          document.querySelector('.confession-form button').style.display = "none";
+          document.getElementById('thankYou').style.display = "block";
+          document.getElementById('nickname').value = "";
+          document.getElementById('message').value = "";
+        } else {
+          alert("Có lỗi xảy ra: " + (res.message || "Vui lòng thử lại"));
+        }
+      })
+      .catch(err => {
+        alert("Gửi thất bại, vui lòng thử lại sau.");
+        console.error(err);
+      });
     }
-
-    filteredItems.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        ${item.thumbnail ? `<img src="${item.thumbnail}" alt="thumbnail">` : ''}
-        <h3>${item.title}</h3>
-        <p><em>${item.pubDate.slice(0, 10)}</em></p>
-        <p>${item.description}</p>
-        <a href="${item.link}" target="_blank">Xem chi tiết</a>
-      `;
-      container.appendChild(card);
-    });
-  }
-
-  // Sự kiện thay đổi
-  const sourceSelector = document.getElementById("sourceSelector");
-  const searchBox = document.getElementById("searchBox");
-  const dateFilter = document.getElementById("dateFilter");
-
-  function updateNews() {
-    const source = sourceSelector.value;
-    fetchNews(source);
-  }
-
-  sourceSelector.addEventListener("change", updateNews);
-  searchBox.addEventListener("input", updateNews);
-  dateFilter.addEventListener("change", updateNews);
-
-  // Load mặc định
-  window.onload = updateNews;
-</script>
+  </script>
 
 </body>
 </html>
