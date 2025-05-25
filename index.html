@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Trang chính</title>
   <style>
+    :root {
+      --bg-light: linear-gradient(135deg, #74ebd5, #ACB6E5);
+      --bg-dark: linear-gradient(135deg, #1e1e1e, #3b3b3b);
+      --text-light: #ffffff;
+      --text-dark: #dddddd;
+      --card-light: rgba(255, 255, 255, 0.95);
+      --card-dark: rgba(30, 30, 30, 0.8);
+    }
     * {
       box-sizing: border-box;
       margin: 0;
@@ -12,63 +20,191 @@
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 40px 20px 80px;
       text-align: center;
+      transition: background 0.5s, color 0.5s;
     }
+    body.light-mode {
+      background: var(--bg-light);
+      color: #333;
+    }
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
     h1 {
       font-size: 3em;
-      color: #fff;
-      margin-bottom: 30px;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      margin-bottom: 10px;
+      animation: fadeIn 2s ease;
+      cursor: default;
     }
+
+    h1:hover {
+      animation: shake 0.3s ease-in-out;
+    }
+
+    .greeting {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      color: inherit;
+    }
+
     .link-container {
       display: flex;
       flex-direction: column;
       gap: 20px;
+      width: 100%;
+      max-width: 400px;
     }
+
     .button-link {
-      background: white;
+      background: var(--card-light);
       color: #333;
       text-decoration: none;
       padding: 15px 25px;
-      border-radius: 12px;
+      border-radius: 16px;
       font-size: 18px;
-      font-weight: bold;
+      font-weight: 600;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
+
+    body.dark-mode .button-link {
+      background: var(--card-dark);
+      color: var(--text-dark);
+      box-shadow: 0 8px 16px rgba(255, 255, 255, 0.05);
+    }
+
     .button-link:hover {
+      transform: scale(1.05);
       background: #333;
       color: white;
-      transform: scale(1.05);
     }
+
     footer {
       position: absolute;
       bottom: 15px;
       font-size: 14px;
       color: #eee;
     }
+
+    .clock {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      backdrop-filter: blur(5px);
+    }
+
+    .toggle-mode {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      background: rgba(255, 255, 255, 0.6);
+      border: none;
+      padding: 8px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    body.dark-mode .toggle-mode {
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2em;
+      }
+      .clock {
+        font-size: 14px;
+        padding: 6px 10px;
+      }
+      .toggle-mode {
+        font-size: 13px;
+        padding: 6px 10px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(1deg); }
+      50% { transform: rotate(-1deg); }
+      75% { transform: rotate(1deg); }
+      100% { transform: rotate(0deg); }
+    }
   </style>
 </head>
-<body>
-  <h1>Chào mừng bạn đến với Website!</h1>
+<body class="light-mode">
+  <button class="toggle-mode" onclick="toggleMode()">🌗 Đổi nền</button>
+  <div class="clock" id="clock">--:--:--</div>
+
+  <h1>Chào mừng bạn!</h1>
+  <div class="greeting" id="greeting">Chào bạn!</div>
 
   <div class="link-container">
-    <a class="button-link" href="thoitietdoam.html">Xem Thời tiết và độ ẩm</a>
-    <a class="button-link" href="demnguoc.html">Xem đếm ngược 2026</a>
-    <a class="button-link" href="tdkthp.html">Tính điểm kết thúc học phần</a>
-    <a class="button-link" href="testinhnang.html">Test tính năng</a>
-    <a class="button-link" href="baomoi.html">Cập nhật báo mới hàng ngày</a>
+    <a class="button-link" href="thoitietdoam.html" onclick="playClick()">Xem Thời tiết và độ ẩm</a>
+    <a class="button-link" href="demnguoc.html" onclick="playClick()">Xem đếm ngược 2026</a>
+    <a class="button-link" href="tdkthp.html" onclick="playClick()">Tính điểm kết thúc học phần</a>
+    <a class="button-link" href="testinhnang.html" onclick="playClick()">Test tính năng</a>
+    <a class="button-link" href="baomoi.html" onclick="playClick()">Cập nhật báo mới hàng ngày</a>
   </div>
 
   <footer>
     &copy; 2025 | Thiết kế bởi Tôi
   </footer>
+
+  <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const time = now.toLocaleTimeString('vi-VN');
+      const date = now.toLocaleDateString('vi-VN');
+      document.getElementById('clock').textContent = `${time} | ${date}`;
+
+      // Lời chào theo giờ
+      const hour = now.getHours();
+      let greeting = "Chào bạn!";
+      if (hour >= 5 && hour < 11) greeting = "Chúc bạn buổi sáng tốt lành!";
+      else if (hour >= 11 && hour < 14) greeting = "Chúc bạn buổi trưa vui vẻ!";
+      else if (hour >= 14 && hour < 18) greeting = "Buổi chiều an lành nhé!";
+      else if (hour >= 18 && hour < 22) greeting = "Chúc buổi tối thư giãn!";
+      else greeting = "Khuya rồi, nhớ ngủ sớm nhé!";
+      document.getElementById('greeting').textContent = greeting;
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle('dark-mode');
+      document.body.classList.toggle('light-mode');
+    }
+
+    function playClick() {
+      const sound = document.getElementById('clickSound');
+      sound.currentTime = 0;
+      sound.play();
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
 </body>
 </html>
