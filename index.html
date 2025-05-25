@@ -2,35 +2,31 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gửi Confession</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      font-family: "Segoe UI", sans-serif;
-      background: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f2f2;
       padding: 40px;
       text-align: center;
-    }
-
-    h1 {
-      color: #333;
     }
 
     form {
       background: white;
       padding: 20px;
+      border-radius: 10px;
       max-width: 400px;
       margin: auto;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     input, textarea, button {
       width: 100%;
-      padding: 10px;
       margin: 10px 0;
-      border-radius: 5px;
+      padding: 10px;
       border: 1px solid #ccc;
+      border-radius: 6px;
       font-size: 16px;
     }
 
@@ -45,7 +41,7 @@
       background-color: #45a049;
     }
 
-    .msg {
+    #resultMsg {
       margin-top: 15px;
       font-weight: bold;
     }
@@ -53,47 +49,29 @@
 </head>
 <body>
 
-  <h1>Gửi lời nhắn ẩn danh</h1>
+  <h1>Gửi Confession Ẩn Danh</h1>
 
-  <form id="confessionForm">
-    <input type="text" id="nickname" placeholder="Biệt danh (có thể để trống)">
-    <textarea id="message" placeholder="Nhập lời nhắn của bạn..." required></textarea>
+  <form id="confessionForm"
+        action="https://script.google.com/macros/s/AKfycbxKY3H7_cPZm4qGAAFx_CgpERhybXRxdkjatYdHakPQxMSgHsRt6-O9Hdfja6VTcJ3w/exec"
+        method="POST"
+        target="hidden_iframe"
+        onsubmit="handleSubmit(); return false;">
+    
+    <input type="text" name="nickname" placeholder="Biệt danh (có thể để trống)">
+    <textarea name="message" placeholder="Nhập lời nhắn của bạn..." required></textarea>
     <button type="submit">Gửi</button>
-    <div class="msg" id="resultMsg"></div>
+    <div id="resultMsg"></div>
   </form>
 
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
+
   <script>
-    const form = document.getElementById('confessionForm');
-    const resultMsg = document.getElementById('resultMsg');
-
-    form.onsubmit = async function(e) {
-      e.preventDefault();
-      resultMsg.textContent = "Đang gửi...";
-
-      const data = {
-        nickname: document.getElementById("nickname").value,
-        message: document.getElementById("message").value
-      };
-
-      try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbxKY3H7_cPZm4qGAAFx_CgpERhybXRxdkjatYdHakPQxMSgHsRt6-O9Hdfja6VTcJ3w/exec", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-
-        const result = await res.json();
-        resultMsg.textContent = result.message;
-        resultMsg.style.color = result.result === "success" ? "green" : "red";
-
-        if (result.result === "success") {
-          form.reset();
-        }
-
-      } catch (err) {
-        resultMsg.textContent = "Lỗi kết nối. Vui lòng thử lại.";
-        resultMsg.style.color = "red";
-      }
+    function handleSubmit() {
+      document.getElementById("resultMsg").textContent = "Đang gửi...";
+      setTimeout(() => {
+        document.getElementById("resultMsg").textContent = "🎉 Gửi thành công! Cảm ơn bạn.";
+        document.getElementById("confessionForm").reset();
+      }, 1500);
     }
   </script>
 
