@@ -1,137 +1,99 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <title>Form Confession đẹp</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gửi Confession</title>
   <style>
     body {
-      background: linear-gradient(to right, #fbd3e9, #bbd2c5);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      padding: 20px;
-    }
-    .confession-form {
-      background-color: white;
-      padding: 30px 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      max-width: 500px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .confession-form h2 {
+      font-family: "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      padding: 40px;
       text-align: center;
-      color: #ff6f91;
-      margin-bottom: 20px;
-      font-weight: 700;
     }
-    .confession-form label {
-      display: block;
-      margin-bottom: 5px;
+
+    h1 {
       color: #333;
-      font-weight: 600;
     }
-    .confession-form input,
-    .confession-form textarea {
-      width: 100%;
-      padding: 10px 12px;
-      margin-bottom: 15px;
+
+    form {
+      background: white;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
       border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
       border: 1px solid #ccc;
       font-size: 16px;
-      font-family: inherit;
-      box-sizing: border-box;
-      transition: border-color 0.3s ease;
     }
-    .confession-form input:focus,
-    .confession-form textarea:focus {
-      border-color: #ff6f91;
-      outline: none;
-    }
-    .confession-form textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-    .confession-form button {
-      width: 100%;
-      background-color: #ff6f91;
+
+    button {
+      background-color: #4CAF50;
       color: white;
       border: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 18px;
       cursor: pointer;
-      font-weight: 700;
-      transition: background-color 0.3s ease;
     }
-    .confession-form button:hover {
-      background-color: #ff4e7a;
+
+    button:hover {
+      background-color: #45a049;
     }
-    .thank-you {
-      display: none;
-      text-align: center;
-      color: #2b2b2b;
-      font-size: 20px;
-      font-weight: 600;
+
+    .msg {
       margin-top: 15px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <form class="confession-form" onsubmit="submitConfession(event)">
-    <h2>📝 Gửi Confession</h2>
+  <h1>Gửi lời nhắn ẩn danh</h1>
 
-    <label for="nickname">Tên hoặc biệt danh (tuỳ chọn):</label>
-    <input type="text" id="nickname" name="nickname" placeholder="Ví dụ: Mèo nhỏ, Crush lớp bên...">
-
-    <label for="message">Nội dung Confession:</label>
-    <textarea id="message" name="message" required placeholder="Tâm sự của bạn... ❤️"></textarea>
-
-    <button type="submit">Gửi ❤️</button>
-    
-    <div class="thank-you" id="thankYou">💌 Cảm ơn bạn đã gửi lời nhắn! 💌</div>
+  <form id="confessionForm">
+    <input type="text" id="nickname" placeholder="Biệt danh (có thể để trống)">
+    <textarea id="message" placeholder="Nhập lời nhắn của bạn..." required></textarea>
+    <button type="submit">Gửi</button>
+    <div class="msg" id="resultMsg"></div>
   </form>
 
   <script>
-    function submitConfession(event) {
-      event.preventDefault();
+    const form = document.getElementById('confessionForm');
+    const resultMsg = document.getElementById('resultMsg');
 
-      const nickname = document.getElementById('nickname').value.trim();
-      const message = document.getElementById('message').value.trim();
+    form.onsubmit = async function(e) {
+      e.preventDefault();
+      resultMsg.textContent = "Đang gửi...";
 
-      if (!message) {
-        alert("Vui lòng nhập nội dung confession!");
-        return;
-      }
+      const data = {
+        nickname: document.getElementById("nickname").value,
+        message: document.getElementById("message").value
+      };
 
-      const formData = new URLSearchParams();
-      formData.append('nickname', nickname);
-      formData.append('message', message);
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbxKY3H7_cPZm4qGAAFx_CgpERhybXRxdkjatYdHakPQxMSgHsRt6-O9Hdfja6VTcJ3w/exec", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
 
-      fetch("https://script.google.com/macros/s/AKfycbxKY3H7_cPZm4qGAAFx_CgpERhybXRxdkjatYdHakPQxMSgHsRt6-O9Hdfja6VTcJ3w/exec", { // Thay YOUR_WEB_APP_URL_HERE bằng URL Web App của bạn
-        method: "POST",
-        body: formData,
-      })
-      .then(res => res.json())
-      .then(res => {
-        if (res.result === "success") {
-          document.querySelector('.confession-form button').style.display = "none";
-          document.getElementById('thankYou').style.display = "block";
-          document.getElementById('nickname').value = "";
-          document.getElementById('message').value = "";
-        } else {
-          alert("Có lỗi xảy ra: " + (typeof res.message === "string" ? res.message : JSON.stringify(res.message)));
+        const result = await res.json();
+        resultMsg.textContent = result.message;
+        resultMsg.style.color = result.result === "success" ? "green" : "red";
+
+        if (result.result === "success") {
+          form.reset();
         }
-      })
-      .catch(err => {
-        alert("Gửi thất bại, vui lòng thử lại sau.");
-        console.error(err);
-      });
+
+      } catch (err) {
+        resultMsg.textContent = "Lỗi kết nối. Vui lòng thử lại.";
+        resultMsg.style.color = "red";
+      }
     }
   </script>
 
