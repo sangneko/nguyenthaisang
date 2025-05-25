@@ -100,14 +100,6 @@
       background: white;
       overflow: hidden;
     }
-    canvas {
-      margin-top: 15px;
-      max-width: 100%;
-      height: 200px !important;
-      border-radius: 15px;
-      background: #f7f9ff;
-      box-shadow: 0 4px 10px rgba(11, 61, 145, 0.1);
-    }
 
     /* Responsive */
     @media (max-width: 480px) {
@@ -134,7 +126,6 @@
     <p id="location">Đang xác định vị trí...</p>
     <p id="temperature"></p>
     <p id="humidity"></p>
-    <canvas id="localChart"></canvas>
   </div>
 
   <!-- Tìm kiếm thành phố khác -->
@@ -147,59 +138,11 @@
       <p id="cityTime"></p>
       <p id="cityTemp"></p>
       <p id="cityHumidity"></p>
-      <canvas id="cityChart"></canvas>
     </div>
   </div>
 
-  <!-- Thêm Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    const apiKey = "YOUR_API_KEY"; // 🔑 Thay bằng API Key từ openweathermap.org
-
-    // Khai báo biến chart toàn cục để update lại dữ liệu
-    let localChartInstance = null;
-    let cityChartInstance = null;
-
-    // Hàm tạo hoặc cập nhật biểu đồ
-    function updateChart(chartInstance, canvasId, temp, humidity) {
-      const ctx = document.getElementById(canvasId).getContext('2d');
-      const data = {
-        labels: ['Nhiệt độ (°C)', 'Độ ẩm (%)'],
-        datasets: [{
-          label: 'Thời tiết',
-          data: [temp, humidity],
-          backgroundColor: ['#0B3D91', '#74b9ff'],
-          borderRadius: 10,
-          borderWidth: 1,
-        }]
-      };
-      const options = {
-        indexAxis: 'y',
-        scales: {
-          x: {
-            min: 0,
-            max: 100,
-            ticks: { stepSize: 20 }
-          }
-        },
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: true }
-        }
-      };
-
-      if (chartInstance) {
-        chartInstance.data = data;
-        chartInstance.update();
-      } else {
-        return new Chart(ctx, {
-          type: 'bar',
-          data: data,
-          options: options
-        });
-      }
-    }
+    const apiKey = "30ec8fa879dfc32040b88d4abc84fa6d"; // 🔑 Thay bằng API Key từ openweathermap.org
 
     // Hiển thị thời gian thực
     function updateTime() {
@@ -216,15 +159,12 @@
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
 
-          fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=vi`)
+          fetch(https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=vi)
             .then(res => res.json())
             .then(data => {
-              document.getElementById("location").textContent = `📍 ${data.name}, ${data.sys.country}`;
-              document.getElementById("temperature").textContent = `🌡️ Nhiệt độ: ${data.main.temp}°C`;
-              document.getElementById("humidity").textContent = `💧 Độ ẩm: ${data.main.humidity}%`;
-
-              // Cập nhật biểu đồ
-              localChartInstance = updateChart(localChartInstance, 'localChart', data.main.temp, data.main.humidity);
+              document.getElementById("location").textContent = 📍 ${data.name}, ${data.sys.country};
+              document.getElementById("temperature").textContent = 🌡️ Nhiệt độ: ${data.main.temp}°C;
+              document.getElementById("humidity").textContent = 💧 Độ ẩm: ${data.main.humidity}%;
             })
             .catch(() => {
               document.getElementById("location").textContent = "Không thể lấy dữ liệu thời tiết.";
@@ -240,7 +180,7 @@
 
     // Danh sách gợi ý thành phố phổ biến
     const cityList = [
-      "Hanoi", "Ho Chi Minh City", "Da Nang", "Can Tho", "Tokyo", "Seoul", "Bangkok", "New York", "London", "Paris", "Sydney", "Moscow", "Dubai","Afghanistan", "Ai Cập", "Albania", "Algeria", "Andorra", "Angola", "Antigua và Barbuda", "Ả Rập Xê Út", "Argentina", "Armenia", "Ấn Độ", "Áo", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Bỉ", "Belize", "Benin", "Bhutan", "Bắc Macedonia", "Bolivia", "Bosna và Hercegovina", "Botswana", "Bồ Đào Nha", "Bờ Biển Ngà", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", "Campuchia", "Canada", "Chad", "Chile", "Colombia", "Comoros", "Cộng hòa Congo", "Cộng hòa Dân chủ Congo", "Cộng hòa Dominica", "Cộng hòa Séc", "Cộng hòa Trung Phi", "Costa Rica", "Croatia", "Cuba", "Djibouti", "Dominica", "Đan Mạch", "Đông Timor", "Đức", "Ecuador", "El Salvador", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Gabon", "Gambia", "Georgia", "Ghana", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Hà Lan", "Hàn Quốc", "Hoa Kỳ", "Honduras", "Hungary", "Hy Lạp", "Iceland", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Jamaica", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Lào", "Latvia", "Lesotho", "Liban", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", "Mauritius", "México", "Micronesia", "Moldova", "Monaco", "Mông Cổ", "Montenegro", "Mozambique", "Myanmar", "Na Uy", "Nam Phi", "Nam Sudan", "Nauru", "Nepal", "New Zealand", "Nga", "Niger", "Nigeria", "Nicaragua", "Nhật Bản", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Pháp", "Phần Lan", "Philippines", "Qatar", "Romania", "Rwanda", "Saint Kitts và Nevis", "Saint Lucia", "Saint Vincent và Grenadines", "Samoa", "San Marino", "São Tomé và Príncipe", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "Sri Lanka", "Sudan", "Suriname", "Syria", "Tajikistan", "Tanzania", "Tây Ban Nha", "Thái Lan", "Thổ Nhĩ Kỳ", "Thụy Điển", "Thụy Sĩ", "Timor-Leste", "Togo", "Tonga", "Trinidad và Tobago", "Triều Tiên", "Tunisia", "Turkmenistan", "Tuvalu", "Úc", "Uganda", "Ukraina", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican", "Venezuela", "Việt Nam", "Vương quốc Anh", "Yemen", "Zambia", "Zimbabwe"
+      "Hanoi", "Ho Chi Minh City", "Da Nang", "Can Tho", "Tokyo", "Seoul", "Bangkok", "New York", "London", "Paris", "Sydney", "Moscow", "Dubai"
     ];
 
     function suggestCities() {
@@ -272,21 +212,18 @@
       const city = document.getElementById("cityInput").value.trim();
       if (!city) return;
 
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`)
+      fetch(https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi)
         .then(res => {
           if (!res.ok) throw new Error("Không tìm thấy thành phố");
           return res.json();
         })
         .then(data => {
           const localTime = new Date((data.dt + data.timezone) * 1000);
-          document.getElementById("cityTime").textContent = `🕒 Giờ địa phương: ${localTime.toUTCString()}`;
-          document.getElementById("cityTemp").textContent = `🌡️ Nhiệt độ: ${data.main.temp}°C`;
-          document.getElementById("cityHumidity").textContent = `💧 Độ ẩm: ${data.main.humidity}%`;
+          document.getElementById("cityTime").textContent = 🕒 Giờ địa phương: ${localTime.toUTCString()};
+          document.getElementById("cityTemp").textContent = 🌡️ Nhiệt độ: ${data.main.temp}°C;
+          document.getElementById("cityHumidity").textContent = 💧 Độ ẩm: ${data.main.humidity}%;
 
-          // Cập nhật biểu đồ
-          cityChartInstance = updateChart(cityChartInstance, 'cityChart', data.main.temp, data.main.humidity);
-
-          // Gửi lịch sử tìm kiếm về backend (nếu cần)
+          // Gửi lịch sử tìm kiếm về backend
           fetch('http://localhost:3000/api/search-history', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -299,10 +236,6 @@
           document.getElementById("cityTime").textContent = "Không tìm thấy thành phố.";
           document.getElementById("cityTemp").textContent = "";
           document.getElementById("cityHumidity").textContent = "";
-          if (cityChartInstance) {
-            cityChartInstance.destroy();
-            cityChartInstance = null;
-          }
         });
     }
   </script>
