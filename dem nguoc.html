@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đếm ngược đến Tết Nguyên Đán 2026</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffffff;
+            color: #000000;
+            text-align: center;
+            line-height: 1.6;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        #currentDate {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        #countdown {
+            font-size: 2em;
+            padding: 10px 20px;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Đếm ngược đến Tết Nguyên Đán 2026</h1>
+    <div id="currentDate"></div>
+    <div id="countdown"></div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const currentDateElement = document.getElementById('currentDate');
+            currentDateElement.innerHTML = now.toLocaleString('vi-VN');
+
+            const lunarNewYear = new Date('2026-02-17T00:00:00');
+            const timeDifference = lunarNewYear - now;
+
+            if (timeDifference > 0) {
+                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                const countdownElement = document.getElementById('countdown');
+                countdownElement.innerHTML = `${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
+            } else {
+                countdownElement.innerHTML = "Chúc Mừng Năm Mới 2025!";
+            }
+        }
+
+        setInterval(updateTime, 1000);
+    </script>
+
+</body>
+</html>
