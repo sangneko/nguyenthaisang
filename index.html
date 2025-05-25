@@ -121,12 +121,13 @@
       const data = { nickname, message };
 
       fetch("https://script.google.com/macros/s/AKfycbxKY3H7_cPZm4qGAAFx_CgpERhybXRxdkjatYdHakPQxMSgHsRt6-O9Hdfja6VTcJ3w/exec", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
+  method: "POST",
+  body: JSON.stringify(data),
+  headers: {
+    "Content-Type": "application/json"
+  }
+})
+
       .then(res => res.json())
       .then(res => {
         if (res.result === "success") {
