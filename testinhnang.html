@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang tổng hợp tính năng</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      transition: background 0.3s, color 0.3s;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #000;
+    }
+
+    .dark-mode {
+      background: #121212;
+      color: #f0f0f0;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #444;
+    }
+
+    nav button {
+      padding: 1rem;
+      background: none;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    nav button:hover {
+      background: #666;
+    }
+
+    .tab {
+      display: none;
+      padding: 2rem;
+    }
+
+    .active {
+      display: block;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+
+    .btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: teal;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .search-box {
+      margin: 20px 0;
+    }
+
+    .countdown, .clock {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Trang HTML Đa Tính Năng</h1>
+    <button onclick="toggleDarkMode()">🌙 Chuyển Dark Mode</button>
+  </header>
+
+  <nav>
+    <button onclick="switchTab('formTab')">📄 Biểu mẫu</button>
+    <button onclick="switchTab('clockTab')">⏰ Đồng hồ</button>
+    <button onclick="switchTab('countdownTab')">📆 Đếm ngược</button>
+    <button onclick="switchTab('searchTab')">🔍 Tìm kiếm</button>
+  </nav>
+
+  <!-- Biểu mẫu người dùng -->
+  <section id="formTab" class="tab active">
+    <h2>Biểu mẫu nhập liệu</h2>
+    <label for="name">Họ và tên:</label>
+    <input type="text" id="name" placeholder="Nhập tên của bạn">
+    
+    <label for="note">Ghi chú:</label>
+    <textarea id="note" rows="4"></textarea>
+
+    <button class="btn" onclick="saveData()">Lưu</button>
+    <p id="savedData"></p>
+  </section>
+
+  <!-- Đồng hồ -->
+  <section id="clockTab" class="tab">
+    <h2>Đồng hồ thời gian thực</h2>
+    <p class="clock" id="clock"></p>
+  </section>
+
+  <!-- Đếm ngược -->
+  <section id="countdownTab" class="tab">
+    <h2>Đếm ngược đến Tết Nguyên Đán 2025</h2>
+    <p class="countdown" id="countdown"></p>
+  </section>
+
+  <!-- Tìm kiếm -->
+  <section id="searchTab" class="tab">
+    <h2>Tìm kiếm nội dung</h2>
+    <input type="text" id="searchInput" class="search-box" placeholder="Nhập từ khóa...">
+    <ul id="contentList">
+      <li>HTML cơ bản</li>
+      <li>CSS nâng cao</li>
+      <li>JavaScript</li>
+      <li>Thiết kế responsive</li>
+      <li>Lưu dữ liệu bằng localStorage</li>
+    </ul>
+  </section>
+
+  <script>
+    // Đổi tab
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    // Đồng hồ thời gian thực
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById("clock").textContent = now.toLocaleString();
+    }, 1000);
+
+    // Đếm ngược đến Tết 2025
+    const tetDate = new Date("2025-01-29T00:00:00");
+    setInterval(() => {
+      const now = new Date();
+      const diff = tetDate - now;
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        document.getElementById("countdown").textContent =
+          `${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
+      } else {
+        document.getElementById("countdown").textContent = "Đã đến Tết!";
+      }
+    }, 1000);
+
+    // Lưu và hiển thị dữ liệu
+    function saveData() {
+      const name = document.getElementById("name").value;
+      const note = document.getElementById("note").value;
+      localStorage.setItem("userData", JSON.stringify({ name, note }));
+      displaySavedData();
+    }
+
+    function displaySavedData() {
+      const data = JSON.parse(localStorage.getItem("userData"));
+      if (data) {
+        document.getElementById("savedData").textContent =
+          `Đã lưu: ${data.name} - "${data.note}"`;
+      }
+    }
+
+    displaySavedData(); // Hiển thị nếu đã từng lưu
+
+    // Chuyển Dark Mode
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    // Tìm kiếm nội dung
+    document.getElementById("searchInput").addEventListener("input", function () {
+      const keyword = this.value.toLowerCase();
+      const items = document.querySelectorAll("#contentList li");
+      items.forEach(item => {
+        item.style.display = item.textContent.toLowerCase().includes(keyword) ? "list-item" : "none";
+      });
+    });
+  </script>
+</body>
+</html>
