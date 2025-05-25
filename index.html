@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Gửi Confession</title>
+  <title>Form Confession đẹp</title>
   <style>
     body {
       background: linear-gradient(to right, #fbd3e9, #bbd2c5);
@@ -14,7 +14,6 @@
       margin: 0;
       padding: 20px;
     }
-
     .confession-form {
       background-color: white;
       padding: 30px 40px;
@@ -24,21 +23,18 @@
       width: 100%;
       box-sizing: border-box;
     }
-
     .confession-form h2 {
       text-align: center;
       color: #ff6f91;
       margin-bottom: 20px;
       font-weight: 700;
     }
-
     .confession-form label {
       display: block;
       margin-bottom: 5px;
       color: #333;
       font-weight: 600;
     }
-
     .confession-form input,
     .confession-form textarea {
       width: 100%;
@@ -51,18 +47,15 @@
       box-sizing: border-box;
       transition: border-color 0.3s ease;
     }
-
     .confession-form input:focus,
     .confession-form textarea:focus {
       border-color: #ff6f91;
       outline: none;
     }
-
     .confession-form textarea {
       resize: vertical;
       min-height: 120px;
     }
-
     .confession-form button {
       width: 100%;
       background-color: #ff6f91;
@@ -75,11 +68,9 @@
       font-weight: 700;
       transition: background-color 0.3s ease;
     }
-
     .confession-form button:hover {
       background-color: #ff4e7a;
     }
-
     .thank-you {
       display: none;
       text-align: center;
@@ -118,16 +109,14 @@
         return;
       }
 
-      const data = { nickname, message };
+      const formData = new URLSearchParams();
+      formData.append('nickname', nickname);
+      formData.append('message', message);
 
-      fetch("https://script.google.com/macros/s/AKfycbxKY3H7_cPZm4qGAAFx_CgpERhybXRxdkjatYdHakPQxMSgHsRt6-O9Hdfja6VTcJ3w/exec", {
-  method: "POST",
-  body: JSON.stringify(data),
-  headers: {
-    "Content-Type": "application/json"
-  }
-})
-
+      fetch("https://script.google.com/macros/library/d/15sXN3c0RZvsRq9O156iTkwMwNGuBb9ESskvEpIZWSVQ1Amiib8EhVSaW/1", { // Thay YOUR_WEB_APP_URL_HERE bằng URL Web App của bạn
+        method: "POST",
+        body: formData,
+      })
       .then(res => res.json())
       .then(res => {
         if (res.result === "success") {
