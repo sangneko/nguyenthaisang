@@ -2,153 +2,225 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8" />
-<title>Thời tiết & giờ thế giới theo quốc gia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dự báo thời tiết 7 ngày</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #c9d6ff, #e2e2e2);
-    text-align: center;
-    padding: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 20px;
+    background: linear-gradient(to right, #74ebd5, #9face6);
+    color: #222;
   }
-  .weather-box {
-    margin: 20px auto;
-    padding: 20px;
-    max-width: 600px;
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .container {
+    max-width: 900px;
+    margin: auto;
     background: white;
     border-radius: 15px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.15);
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   }
-  input, select, button {
-    padding: 10px;
-    margin: 10px;
-    font-size: 16px;
+  label, input, button {
+    font-size: 1em;
   }
-  #cityList div {
-    cursor: pointer;
+  input[type="text"] {
+    width: 60%;
     padding: 8px;
-    border-bottom: 1px solid #ddd;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
   }
-  #cityList div:hover {
-    background-color: #e0e0e0;
+  button {
+    padding: 8px 15px;
+    border: none;
+    background-color: #4a90e2;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
   }
-  .weather-detail {
-    margin-top: 15px;
+  button:hover {
+    background-color: #357ABD;
   }
-  img.weather-icon {
-    vertical-align: middle;
+  #weatherResult {
+    margin-top: 30px;
+  }
+  .city-info {
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  .day-forecast {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .day {
+    flex: 0 0 130px;
+    background: #f0f4ff;
+    margin: 5px;
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  .day img {
+    width: 50px;
+    height: 50px;
+  }
+  .temp-day {
+    color: #d94e5d;
+    font-weight: bold;
+  }
+  .temp-night {
+    color: #496db3;
+  }
+  canvas {
+    max-width: 100%;
+    margin-top: 30px;
+  }
+
+  /* Responsive */
+  @media(max-width:600px){
+    input[type="text"] {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 100%;
+    }
+    .day {
+      flex: 0 0 45%;
+    }
   }
 </style>
 </head>
 <body>
-  <h1>🌍 Thời tiết & Giờ thế giới theo quốc gia</h1>
+  <div class="container">
+    <h1>Dự báo thời tiết 7 ngày</h1>
+    <div>
+      <input type="text" id="cityInput" placeholder="Nhập tên thành phố (ví dụ: Hanoi)" />
+      <button onclick="getWeather()">Xem dự báo</button>
+    </div>
 
-  <div class="weather-box">
-    <h2>Chọn quốc gia:</h2>
-    <input type="text" id="countryInput" placeholder="Nhập tên quốc gia (ví dụ: Vietnam)" oninput="suggestCountries()">
-    <div id="countrySuggestion" style="max-width: 600px; margin: 0 auto; text-align:left;"></div>
+    <div id="weatherResult" style="display:none;">
+      <p class="city-info" id="cityName"></p>
+      <p id="currentTime"></p>
+      <div class="day-forecast" id="dayForecast"></div>
+      <canvas id="tempChart"></canvas>
+    </div>
   </div>
 
-  <div class="weather-box" id="cityContainer" style="display:none;">
-    <h2>Danh sách thành phố</h2>
-    <div id="cityList" style="text-align:left; max-height:250px; overflow-y:auto;"></div>
-  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const apiKey = "adbf510244ceece337b1b07bf6317d4c"; // Thay bằng API key OpenWeatherMap
 
-  <div class="weather-box" id="weatherInfo" style="display:none;">
-    <h2>Thông tin thời tiết & giờ thực</h2>
-    <p id="cityName"></p>
-    <p id="localTime"></p>
-    <p id="temp"></p>
-    <p id="humidity"></p>
-    <p id="weatherDesc"></p>
-    <img id="weatherIcon" class="weather-icon" src="" alt="" />
-  </div>
-
-<script>
-  const apiKey = "adbf510244ceece337b1b07bf6317d4c"; // Thay bằng API key của bạn từ openweathermap.org
-
-  // Dữ liệu tĩnh mẫu quốc gia - thành phố - timezone (bạn có thể mở rộng, lấy từ API hoặc file JSON)
-  const countryCityData = {
-    "vietnam": [
-      {name: "Hanoi", lat: 21.0285, lon: 105.8542, timezone: 7},
-      {name: "Ho Chi Minh City", lat: 10.8231, lon: 106.6297, timezone: 7},
-      {name: "Da Nang", lat: 16.0544, lon: 108.2022, timezone: 7}
-    ],
-    "japan": [
-      {name: "Tokyo", lat: 35.6895, lon: 139.6917, timezone: 9},
-      {name: "Osaka", lat: 34.6937, lon: 135.5023, timezone: 9},
-      {name: "Sapporo", lat: 43.0618, lon: 141.3545, timezone: 9}
-    ],
-    "usa": [
-      {name: "New York", lat: 40.7128, lon: -74.0060, timezone: -4},
-      {name: "Los Angeles", lat: 34.0522, lon: -118.2437, timezone: -7},
-      {name: "Chicago", lat: 41.8781, lon: -87.6298, timezone: -5}
-    ]
-  };
-
-  const countries = Object.keys(countryCityData);
-
-  function suggestCountries() {
-    const input = document.getElementById("countryInput").value.toLowerCase();
-    const suggestionBox = document.getElementById("countrySuggestion");
-    suggestionBox.innerHTML = "";
-    if(!input) return;
-
-    const matches = countries.filter(c => c.startsWith(input)).slice(0,5);
-    matches.forEach(c => {
-      const div = document.createElement("div");
-      div.textContent = capitalize(c);
-      div.style.padding = "5px";
-      div.style.cursor = "pointer";
-      div.style.borderBottom = "1px solid #ccc";
-      div.onclick = () => {
-        document.getElementById("countryInput").value = capitalize(c);
-        suggestionBox.innerHTML = "";
-        showCityList(c);
+    async function getWeather() {
+      const city = document.getElementById("cityInput").value.trim();
+      if(!city) {
+        alert("Vui lòng nhập tên thành phố!");
+        return;
       }
-      suggestionBox.appendChild(div);
-    });
-  }
 
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+      // Lấy tọa độ thành phố (Geocoding API)
+      const geoRes = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=1&appid=${apiKey}`);
+      const geoData = await geoRes.json();
+      if(!geoData || geoData.length === 0) {
+        alert("Không tìm thấy thành phố!");
+        return;
+      }
 
-  function showCityList(countryKey) {
-    const cityContainer = document.getElementById("cityContainer");
-    const cityList = document.getElementById("cityList");
-    cityList.innerHTML = "";
-    cityContainer.style.display = "block";
+      const {lat, lon, name, country} = geoData[0];
+      document.getElementById("cityName").textContent = `${name}, ${country}`;
 
-    const cities = countryCityData[countryKey];
-    cities.forEach(city => {
-      const div = document.createElement("div");
-      div.textContent = `${city.name} (UTC${city.timezone >= 0 ? "+" : ""}${city.timezone})`;
-      div.onclick = () => fetchWeather(city);
-      cityList.appendChild(div);
-    });
-  }
+      // Lấy dự báo 7 ngày (One Call API)
+      const weatherRes = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=metric&lang=vi&appid=${apiKey}`);
+      const weatherData = await weatherRes.json();
 
-  // Hàm lấy thời tiết và giờ theo vị trí thành phố
-  function fetchWeather(city) {
-    const {lat, lon, name} = city;
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=vi`)
-      .then(res => res.json())
-      .then(data => {
-        // Tính giờ địa phương = UTC + timezone từ OpenWeatherMap (giây)
-        const localTimestamp = (data.dt + data.timezone) * 1000;
-        const localDate = new Date(localTimestamp);
-        document.getElementById("weatherInfo").style.display = "block";
-        document.getElementById("cityName").textContent = `🏙️ Thành phố: ${name}`;
-        document.getElementById("localTime").textContent = `🕒 Giờ địa phương: ${localDate.toLocaleString()}`;
-        document.getElementById("temp").textContent = `🌡️ Nhiệt độ: ${data.main.temp}°C`;
-        document.getElementById("humidity").textContent = `💧 Độ ẩm: ${data.main.humidity}%`;
-        document.getElementById("weatherDesc").textContent = `🌤️ Mô tả: ${data.weather[0].description}`;
-        const iconCode = data.weather[0].icon;
-        document.getElementById("weatherIcon").src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-        document.getElementById("weatherIcon").alt = data.weather[0].description;
-      })
-      .catch(() => alert("Không lấy được dữ liệu thời tiết!"));
-  }
-</script>
+      // Hiển thị giờ hiện tại theo timezone
+      const nowUTC = new Date((weatherData.current.dt + weatherData.timezone_offset) * 1000);
+      document.getElementById("currentTime").textContent = `🕒 Giờ địa phương: ${nowUTC.toLocaleString()}`;
+
+      // Hiển thị dự báo ngày
+      const dayContainer = document.getElementById("dayForecast");
+      dayContainer.innerHTML = "";
+
+      const labels = [];
+      const tempDayArr = [];
+      const tempNightArr = [];
+
+      weatherData.daily.slice(0,7).forEach(day => {
+        const date = new Date((day.dt + weatherData.timezone_offset) * 1000);
+        const options = {weekday:'short', day:'numeric', month:'numeric'};
+        const dayLabel = date.toLocaleDateString('vi-VN', options);
+
+        labels.push(dayLabel);
+        tempDayArr.push(day.temp.day);
+        tempNightArr.push(day.temp.night);
+
+        const icon = day.weather[0].icon;
+        const desc = day.weather[0].description;
+
+        const div = document.createElement("div");
+        div.className = "day";
+        div.innerHTML = `
+          <div>${dayLabel}</div>
+          <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${desc}" title="${desc}" />
+          <div class="temp-day">Ngày: ${day.temp.day.toFixed(1)}°C</div>
+          <div class="temp-night">Đêm: ${day.temp.night.toFixed(1)}°C</div>
+          <div title="${desc}">${desc}</div>
+        `;
+        dayContainer.appendChild(div);
+      });
+
+      // Vẽ biểu đồ nhiệt độ
+      const ctx = document.getElementById('tempChart').getContext('2d');
+      if(window.myChart) {
+        window.myChart.destroy();
+      }
+      window.myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Nhiệt độ ngày (°C)',
+              data: tempDayArr,
+              borderColor: '#e74c3c',
+              backgroundColor: 'rgba(231, 76, 60, 0.2)',
+              fill: true,
+              tension: 0.3
+            },
+            {
+              label: 'Nhiệt độ đêm (°C)',
+              data: tempNightArr,
+              borderColor: '#3498db',
+              backgroundColor: 'rgba(52, 152, 219, 0.2)',
+              fill: true,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          stacked: false,
+          scales: {
+            y: {
+              suggestedMin: Math.min(...tempNightArr) - 5,
+              suggestedMax: Math.max(...tempDayArr) + 5
+            }
+          }
+        }
+      });
+
+      document.getElementById("weatherResult").style.display = "block";
+    }
+  </script>
 </body>
 </html>
