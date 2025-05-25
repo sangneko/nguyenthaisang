@@ -125,7 +125,7 @@
           document.getElementById('nickname').value = "";
           document.getElementById('message').value = "";
         } else {
-          alert("Có lỗi xảy ra: " + (res.message || "Vui lòng thử lại"));
+          alert("Có lỗi xảy ra: " + (typeof res.message === "string" ? res.message : JSON.stringify(res.message)));
         }
       })
       .catch(err => {
