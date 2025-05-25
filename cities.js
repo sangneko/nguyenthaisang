@@ -1,6 +1,6 @@
 // cities.js
 
-const countryList = [
+const cityList = [
   {name: "Afghanistan", code: "AF"},
   {name: "Albania", code: "AL"},
   {name: "Algeria", code: "DZ"},
