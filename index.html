@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Trang chính</title>
-  <!-- Favicon -->
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/857/857681.png" type="image/png">
-
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/857/857681.png" type="image/png" />
   <style>
     :root {
-      --bg-light: linear-gradient(135deg, #74ebd5, #ACB6E5);
-      --bg-dark: linear-gradient(135deg, #1e1e1e, #3b3b3b);
+      --bg-light: linear-gradient(-45deg, #74ebd5, #acb6e5, #6dd5fa, #2980b9);
+      --bg-dark: linear-gradient(135deg, #1e1e1e, #111);
+      --text-light: #fff;
+      --text-dark: #000;
     }
 
     * {
@@ -28,22 +28,18 @@
       justify-content: center;
       padding: 40px 20px 80px;
       text-align: center;
-      color: #fff;
+      color: var(--text-light);
+      background: var(--bg-light);
+      background-size: 400% 400%;
+      animation: gradientBG 20s ease infinite;
+      transition: background 0.5s ease, color 0.3s ease;
       position: relative;
       overflow: hidden;
     }
 
-    /* Nền động gradient */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(-45deg, #74ebd5, #ACB6E5, #6DD5FA, #2980B9);
-      background-size: 400% 400%;
-      animation: gradientBG 20s ease infinite;
-      z-index: -1;
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-light);
     }
 
     @keyframes gradientBG {
@@ -86,7 +82,7 @@
     }
 
     .button-link {
-      background: rgba(255,255,255,0.9);
+      background: rgba(255, 255, 255, 0.9);
       color: #333;
       text-decoration: none;
       padding: 15px 25px;
@@ -127,17 +123,43 @@
       position: absolute;
       top: 20px;
       left: 30px;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.8);
       border: none;
       padding: 8px 14px;
       border-radius: 12px;
       cursor: pointer;
       font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .toggle-mode:hover {
+      background: #333;
+      color: #fff;
     }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Dark Mode button & links in dark background */
+    body.dark-mode .button-link {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    body.dark-mode .button-link:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    body.dark-mode .toggle-mode {
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+    }
+
+    body.dark-mode .clock {
+      background: rgba(255, 255, 255, 0.2);
     }
   </style>
 </head>
@@ -158,6 +180,7 @@
     <a class="button-link" href="tdkthp.html" onclick="playClick()">Tính điểm kết thúc học phần</a>
     <a class="button-link" href="testinhnang.html" onclick="playClick()">Test tính năng</a>
     <a class="button-link" href="baomoi.html" onclick="playClick()">Cập nhật báo mới hàng ngày</a>
+    <a class="button-link" href="Lock.html" onclick="playClick()">Tính năng khóa</a>
   </div>
 
   <footer>
