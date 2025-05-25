@@ -4,20 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Trang chính</title>
+  <!-- Favicon -->
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/857/857681.png" type="image/png">
+
   <style>
     :root {
       --bg-light: linear-gradient(135deg, #74ebd5, #ACB6E5);
       --bg-dark: linear-gradient(135deg, #1e1e1e, #3b3b3b);
-      --text-light: #ffffff;
-      --text-dark: #dddddd;
-      --card-light: rgba(255, 255, 255, 0.95);
-      --card-dark: rgba(30, 30, 30, 0.8);
     }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       min-height: 100vh;
@@ -27,32 +28,53 @@
       justify-content: center;
       padding: 40px 20px 80px;
       text-align: center;
-      transition: background 0.5s, color 0.5s;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
     }
-    body.light-mode {
-      background: var(--bg-light);
-      color: #333;
+
+    /* Nền động gradient */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(-45deg, #74ebd5, #ACB6E5, #6DD5FA, #2980B9);
+      background-size: 400% 400%;
+      animation: gradientBG 20s ease infinite;
+      z-index: -1;
     }
-    body.dark-mode {
-      background: var(--bg-dark);
-      color: var(--text-dark);
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     h1 {
-      font-size: 3em;
+      font-size: 2.5em;
       margin-bottom: 10px;
       animation: fadeIn 2s ease;
-      cursor: default;
     }
 
-    h1:hover {
-      animation: shake 0.3s ease-in-out;
+    .logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      border: 4px solid #fff;
+      transition: transform 0.3s;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .logo:hover {
+      transform: rotate(5deg) scale(1.05);
     }
 
     .greeting {
       font-size: 1.2em;
       margin-bottom: 30px;
-      color: inherit;
     }
 
     .link-container {
@@ -64,7 +86,7 @@
     }
 
     .button-link {
-      background: var(--card-light);
+      background: rgba(255,255,255,0.9);
       color: #333;
       text-decoration: none;
       padding: 15px 25px;
@@ -72,13 +94,7 @@
       font-size: 18px;
       font-weight: 600;
       transition: all 0.3s ease;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    }
-
-    body.dark-mode .button-link {
-      background: var(--card-dark);
-      color: var(--text-dark);
-      box-shadow: 0 8px 16px rgba(255, 255, 255, 0.05);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
     .button-link:hover {
@@ -98,7 +114,7 @@
       position: absolute;
       top: 20px;
       right: 30px;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.3);
       color: #fff;
       padding: 8px 14px;
       border-radius: 12px;
@@ -111,51 +127,27 @@
       position: absolute;
       top: 20px;
       left: 30px;
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.7);
       border: none;
       padding: 8px 14px;
       border-radius: 12px;
       cursor: pointer;
       font-weight: bold;
-      transition: background 0.3s;
-    }
-
-    body.dark-mode .toggle-mode {
-      background: rgba(0, 0, 0, 0.5);
-      color: #fff;
-    }
-
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 2em;
-      }
-      .clock {
-        font-size: 14px;
-        padding: 6px 10px;
-      }
-      .toggle-mode {
-        font-size: 13px;
-        padding: 6px 10px;
-      }
     }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    @keyframes shake {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(1deg); }
-      50% { transform: rotate(-1deg); }
-      75% { transform: rotate(1deg); }
-      100% { transform: rotate(0deg); }
-    }
   </style>
 </head>
-<body class="light-mode">
+<body>
+  <!-- Nút đổi nền -->
   <button class="toggle-mode" onclick="toggleMode()">🌗 Đổi nền</button>
   <div class="clock" id="clock">--:--:--</div>
+
+  <!-- Logo hoặc avatar -->
+  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo" class="logo">
 
   <h1>Chào mừng bạn!</h1>
   <div class="greeting" id="greeting">Chào bạn!</div>
@@ -172,6 +164,7 @@
     &copy; 2025 | Thiết kế bởi Tôi
   </footer>
 
+  <!-- Âm thanh click -->
   <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
 
   <script>
@@ -181,7 +174,6 @@
       const date = now.toLocaleDateString('vi-VN');
       document.getElementById('clock').textContent = `${time} | ${date}`;
 
-      // Lời chào theo giờ
       const hour = now.getHours();
       let greeting = "Chào bạn!";
       if (hour >= 5 && hour < 11) greeting = "Chúc bạn buổi sáng tốt lành!";
@@ -194,7 +186,6 @@
 
     function toggleMode() {
       document.body.classList.toggle('dark-mode');
-      document.body.classList.toggle('light-mode');
     }
 
     function playClick() {
