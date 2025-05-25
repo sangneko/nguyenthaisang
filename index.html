@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trang chính</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3em;
+      color: #fff;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .link-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .button-link {
+      background: white;
+      color: #333;
+      text-decoration: none;
+      padding: 15px 25px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .button-link:hover {
+      background: #333;
+      color: white;
+      transform: scale(1.05);
+    }
+    footer {
+      position: absolute;
+      bottom: 15px;
+      font-size: 14px;
+      color: #eee;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chào mừng bạn đến với Website!</h1>
+
+  <div class="link-container">
+    <a class="button-link" href="thoitietdoam.html">Xem Thời tiết và độ ẩm</a>
+    <a class="button-link" href="demnguoc.html">Xem đếm ngược 2026</a>
+  </div>
+
+  <footer>
+    &copy; 2025 | Thiết kế bởi Tôi
+  </footer>
+</body>
+</html>
