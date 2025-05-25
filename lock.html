@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Trang bảo mật</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      padding-top: 100px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chào mừng!</h1>
+  <p>Bạn sẽ được chuyển sang Google sau 5 giây...</p>
+
+  <script>
+    // ====== Ngăn click chuột phải ======
+    document.addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+      alert("Bạn không thể chuột phải ở đây!");
+    });
+
+    // ====== Ngăn nhấn Ctrl+U, Ctrl+Shift+I, F12 ======
+    document.addEventListener("keydown", function(e) {
+      if (
+        (e.ctrlKey && e.key.toLowerCase() === 'u') || // Ctrl+U
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i') || // Ctrl+Shift+I
+        (e.key === 'F12')
+      ) {
+        e.preventDefault();
+        alert("Xem mã nguồn bị chặn!");
+      }
+    });
+
+    // ====== Hỏi mật khẩu ======
+    const password = prompt("Vui lòng nhập mật khẩu để truy cập:");
+    const correctPassword = "123456"; // ✅ Đổi mật khẩu tại đây
+
+    if (password === correctPassword) {
+      document.body.style.display = "block";
+
+      // ====== Chuyển hướng sau 5 giây ======
+      setTimeout(() => {
+        window.location.href = "https://www.google.com"; // ✅ Đổi trang đích tại đây
+      }, 5000);
+
+    } else {
+      alert("Sai mật khẩu. Truy cập bị từ chối.");
+      document.write("<h2 style='color:red;'>Truy cập bị từ chối!</h2>");
+    }
+  </script>
+</body>
+</html>
