@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Windows 11 Desktop Giả Lập</title>
+<style>
+  /* Reset và chung */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin:0; padding:0; height: 100%; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0078d7, #00bcf2);
+    overflow: hidden;
+    user-select: none;
+  }
+  #desktop {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: url('https://wallpaperaccess.com/full/2663455.jpg') center/cover no-repeat;
+    overflow: hidden;
+  }
+  /* Desktop icon */
+  .desktop-icon {
+    position: absolute;
+    width: 72px;
+    height: 90px;
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    user-select:none;
+  }
+  .desktop-icon img {
+    width: 48px;
+    height: 48px;
+  }
+  .desktop-icon div {
+    margin-top: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* Taskbar */
+  #taskbar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 40px;
+    background: rgba(30, 30, 30, 0.85);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    color: white;
+    z-index: 10000;
+  }
+  #start-button {
+    width: 36px;
+    height: 36px;
+    background: transparent url('https://upload.wikimedia.org/wikipedia/commons/4/44/Windows_logo_-_2021.svg') center/contain no-repeat;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  #taskbar-buttons {
+    display: flex;
+    flex: 1;
+    gap: 8px;
+  }
+  .taskbar-button {
+    background: rgba(255,255,255,0.1);
+    border-radius: 5px;
+    padding: 4px 8px;
+    cursor: pointer;
+    user-select:none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .taskbar-button:hover {
+    background: rgba(255,255,255,0.2);
+  }
+  .taskbar-button img {
+    width: 20px;
+    height: 20px;
+  }
+  /* Start Menu */
+  #start-menu {
+    position: fixed;
+    bottom: 40px;
+    left: 10px;
+    width: 300px;
+    height: 400px;
+    background: rgba(20, 20, 20, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    padding: 12px;
+    display: none;
+    flex-direction: column;
+    color: white;
+    z-index: 20000;
+  }
+  #start-menu h3 {
+    margin: 0 0 10px 0;
+    font-weight: 600;
+    font-size: 20px;
+  }
+  #start-menu .start-item {
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  #start-menu .start-item:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  #start-menu .start-item img {
+    width: 24px;
+    height: 24px;
+  }
+  /* Window */
+  .app-window {
+    position: absolute;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    user-select: text;
+  }
+  .window-titlebar {
+    background: #0078d7;
+    color: white;
+    height: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
+    font-size: 14px;
+    cursor: move;
+    user-select:none;
+  }
+  .window-titlebar button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    line-height: 18px;
+  }
+  .window-titlebar button:hover {
+    background: rgba(255,255,255,0.3);
+    border-radius: 4px;
+  }
+  .window-content {
+    flex: 1;
+    padding: 12px;
+    overflow: auto;
+    color: #222;
+    font-size: 14px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.2);
+    border-radius: 4px;
+  }
+
+  /* Mail App */
+  #mail-list li {
+    padding: 5px;
+    cursor: pointer;
+    list-style:none;
+  }
+  #mail-list li:hover {
+    background-color: #d0eaff;
+  }
+
+  /* Calendar */
+  #calendar table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+  }
+  #calendar th, #calendar td {
+    padding: 8px;
+  }
+  #calendar thead tr {
+    background: #ddd;
+  }
+  #calendar td {
+    border-radius: 4px;
+    cursor: default;
+  }
+</style>
+</head>
+<body>
+
+<div id="desktop">
+  <!-- Desktop icons -->
+  <div class="desktop-icon" ondblclick="openApp('explorer')" style="top: 20px; left: 20px;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="File Explorer" />
+    <div>File Explorer</div>
+  </div>
+  <div class="desktop-icon" ondblclick="openApp('settings')" style="top: 20px; left: 100px;">
+    <img src="https://cdn-icons-png.flaticon.com/512/3524/3524637.png" alt="Settings" />
+    <div>Settings</div>
+  </div>
+  <div class="desktop-icon" ondblclick="openApp('mail')" style="top: 20px; left: 180px;">
+    <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Mail" />
+    <div>Mail</div>
+  </div>
+  <div class="desktop-icon" ondblclick="openApp('weather')" style="top: 20px; left: 260px;">
+    <img src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Weather" />
+    <div>Weather</div>
+  </div>
+  <div class="desktop-icon" ondblclick="openApp('calendar')" style="top: 20px; left: 340px;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" alt="Calendar" />
+    <div>Calendar</div>
+  </div>
+
+  <!-- App Windows -->
+  <!-- File Explorer -->
+  <div class="app-window" id="app-explorer" style="display:none; width: 450px; height: 400px; left: 100px; top: 100px;">
+    <div class="window-titlebar" onmousedown="dragMouseDown(event, 'app-explorer')">
+      <div>File Explorer</div>
+      <div>
+        <button onclick="minimizeApp(event, 'explorer')">_</button>
+        <button onclick="closeApp(event, 'explorer')">×</button>
+      </div>
+    </div>
+    <div class="window-content">
+      <p><em>Đây là File Explorer giả lập.</em></p>
+      <ul>
+        <li>Document.txt</li>
+        <li>Pictures</li>
+        <li>Music</li>
+        <li>Videos</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div class="app-window" id="app-settings" style="display:none; width: 400px; height: 350px; left: 150px; top: 120px;">
+    <div class="window-titlebar" onmousedown="dragMouseDown(event, 'app-settings')">
+      <div>Settings</div>
+      <div>
+        <button onclick="minimizeApp(event, 'settings')">_</button>
+        <button onclick="closeApp(event, 'settings')">×</button>
+      </div>
+    </div>
+    <div class="window-content">
+      <p><em>Thiết lập hệ thống (giả lập).</em></p>
+      <label>
+        Tên máy tính: <input type="text" value="User-PC" />
+      </label><br/><br/>
+      <label>
+        Chế độ tối:
+        <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode(this.checked)" />
+      </label>
+    </div>
+  </div>
+
+  <!-- Mail -->
+  <div class="app-window" id="app-mail" style="display:none; width: 400px; height: 500px; left: 200px; top: 150px; flex-direction: column;">
+    <div class="window-titlebar" onmousedown="dragMouseDown(event, 'app-mail')">
+      <div>Mail</div>
+      <div>
+        <button onclick="minimizeApp(event, 'mail')">_</button>
+        <button onclick="closeApp(event, 'mail')">×</button>
+      </div>
+    </div>
+    <div class="window-content" style="display:flex; height: calc(100% - 28px);">
+      <div style="width: 40%; border-right: 1px solid #ccc; overflow-y: auto;">
+        <ul id="mail-list" style="list-style:none; padding: 0; margin:0;"></ul>
+      </div>
+      <div style="width: 60%; padding: 10px; overflow-y: auto;" id="mail-content">
+        <em>Chọn email để xem nội dung</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weather -->
+  <div class="app-window" id="app-weather" style="display:none; width: 300px; height: 250px; left: 260px; top: 180px;">
+    <div class="window-titlebar" onmousedown="dragMouseDown(event, 'app-weather')">
+      <div>Thời tiết</div>
+      <div>
+        <button onclick="minimizeApp(event, 'weather')">_</button>
+        <button onclick="closeApp(event, 'weather')">×</button>
+      </div>
+    </div>
+    <div class="window-content" style="padding: 10px; font-size: 16px;">
+      <div id="weather-info">Đang tải thời tiết...</div>
+    </div>
+  </div>
+
+  <!-- Calendar -->
+  <div class="app-window" id="app-calendar" style="display:none; width: 350px; height: 400px; left: 320px; top: 220px;">
+    <div class="window-titlebar" onmousedown="dragMouseDown(event, 'app-calendar')">
+      <div>Lịch</div>
+      <div>
+        <button onclick="minimizeApp(event, 'calendar')">_</button>
+        <button onclick="closeApp(event, 'calendar')">×</button>
+      </div>
+    </div>
+    <div class="window-content" style="padding: 10px;">
+      <div id="calendar"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Notification container -->
+<div id="notification-container" style="
+  position: fixed;
+  bottom: 50px;
+  right: 20px;
+  max-width: 300px;
+  z-index: 9999;
+"></div>
+
+<!-- Taskbar -->
+<div id="taskbar">
+  <button id="start-button" title="Start" onclick="toggleStartMenu()"></button>
+  <div id="taskbar-buttons"></div>
+</div>
+
+<!-- Start Menu -->
+<div id="start-menu">
+  <h3>Start Menu</h3>
+  <div class="start-item" onclick="openApp('explorer')">
+    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="File Explorer" />
+    <span>File Explorer</span>
+  </div>
+  <div class="start-item" onclick="openApp('settings')">
+    <img src="https://cdn-icons-png.flaticon.com/512/3524/3524637.png" alt="Settings" />
+    <span>Settings</span>
+  </div>
+  <div class="start-item" onclick="openApp('mail')">
+    <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Mail" />
+    <span>Mail</span>
+  </div>
+  <div class="start-item" onclick="openApp('weather')">
+    <img src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Weather" />
+    <span>Weather</span>
+  </div>
+  <div class="start-item" onclick="openApp('calendar')">
+    <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" alt="Calendar" />
+    <span>Calendar</span>
+  </div>
+</div>
+
+<script>
+  // --- Đa nhiệm & Window management ---
+
+  let zIndexCounter = 10;
+
+  function bringToFront(el) {
+    zIndexCounter++;
+    el.style.zIndex = zIndexCounter;
+  }
+
+  // Kéo thả cửa sổ
+  let dragData = {
+    el: null,
+    offsetX: 0,
+    offsetY: 0,
+  };
+  function dragMouseDown(e, id) {
+    dragData.el = document.getElementById('app-' + id);
+    bringToFront(dragData.el);
+    dragData.offsetX = e.clientX - dragData.el.offsetLeft;
+    dragData.offsetY = e.clientY - dragData.el.offsetTop;
+    document.onmousemove = dragMouseMove;
+    document.onmouseup = dragMouseUp;
+  }
+  function dragMouseMove(e) {
+    if (!dragData.el) return;
+    dragData.el.style.left = (e.clientX - dragData.offsetX) + 'px';
+    dragData.el.style.top = (e.clientY - dragData.offsetY) + 'px';
+  }
+  function dragMouseUp(e) {
+    dragData.el = null;
+    document.onmousemove = null;
+    document.onmouseup = null;
+  }
+
+  // Mở app
+  function openApp(appId) {
+    const win = document.getElementById('app-' + appId);
+    if (!win) return;
+    win.style.display = 'flex';
+    bringToFront(win);
+    updateTaskbar(appId, true);
+    hideStartMenu();
+    if(appId === 'mail') loadMailList();
+    if(appId === 'weather') loadWeather();
+    if(appId === 'calendar') renderCalendar();
+  }
+
+  // Đóng app
+  function closeApp(e, appId) {
+    e.stopPropagation();
+    const win = document.getElementById('app-' + appId);
+    if (!win) return;
+    win.style.display = 'none';
+    updateTaskbar(appId, false);
+  }
+
+  // Thu nhỏ app
+  function minimizeApp(e, appId) {
+    e.stopPropagation();
+    const win = document.getElementById('app-' + appId);
+    if (!win) return;
+    win.style.display = 'none';
+  }
+
+  // Taskbar quản lý
+  function updateTaskbar(appId, opened) {
+    const container = document.getElementById('taskbar-buttons');
+    let btn = container.querySelector(`[data-app="${appId}"]`);
+    if (opened) {
+      if (!btn) {
+        btn = document.createElement('div');
+        btn.className = 'taskbar-button';
+        btn.dataset.app = appId;
+        btn.onclick = () => toggleApp(appId);
+        const icon = document.createElement('img');
+        icon.src = getAppIcon(appId);
+        icon.alt = appId;
+        btn.appendChild(icon);
+        btn.appendChild(document.createTextNode(capitalizeFirstLetter(appId)));
+        container.appendChild(btn);
+      }
+    } else {
+      if (btn) container.removeChild(btn);
+    }
+  }
+  function toggleApp(appId) {
+    const win = document.getElementById('app-' + appId);
+    if (!win) return;
+    if (win.style.display === 'flex') {
+      win.style.display = 'none';
+    } else {
+      win.style.display = 'flex';
+      bringToFront(win);
+    }
+  }
+
+  function getAppIcon(appId) {
+    const icons = {
+      explorer: 'https://cdn-icons-png.flaticon.com/512/2991/2991148.png',
+      settings: 'https://cdn-icons-png.flaticon.com/512/3524/3524637.png',
+      mail: 'https://cdn-icons-png.flaticon.com/512/561/561127.png',
+      weather: 'https://cdn-icons-png.flaticon.com/512/1163/1163624.png',
+      calendar: 'https://cdn-icons-png.flaticon.com/512/2921/2921222.png'
+    };
+    return icons[appId] || '';
+  }
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  // --- Start Menu ---
+  function toggleStartMenu() {
+    const menu = document.getElementById('start-menu');
+    if(menu.style.display === 'flex') {
+      menu.style.display = 'none';
+    } else {
+      menu.style.display = 'flex';
+      bringToFront(menu);
+    }
+  }
+  function hideStartMenu() {
+    document.getElementById('start-menu').style.display = 'none';
+  }
+  // Click ra ngoài Start Menu đóng nó
+  window.addEventListener('click', (e) => {
+    const startMenu = document.getElementById('start-menu');
+    const startBtn = document.getElementById('start-button');
+    if (!startMenu.contains(e.target) && e.target !== startBtn) {
+      startMenu.style.display = 'none';
+    }
+  });
+
+  // --- Mail App dữ liệu mẫu ---
+  const mails = [
+    {from: 'alice@example.com', subject: 'Chào bạn!', body: 'Đây là email thử nghiệm đầu tiên.'},
+    {from: 'bob@example.com', subject: 'Cuộc họp', body: 'Cuộc họp sẽ diễn ra lúc 3 giờ chiều nay.'},
+    {from: 'charlie@example.com', subject: 'Chúc mừng sinh nhật', body: 'Chúc bạn sinh nhật vui vẻ!'}
+  ];
+  function loadMailList() {
+    const list = document.getElementById('mail-list');
+    list.innerHTML = '';
+    mails.forEach((mail, i) => {
+      const li = document.createElement('li');
+      li.textContent = `${mail.subject} - ${mail.from}`;
+      li.onclick = () => showMailContent(i);
+      list.appendChild(li);
+    });
+  }
+  function showMailContent(i) {
+    const content = document.getElementById('mail-content');
+    content.innerHTML = `<h4>${mails[i].subject}</h4><p><strong>From:</strong> ${mails[i].from}</p><p>${mails[i].body}</p>`;
+  }
+
+  // --- Weather giả lập ---
+  function loadWeather() {
+    const el = document.getElementById('weather-info');
+    // giả lập dữ liệu thời tiết tĩnh
+    el.innerHTML = `
+      <h3>Thành phố Hồ Chí Minh</h3>
+      <p>Nhiệt độ: 32°C</p>
+      <p>Trời nắng, quang đãng</p>
+      <p>Độ ẩm: 70%</p>
+    `;
+  }
+
+  // --- Calendar ---
+  function renderCalendar() {
+    const now = new Date();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+
+    const calendarDiv = document.getElementById('calendar');
+    calendarDiv.innerHTML = '';
+
+    const monthNames = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
+    const daysOfWeek = ['CN','T2','T3','T4','T5','T6','T7'];
+
+    // Tiêu đề tháng năm
+    const title = document.createElement('h4');
+    title.textContent = `${monthNames[month]} ${year}`;
+    calendarDiv.appendChild(title);
+
+    // Tạo bảng
+    const table = document.createElement('table');
+
+    // Header ngày trong tuần
+    const thead = document.createElement('thead');
+    const trHead = document.createElement('tr');
+    daysOfWeek.forEach(day => {
+      const th = document.createElement('th');
+      th.textContent = day;
+      trHead.appendChild(th);
+    });
+    thead.appendChild(trHead);
+    table.appendChild(thead);
+
+    // Ngày bắt đầu và số ngày trong tháng
+    const firstDay = new Date(year, month, 1);
+    const startDay = firstDay.getDay(); // 0=CN...6=T7
+    const daysInMonth = new Date(year, month+1, 0).getDate();
+
+    // Body bảng
+    const tbody = document.createElement('tbody');
+    let dayCount = 1;
+    for(let i=0; i<6; i++) { // 6 tuần tối đa
+      const tr = document.createElement('tr');
+      for(let j=0; j<7; j++) {
+        const td = document.createElement('td');
+        if(i === 0 && j < startDay) {
+          td.textContent = '';
+        } else if(dayCount > daysInMonth) {
+          td.textContent = '';
+        } else {
+          td.textContent = dayCount;
+          // Đánh dấu ngày hiện tại
+          const nowDate = new Date();
+          if(dayCount === nowDate.getDate() && month === nowDate.getMonth() && year === nowDate.getFullYear()){
+            td.style.backgroundColor = '#0078d7';
+            td.style.color = 'white';
+            td.style.fontWeight = 'bold';
+            td.style.borderRadius = '4px';
+          }
+          dayCount++;
+        }
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+      if(dayCount > daysInMonth) break;
+    }
+    table.appendChild(tbody);
+    calendarDiv.appendChild(table);
+  }
+
+  // --- Dark mode toggle trong Settings ---
+  function toggleDarkMode(enabled) {
+    if(enabled) {
+      document.body.style.background = '#121212';
+      document.body.style.color = '#eee';
+      // Đổi background desktop đơn giản
+      document.getElementById('desktop').style.background = 'linear-gradient(135deg, #222, #444)';
+    } else {
+      document.body.style.background = '';
+      document.body.style.color = '';
+      document.getElementById('desktop').style.background = "url('https://wallpaperaccess.com/full/2663455.jpg') center/cover no-repeat";
+    }
+  }
+
+  // --- Notification ---
+  function showNotification(message, timeout=3000) {
+    const container = document.getElementById('notification-container');
+    const notif = document.createElement('div');
+    notif.style.background = 'rgba(0,0,0,0.75)';
+    notif.style.color = 'white';
+    notif.style.padding = '10px 15px';
+    notif.style.marginTop = '8px';
+    notif.style.borderRadius = '8px';
+    notif.style.fontSize = '13px';
+    notif.textContent = message;
+    container.appendChild(notif);
+    setTimeout(() => {
+      notif.style.opacity = '0';
+      setTimeout(() => container.removeChild(notif), 600);
+    }, timeout);
+  }
+
+  // --- Khởi tạo ---
+  document.addEventListener('DOMContentLoaded', () => {
+    // Mở Start Menu khi nhấn Windows key (keyCode 91 hoặc 92)
+    document.addEventListener('keydown', (e) => {
+      if(e.key === "Meta") {
+        toggleStartMenu();
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
