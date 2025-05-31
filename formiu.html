@@ -10,7 +10,7 @@
       overflow: hidden;
       height: 100%;
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://i.imgur.com/EJZsLxZ.jpg') no-repeat center center fixed;
+      background: url('https://i.imgur.com/ZY7YkGt.jpg') no-repeat center center fixed;
       background-size: cover;
       color: white;
       text-align: center;
@@ -46,29 +46,6 @@
       50% { transform: scale(1.2); }
       100% { transform: scale(1); }
     }
-    /* Sao lấp lánh */
-    .stars {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      top: 0;
-      left: 0;
-      z-index: 1;
-    }
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 2s infinite ease-in-out;
-    }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.2; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.5); }
-    }
-    /* Cánh hoa rơi */
     .petal {
       position: fixed;
       top: -50px;
@@ -89,8 +66,6 @@
   </style>
 </head>
 <body>
-
-  <div class="stars"></div>
 
   <div class="container">
     <h1>Chúc Miu yêu 1/6 vui vẻ! 🌸</h1>
@@ -119,17 +94,6 @@
       petal.style.animationDuration = (5 + Math.random() * 5) + "s";
       petal.style.animationDelay = Math.random() * 5 + "s";
       document.body.appendChild(petal);
-    }
-
-    // Sao lấp lánh
-    const stars = document.querySelector('.stars');
-    for (let i = 0; i < 100; i++) {
-      let star = document.createElement('div');
-      star.className = 'star';
-      star.style.top = Math.random() * 100 + '%';
-      star.style.left = Math.random() * 100 + '%';
-      star.style.animationDuration = (Math.random() * 3 + 1) + 's';
-      stars.appendChild(star);
     }
   </script>
 
