@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speaking Midterm - English & Vietnamese</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 30px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 900px;
+      margin: auto;
+    }
+    .english, .vietnamese {
+      display: none;
+    }
+    .line {
+      margin-bottom: 10px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Speaking MIDTERM – Anh ngữ 4</h1>
+<div class="controls">
+  <button onclick="showLanguage('en')">English</button>
+  <button onclick="showLanguage('vi')">Tiếng Việt</button>
+  <button onclick="showLanguage('both')">Song ngữ</button>
+</div>
+
+<div class="content">
+  <!-- English Content -->
+  <div class="english">
+    <h2>Part 1: General Questions</h2>
+    <ul>
+      <li><strong>1. What do you like to do in your free time?</strong><br>
+      I like reading books, listening to music, and going for walks. These help me relax and reduce stress.</li>
+
+      <li><strong>2. What is your major and why did you choose it?</strong><br>
+      My major is Information Technology. I chose it because I love technology and want to work with computers in the future.</li>
+
+      <li><strong>3. What are your main strengths and weaknesses?</strong><br>
+      My strength is that I work hard and learn quickly. My weakness is that I feel nervous when speaking in front of many people.</li>
+
+      <li><strong>4. What are your short-term and long-term future goals?</strong><br>
+      My short-term goal is to graduate with good results. My long-term goal is to become a software developer and work for a good company.</li>
+    </ul>
+
+    <h2>Part 2: Topic Speaking – Invention: Smartphone</h2>
+    <p>I want to talk about the smartphone.</p>
+    <p>It is a very useful invention and almost everyone uses it today. A smartphone is small, easy to carry, and can do many things. We can use it to call people, send messages, take photos, listen to music, and watch videos.</p>
+    <p>Smartphones help us study and work better. For example, students can use them to learn English, search for information, and do homework. Workers can use phones to send emails, join online meetings, and work from home. During the COVID-19 time, many people used smartphones to study online or work online. That was very helpful.</p>
+    <p>I think smartphones are important because they save time and make life easier. We can use apps like Google Maps to find places or use social media to connect with friends. If we want to learn something new, we can watch YouTube or use learning apps.</p>
+    <p>However, using smartphones too much is not good. Some people play games or use social media all day, and that is bad for their eyes and health. We should use smartphones for good things like learning, working, and talking with family.</p>
+    <p>In short, I think the smartphone is a great invention. It helps people a lot in daily life and makes everything faster and easier.</p>
+
+    <h2>Part 3: Further Questions</h2>
+    <ul>
+      <li><strong>1. How has this invention changed the way people live or work?</strong><br>
+      Smartphones help people work and study from anywhere. They also make it easy to connect with others.</li>
+
+      <li><strong>2. Do you think there are any negative effects of this invention?</strong><br>
+      Yes. Some people spend too much time on their phones. It can cause eye strain and less face-to-face talking.</li>
+
+      <li><strong>3. Who do you think benefits the most from this invention, and why?</strong><br>
+      I think students and workers benefit most. They use smartphones for studying, working, and staying updated.</li>
+    </ul>
+  </div>
+
+  <!-- Vietnamese Content -->
+  <div class="vietnamese">
+    <h2>Phần 1: Câu hỏi chung</h2>
+    <ul>
+      <li><strong>1. Bạn thích làm gì vào thời gian rảnh?</strong><br>
+      Tôi thích đọc sách, nghe nhạc và đi dạo. Những hoạt động này giúp tôi thư giãn và giảm căng thẳng.</li>
+
+      <li><strong>2. Chuyên ngành của bạn là gì và tại sao bạn chọn nó?</strong><br>
+      Chuyên ngành của tôi là Công nghệ Thông tin. Tôi chọn ngành này vì tôi yêu thích công nghệ và muốn làm việc với máy tính trong tương lai.</li>
+
+      <li><strong>3. Điểm mạnh và điểm yếu chính của bạn là gì?</strong><br>
+      Điểm mạnh của tôi là tôi chăm chỉ và học nhanh. Điểm yếu của tôi là tôi cảm thấy lo lắng khi nói trước đám đông.</li>
+
+      <li><strong>4. Mục tiêu ngắn hạn và dài hạn của bạn là gì?</strong><br>
+      Mục tiêu ngắn hạn của tôi là tốt nghiệp với kết quả tốt. Mục tiêu dài hạn của tôi là trở thành lập trình viên phần mềm và làm việc cho một công ty tốt.</li>
+    </ul>
+
+    <h2>Phần 2: Nói theo chủ đề – Phát minh: Điện thoại thông minh</h2>
+    <p>Tôi muốn nói về điện thoại thông minh.</p>
+    <p>Đây là một phát minh rất hữu ích và hầu như ai cũng sử dụng hiện nay. Điện thoại thông minh nhỏ gọn, dễ mang theo và có thể làm được nhiều việc. Chúng ta có thể dùng nó để gọi điện, nhắn tin, chụp ảnh, nghe nhạc và xem video.</p>
+    <p>Điện thoại thông minh giúp chúng ta học tập và làm việc tốt hơn. Ví dụ, học sinh có thể dùng nó để học tiếng Anh, tìm kiếm thông tin và làm bài tập. Người đi làm có thể dùng điện thoại để gửi email, tham gia họp trực tuyến và làm việc tại nhà. Trong thời gian dịch COVID-19, nhiều người đã dùng điện thoại để học online hoặc làm việc online. Điều đó rất hữu ích.</p>
+    <p>Tôi nghĩ điện thoại thông minh rất quan trọng vì nó tiết kiệm thời gian và làm cho cuộc sống dễ dàng hơn. Chúng ta có thể dùng các ứng dụng như Google Maps để tìm đường hoặc dùng mạng xã hội để kết nối với bạn bè. Nếu muốn học điều gì mới, chúng ta có thể xem YouTube hoặc dùng ứng dụng học tập.</p>
+    <p>Tuy nhiên, sử dụng điện thoại thông minh quá nhiều thì không tốt. Một số người chơi game hoặc dùng mạng xã hội cả ngày, điều đó không tốt cho mắt và sức khỏe. Chúng ta nên dùng điện thoại vào những việc có ích như học tập, làm việc và trò chuyện với gia đình.</p>
+    <p>Tóm lại, tôi nghĩ điện thoại thông minh là một phát minh tuyệt vời. Nó giúp con người rất nhiều trong cuộc sống hằng ngày và làm mọi việc trở nên nhanh hơn, dễ dàng hơn.</p>
+
+    <h2>Phần 3: Câu hỏi mở rộng</h2>
+    <ul>
+      <li><strong>1. Phát minh này đã thay đổi cách mọi người sống hoặc làm việc như thế nào?</strong><br>
+      Điện thoại thông minh giúp mọi người có thể học tập và làm việc ở bất cứ đâu. Nó cũng giúp kết nối với người khác dễ dàng hơn.</li>
+
+      <li><strong>2. Bạn có nghĩ rằng phát minh này có tác động tiêu cực nào không?</strong><br>
+      Có. Một số người dành quá nhiều thời gian cho điện thoại. Nó có thể gây mỏi mắt và làm giảm việc giao tiếp trực tiếp ngoài đời.</li>
+
+      <li><strong>3. Bạn nghĩ ai là người được lợi nhiều nhất từ phát minh này, và tại sao?</strong><br>
+      Tôi nghĩ học sinh và người đi làm là những người được lợi nhiều nhất. Họ sử dụng điện thoại để học tập, làm việc và cập nhật thông tin.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  function showLanguage(lang) {
+    const en = document.querySelector('.english');
+    const vi = document.querySelector('.vietnamese');
+
+    if (lang === 'en') {
+      en.style.display = 'block';
+      vi.style.display = 'none';
+    } else if (lang === 'vi') {
+      en.style.display = 'none';
+      vi.style.display = 'block';
+    } else {
+      en.style.display = 'block';
+      vi.style.display = 'block';
+    }
+  }
+
+  // Default to bilingual
+  showLanguage('both');
+</script>
+
+</body>
+</html>
