@@ -1,94 +1,162 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tính Điểm Trung Bình</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .calculator {
-            width: 300px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        input[type="button"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        input[type="button"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tính Điểm Trung Bình</title>
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --danger-color: #dc3545;
+      --bg-light: #f4f4f4;
+      --text-dark: #333;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .calculator {
+      background: #fff;
+      padding: 30px 25px;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: 500;
+      text-align: left;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input[type="button"] {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="button"]:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    .result span {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .error {
+      color: var(--danger-color);
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+      .calculator {
+        padding: 25px 15px;
+      }
+
+      input[type="button"] {
+        font-size: 15px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="calculator">
-        <h2>Tính Điểm Trung Bình</h2>
-        <label for="diemQuaTrinh">Điểm Quá Trình:</label>
-        <input type="number" id="diemQuaTrinh" placeholder="Nhập điểm quá trình" min="0" max="10" step="0.01">
-        <label for="diemThiCuoiKy">Điểm Thi Cuối Kỳ:</label>
-        <input type="number" id="diemThiCuoiKy" placeholder="Nhập điểm thi cuối kỳ" min="0" max="10" step="0.01">
-        <input type="button" value="Tính" onclick="tinhDiem()">
-        <h3>Điểm Trung Bình: <span id="diemTrungBinh"></span></h3>
-        <h3>Hạng: <span id="hang"></span></h3>
+  <div class="calculator">
+    <h2>Tính Điểm Trung Bình</h2>
+
+    <label for="diemQuaTrinh">Điểm Quá Trình:</label>
+    <input type="number" id="diemQuaTrinh" placeholder="Nhập điểm quá trình" min="0" max="10" step="0.01" />
+
+    <label for="diemThiCuoiKy">Điểm Thi Cuối Kỳ:</label>
+    <input type="number" id="diemThiCuoiKy" placeholder="Nhập điểm thi cuối kỳ" min="0" max="10" step="0.01" />
+
+    <input type="button" value="Tính điểm" onclick="tinhDiem()" />
+
+    <div id="errorMsg" class="error"></div>
+
+    <div class="result">
+      Điểm Trung Bình: <span id="diemTrungBinh">--</span><br />
+      Hạng: <span id="hang">--</span>
     </div>
+  </div>
 
-    <script>
-        function tinhDiem() {
-            var diemQuaTrinh = parseFloat(document.getElementById('diemQuaTrinh').value);
-            var diemThiCuoiKy = parseFloat(document.getElementById('diemThiCuoiKy').value);
+  <script>
+    function tinhDiem() {
+      const diemQuaTrinh = parseFloat(document.getElementById('diemQuaTrinh').value);
+      const diemThiCuoiKy = parseFloat(document.getElementById('diemThiCuoiKy').value);
+      const errorMsg = document.getElementById('errorMsg');
 
-            if (isNaN(diemQuaTrinh) || isNaN(diemThiCuoiKy) || diemQuaTrinh < 0 || diemQuaTrinh > 10 || diemThiCuoiKy < 0 || diemThiCuoiKy > 10) {
-                alert('Vui lòng nhập điểm hợp lệ.');
-                return;
-            }
+      if (
+        isNaN(diemQuaTrinh) || isNaN(diemThiCuoiKy) ||
+        diemQuaTrinh < 0 || diemQuaTrinh > 10 ||
+        diemThiCuoiKy < 0 || diemThiCuoiKy > 10
+      ) {
+        errorMsg.textContent = '⚠️ Vui lòng nhập điểm hợp lệ từ 0 đến 10!';
+        document.getElementById('diemTrungBinh').textContent = "--";
+        document.getElementById('hang').textContent = "--";
+        return;
+      }
 
-            var diemTrungBinh = (diemQuaTrinh + diemThiCuoiKy) / 2;
-            var hang = '';
+      errorMsg.textContent = '';
+      const diemTrungBinh = ((diemQuaTrinh + diemThiCuoiKy) / 2).toFixed(2);
 
-            if (diemTrungBinh >= 8.5) {
-                hang = 'A';
-            } else if (diemTrungBinh >= 7.8) {
-                hang = 'B+';
-            } else if (diemTrungBinh >= 7.0) {
-                hang = 'B';
-            } else if (diemTrungBinh >= 6.3) {
-                hang = 'C+';
-            } else if (diemTrungBinh >= 5.5) {
-                hang = 'C';
-            } else if (diemTrungBinh >= 4.8) {
-                hang = 'D+';
-            } else if (diemTrungBinh >= 4.0) {
-                hang = 'D';
-            } else if (diemTrungBinh >= 3.0) {
-                hang = 'F+';
-            } else if (diemTrungBinh >= 0.0) {
-                hang = 'F';
-            } else {
-                hang = 'Yếu';
-            }
+      let hang = '';
+      if (diemTrungBinh >= 8.5) hang = 'A';
+      else if (diemTrungBinh >= 7.8) hang = 'B+';
+      else if (diemTrungBinh >= 7.0) hang = 'B';
+      else if (diemTrungBinh >= 6.3) hang = 'C+';
+      else if (diemTrungBinh >= 5.5) hang = 'C';
+      else if (diemTrungBinh >= 4.8) hang = 'D+';
+      else if (diemTrungBinh >= 4.0) hang = 'D';
+      else if (diemTrungBinh >= 3.0) hang = 'F+';
+      else hang = 'F';
 
-            document.getElementById('diemTrungBinh').textContent = diemTrungBinh.toFixed(2);
-            document.getElementById('hang').textContent = hang;
-        }
-    </script>
+      document.getElementById('diemTrungBinh').textContent = diemTrungBinh;
+      document.getElementById('hang').textContent = hang;
+    }
+  </script>
 </body>
 </html>
-
