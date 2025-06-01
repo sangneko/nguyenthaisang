@@ -7,10 +7,11 @@
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/857/857681.png" type="image/png" />
   <style>
     :root {
-      --bg-light: linear-gradient(-45deg, #74ebd5, #acb6e5, #6dd5fa, #2980b9);
+      --bg-light: linear-gradient(135deg, #74ebd5, #acb6e5);
       --bg-dark: linear-gradient(135deg, #1e1e1e, #111);
       --text-light: #fff;
-      --text-dark: #000;
+      --text-dark: #111;
+      --glass-bg: rgba(255, 255, 255, 0.2);
     }
 
     * {
@@ -28,13 +29,12 @@
       justify-content: center;
       padding: 40px 20px 80px;
       text-align: center;
-      color: var(--text-light);
       background: var(--bg-light);
       background-size: 400% 400%;
       animation: gradientBG 20s ease infinite;
-      transition: background 0.5s ease, color 0.3s ease;
+      color: var(--text-dark);
+      transition: all 0.4s ease-in-out;
       position: relative;
-      overflow: hidden;
     }
 
     body.dark-mode {
@@ -48,55 +48,56 @@
       100% { background-position: 0% 50%; }
     }
 
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
-      animation: fadeIn 2s ease;
-    }
-
     .logo {
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      margin-bottom: 15px;
-      border: 4px solid #fff;
-      transition: transform 0.3s;
-      animation: fadeIn 1.5s ease;
+      border: 3px solid #fff;
+      margin-bottom: 20px;
+      transition: 0.3s;
     }
 
     .logo:hover {
-      transform: rotate(5deg) scale(1.05);
+      transform: scale(1.05) rotate(3deg);
+    }
+
+    h1 {
+      font-size: 2.4em;
+      margin-bottom: 10px;
+      animation: fadeIn 1.5s ease;
     }
 
     .greeting {
       font-size: 1.2em;
       margin-bottom: 30px;
+      animation: fadeIn 2s ease;
     }
 
     .link-container {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
       width: 100%;
       max-width: 400px;
+      padding: 10px;
     }
 
     .button-link {
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
       text-decoration: none;
-      padding: 15px 25px;
-      border-radius: 16px;
-      font-size: 18px;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      padding: 14px 20px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #222;
+      font-weight: bold;
+      font-size: 16px;
+      transition: 0.3s ease;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
 
     .button-link:hover {
-      transform: scale(1.05);
-      background: #333;
+      background: #222;
       color: white;
+      transform: translateY(-2px) scale(1.02);
     }
 
     footer {
@@ -109,42 +110,36 @@
     .clock {
       position: absolute;
       top: 20px;
-      right: 30px;
-      background: rgba(0, 0, 0, 0.3);
-      color: #fff;
+      right: 20px;
+      background: var(--glass-bg);
       padding: 8px 14px;
       border-radius: 12px;
-      font-size: 16px;
-      font-weight: 500;
-      backdrop-filter: blur(5px);
+      font-size: 15px;
+      backdrop-filter: blur(8px);
+      color: #fff;
     }
 
     .toggle-mode {
       position: absolute;
       top: 20px;
-      left: 30px;
-      background: rgba(255, 255, 255, 0.8);
-      border: none;
+      left: 20px;
       padding: 8px 14px;
       border-radius: 12px;
+      font-weight: 600;
+      border: none;
+      background: rgba(255, 255, 255, 0.8);
+      color: #111;
       cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
+      transition: 0.3s ease;
     }
 
     .toggle-mode:hover {
-      background: #333;
+      background: #111;
       color: #fff;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Dark Mode button & links in dark background */
     body.dark-mode .button-link {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
       color: #fff;
     }
 
@@ -154,42 +149,47 @@
     }
 
     body.dark-mode .toggle-mode {
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(255, 255, 255, 0.15);
       color: #fff;
     }
 
     body.dark-mode .clock {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 500px) {
+      h1 { font-size: 1.8em; }
+      .button-link { font-size: 15px; padding: 12px; }
     }
   </style>
 </head>
 <body>
-  <!-- Nút đổi nền -->
   <button class="toggle-mode" onclick="toggleMode()">🌗 Đổi nền</button>
   <div class="clock" id="clock">--:--:--</div>
 
-  <!-- Logo hoặc avatar -->
   <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo" class="logo">
 
   <h1>Chào mừng bạn!</h1>
   <div class="greeting" id="greeting">Chào bạn!</div>
 
   <div class="link-container">
-    <a class="button-link" href="thoitietdoam.html" onclick="playClick()">Xem Thời tiết và độ ẩm</a>
-    <a class="button-link" href="demnguoc.html" onclick="playClick()">Xem đếm ngược 2026</a>
-    <a class="button-link" href="tdkthp.html" onclick="playClick()">Tính điểm kết thúc học phần</a>
-    <!-- <a class="button-link" href="testinhnang.html" onclick="playClick()">Test tính năng</a> -->
-    <a class="button-link" href="baomoi.html" onclick="playClick()">Cập nhật báo mới hàng ngày</a>
-    <a class="button-link" href="Lock.html" onclick="playClick()">Tính năng khóa</a>
-  <!--  <a class="button-link" href="window.html" onclick="playClick()">Window 11</a> -->
-    <a class="button-link" href="Bua.html" onclick="playClick()">Búa</a>
+    <a class="button-link" href="thoitietdoam.html" onclick="playClick()">🌦️ Xem Thời tiết và Độ ẩm</a>
+    <a class="button-link" href="demnguoc.html" onclick="playClick()">⏳ Đếm ngược đến 2026</a>
+    <a class="button-link" href="tdkthp.html" onclick="playClick()">📚 Tính điểm KTHP</a>
+    <a class="button-link" href="baomoi.html" onclick="playClick()">📰 Báo mới hàng ngày</a>
+    <a class="button-link" href="Lock.html" onclick="playClick()">🔒 Tính năng khóa</a>
+    <a class="button-link" href="Bua.html" onclick="playClick()">🔨 Búa</a>
   </div>
 
   <footer>
     &copy; 2025 | Thiết kế bởi Tôi
   </footer>
 
-  <!-- Âm thanh click -->
   <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
 
   <script>
@@ -201,11 +201,11 @@
 
       const hour = now.getHours();
       let greeting = "Chào bạn!";
-      if (hour >= 5 && hour < 11) greeting = "Chúc bạn buổi sáng tốt lành!";
-      else if (hour >= 11 && hour < 14) greeting = "Chúc bạn buổi trưa vui vẻ!";
-      else if (hour >= 14 && hour < 18) greeting = "Buổi chiều an lành nhé!";
-      else if (hour >= 18 && hour < 22) greeting = "Chúc buổi tối thư giãn!";
-      else greeting = "Khuya rồi, nhớ ngủ sớm nhé!";
+      if (hour >= 5 && hour < 11) greeting = "🌅 Chúc bạn buổi sáng tốt lành!";
+      else if (hour >= 11 && hour < 14) greeting = "🍽️ Buổi trưa vui vẻ nhé!";
+      else if (hour >= 14 && hour < 18) greeting = "☕ Buổi chiều an lành!";
+      else if (hour >= 18 && hour < 22) greeting = "🌇 Chúc buổi tối thư giãn!";
+      else greeting = "🌙 Khuya rồi, nhớ ngủ sớm nhé!";
       document.getElementById('greeting').textContent = greeting;
     }
 
