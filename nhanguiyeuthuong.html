@@ -2,15 +2,15 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>QR Lời Yêu Thương 💘</title>
+  <title>QR Yêu Thương Trong Trái Tim</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       text-align: center;
-      background: #fff0f5;
       padding: 40px;
+      background: linear-gradient(to bottom, #ffe4e1, #fff0f5);
     }
 
     h1 {
@@ -46,6 +46,12 @@
       background-color: #c2185b;
     }
 
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
     #heart-container {
       position: relative;
       width: 300px;
@@ -60,4 +66,78 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width:
+      width: 140px;
+      height: 140px;
+      background: white;
+      padding: 6px;
+      border-radius: 12px;
+    }
+
+    audio {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💖 QR Lời Yêu Thương Trong Trái Tim 💖</h1>
+
+  <label>Nhập lời nhắn (hoặc để trống để lấy ngẫu nhiên):</label>
+  <textarea id="customMessage" placeholder="Ví dụ: Gửi em ngàn nụ hôn 💌"></textarea>
+
+  <button onclick="generateQR()">Tạo QR</button>
+  <button onclick="downloadQR()">Tải ảnh QR về</button>
+
+  <div id="heart-container">
+    <canvas id="qrcode"></canvas>
+  </div>
+
+  <audio id="loveMusic" controls autoplay loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_d013ad2fc2.mp3?filename=love-you-117343.mp3" type="audio/mpeg">
+    Trình duyệt của bạn không hỗ trợ âm thanh.
+  </audio>
+
+  <script>
+    const loveMessages = [
+      "Anh yêu em nhiều lắm 💌",
+      "Mỗi ngày có em là một ngày hạnh phúc 🌹",
+      "Em là ánh sáng trong cuộc đời anh ✨",
+      "Gửi ngàn nụ hôn qua dòng chữ này 😘",
+      "Chỉ cần em cười, cả thế giới của anh rạng rỡ 💖",
+      "Thương em hơn tất cả mọi thứ trên đời 🥰",
+      "Có em là điều tuyệt vời nhất 💑",
+      "Dù ở đâu, trái tim anh vẫn hướng về em 💘",
+      "Em là duy nhất, mãi là của anh ❤️",
+      "Một cái ôm từ xa gửi đến em 🤗"
+    ];
+
+    function generateQR() {
+      const input = document.getElementById("customMessage").value.trim();
+      const message = input !== "" ? input : loveMessages[Math.floor(Math.random() * loveMessages.length)];
+
+      // Link tạm thời chứa thông điệp + nhạc
+      const pageURL = `https://example.com/love?msg=${encodeURIComponent(message)}`;
+      const qrCanvas = document.getElementById("qrcode");
+
+      QRCode.toCanvas(qrCanvas, pageURL, { width: 128 }, function (error) {
+        if (error) console.error(error);
+      });
+    }
+
+    function downloadQR() {
+      const heartContainer = document.getElementById("heart-container");
+
+      html2canvas(heartContainer).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "qr_yeu_thuong.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+
+    // Khởi tạo
+    window.onload = generateQR;
+  </script>
+
+</body>
+</html>
