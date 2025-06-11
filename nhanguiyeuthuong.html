@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tạo QR Lời Yêu Thương</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #fff0f5;
+    }
+    h1 {
+      color: #e91e63;
+      margin-bottom: 20px;
+    }
+    #qr-container {
+      margin: 20px auto;
+      padding: 20px;
+      display: inline-block;
+      border-radius: 16px;
+    }
+    #qr-heart {
+      border: 5px dashed #e91e63;
+      border-radius: 50%;
+      padding: 20px;
+    }
+    textarea {
+      width: 90%;
+      max-width: 400px;
+      height: 80px;
+      font-size: 16px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      resize: none;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 17px;
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #c2185b;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Tạo QR Lời Yêu Thương 💖</h1>
+
+  <label>Nhập lời nhắn (hoặc để trống để chọn ngẫu nhiên):</label>
+  <textarea id="customMessage" placeholder="Ví dụ: Em là điều ngọt ngào nhất trong đời anh 💌"></textarea>
+
+  <div>
+    <label>
+      <input type="checkbox" id="heartStyle"> Viền trái tim xinh xắn ❤️
+    </label>
+  </div>
+
+  <button onclick="generateQR()">Tạo QR</button>
+  <button onclick="downloadQR()">Tải ảnh QR về</button>
+
+  <div id="qr-container">
+    <div id="qr-heart">
+      <canvas id="qrcode"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const loveMessages = [
+      "Anh yêu em nhiều lắm 💌",
+      "Mỗi ngày có em là một ngày hạnh phúc 🌹",
+      "Em là ánh sáng trong cuộc đời anh ✨",
+      "Gửi ngàn nụ hôn qua dòng chữ này 😘",
+      "Chỉ cần em cười, cả thế giới của anh rạng rỡ 💖",
+      "Thương em hơn tất cả mọi thứ trên đời 🥰",
+      "Có em là điều tuyệt vời nhất 💑",
+      "Dù ở đâu, trái tim anh vẫn hướng về em 💘",
+      "Em là duy nhất, mãi là của anh ❤️",
+      "Một cái ôm từ xa gửi đến em 🤗"
+    ];
+
+    function generateQR() {
+      const inputMessage = document.getElementById("customMessage").value.trim();
+      const heartStyle = document.getElementById("heartStyle").checked;
+      const message = inputMessage !== "" ? inputMessage : loveMessages[Math.floor(Math.random() * loveMessages.length)];
+
+      const qrCanvas = document.getElementById("qrcode");
+      QRCode.toCanvas(qrCanvas, message, { width: 256 }, function (error) {
+        if (error) console.error(error);
+      });
+
+      // Show/hide heart border
+      document.getElementById("qr-heart").style.display = heartStyle ? "inline-block" : "none";
+      qrCanvas.style.display = "block"; // ensure visible
+    }
+
+    function downloadQR() {
+      const canvas = document.getElementById("qrcode");
+      const link = document.createElement("a");
+      link.download = "qr_yeu_thuong.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
+    // Khởi tạo QR khi tải trang
+    window.onload = generateQR;
+  </script>
+
+</body>
+</html>
