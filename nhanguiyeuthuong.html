@@ -1,297 +1,177 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QR Yêu Thương</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Yêu Thương + Lyrics</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="messages.js"></script> <!-- File chứa mảng loveMessages -->
-
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
-
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(to bottom right, #ffe4e1, #fff0f5);
-      overflow-x: hidden;
     }
-
     h1 {
-      font-family: 'Dancing Script', cursive;
-      font-size: 40px;
-      color: #d81b60;
       text-align: center;
-      margin-top: 30px;
-      text-shadow: 1px 1px 2px white;
+      font-size: 32px;
+      color: #d81b60;
+      margin-top: 20px;
     }
-
     .container {
       background: #fff;
       border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      max-width: 420px;
-      margin: 30px auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 20px;
+      max-width: 400px;
+      margin: 20px auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
     }
-
     textarea {
       width: 100%;
       height: 100px;
-      padding: 12px;
       border-radius: 10px;
-      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
       font-size: 16px;
-      font-family: 'Dancing Script', cursive;
-      margin-bottom: 15px;
-      resize: none;
     }
-
     button {
       width: 100%;
-      padding: 12px;
-      margin: 6px 0;
-      font-size: 16px;
-      background-color: #ec407a;
-      border: none;
+      padding: 10px;
+      margin: 5px 0;
+      background: #ec407a;
       color: #fff;
+      border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
-
     button:hover {
-      background-color: #c2185b;
+      background: #c2185b;
     }
-
     #heart-container {
       position: relative;
-      width: 240px;
-      height: 220px;
-      margin-top: 20px;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/0/07/Red_Heart.svg') no-repeat center;
-      background-size: contain;
+      margin-top: 15px;
     }
-
     #qrcode {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       width: 120px;
       height: 120px;
-      background: #fff;
-      padding: 6px;
-      border-radius: 12px;
+      margin: 0 auto;
     }
-
-    #qr-logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 32px;
-      height: 32px;
-      pointer-events: none;
-      border-radius: 50%;
-    }
-
-    footer {
-      text-align: center;
-      color: #777;
-      margin: 40px 0 20px;
-      font-size: 14px;
-    }
-
-    /* Hiệu ứng trái tim rơi */
-    .heart {
-      position: fixed;
-      top: -50px;
-      width: 20px;
-      height: 20px;
-      background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center;
-      background-size: cover;
-      animation: fall 10s linear infinite;
-      z-index: 0;
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    #yt-player {
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      z-index: -1;
-    }
-
-    #song-title {
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
-      background: rgba(255, 255, 255, 0.85);
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 15px;
-      font-family: 'Segoe UI', sans-serif;
-      color: #d81b60;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      z-index: 999;
-    }
-
     #toggleMusicBtn {
       position: fixed;
-      top: 10px;
-      left: 10px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #d81b60;
+      bottom: 15px;
+      right: 15px;
+      background: #fff;
       border: none;
-      border-radius: 20px;
-      padding: 8px 16px;
-      font-size: 14px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-size: 18px;
       cursor: pointer;
-      z-index: 999;
+      z-index: 1000;
     }
-
-    @media (max-width: 500px) {
-      h1 {
-        font-size: 30px;
-      }
-
-      .container {
-        padding: 16px;
-        border-radius: 16px;
-      }
-
-      #heart-container {
-        width: 200px;
-        height: 180px;
-      }
-
-      #qrcode {
-        width: 100px;
-        height: 100px;
-      }
-
-      #qr-logo {
-        width: 28px;
-        height: 28px;
-      }
-
-      #toggleMusicBtn {
-        padding: 6px 12px;
-        font-size: 13px;
-      }
+    #lyrics-box {
+      position: fixed;
+      bottom: 60px;
+      right: 15px;
+      max-width: 80vw;
+      background: rgba(255,255,255,0.9);
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 15px;
+      color: #d81b60;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: right;
+      z-index: 999;
     }
   </style>
 </head>
 <body>
-
   <h1>💘 QR Yêu Thương 💘</h1>
-
   <div class="container">
-    <textarea id="customMessage" placeholder="Nhập lời yêu thương hoặc để trống để lấy ngẫu nhiên..."></textarea>
+    <textarea id="customMessage" placeholder="Nhập lời yêu thương..."></textarea>
     <button onclick="generateQR()">Tạo QR</button>
-    <button onclick="downloadQR()">Tải ảnh về</button>
-
+    <button onclick="downloadQR()">Tải ảnh</button>
     <div id="heart-container">
       <canvas id="qrcode"></canvas>
-      <img id="qr-logo" src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="logo" />
     </div>
   </div>
-
-  <footer>✨ Made with love | <a href="#" style="color:#ec407a; text-decoration:none;">❤️</a> ✨</footer>
-
-  <!-- Nút điều khiển nhạc -->
-  <button id="toggleMusicBtn" onclick="toggleMusic()">🔇 Tắt nhạc</button>
-
-  <!-- Hiển thị tên bài hát -->
-  <div id="song-title">🎵 Đang phát: JACK - J97 | TRẠM DỪNG CHÂN | Track No.3</div>
-
-  <!-- Nhúng video YouTube cực nhỏ + hỗ trợ điều khiển -->
+  <div id="lyrics-box"><div id="lyrics-text">🎤 Lyrics sẽ hiển thị tại đây...</div></div>
+  <button id="toggleMusicBtn" onclick="toggleMusic()">🔇</button>
   <div id="yt-player">
-    <iframe
-      id="ytplayer"
-      width="1" height="1"
+    <iframe id="ytplayer" width="1" height="1"
       src="https://www.youtube.com/embed/iK-Cji6J73Q?autoplay=1&mute=0&loop=1&playlist=iK-Cji6J73Q&enablejsapi=1"
-      title="YouTube player"
-      frameborder="0"
-      allow="autoplay"
-      allowfullscreen>
-    </iframe>
+      frameborder="0" allow="autoplay" allowfullscreen></iframe>
   </div>
-
   <script>
+    const lyrics = [
+      { time: 0, text: "Giờ thì còn điều gì ngoài trừ ngàn nhung nhớ" },
+      { time: 8, text: "Người thì về bỏ lại bầu trời nhìn xác xơ" },
+      { time: 16, text: "Cả cuộc đời này còn nhỏ dại và giấc mơ" },
+      { time: 24, text: "Mà em đâu có hay, đâu biết chăng nơi này.." },
+      { time: 32, text: "Ngày nào mình vẫn còn tựa đầu rồi nắm tay" },
+      { time: 40, text: "Vậy mà tình chỉ là kỉ niệm thời đắm say" },
+      { time: 48, text: "Mất em.. Cơn đau anh đâu tính ngày.." },
+      { time: 56, text: "Đâu ai làm sai nhưng ta lại không gần nhau" },
+      { time: 64, text: "Em nghe gì không nhịp tim này không còn đau" },
+      { time: 72, text: "Đâm sâu thật sâu thật ra là không cần khâu" },
+      { time: 80, text: "Em dạy anh phải yêu thật lâu" },
+      { time: 88, text: "Mà khi rời xa lại không lần lau" },
+      { time: 96, text: "Anh thấy sao không em? Giấu cho ai xem" },
+      { time: 104, text: "Năm tháng đi bên nhau, cô đơn anh khóc trên vai em" },
+      { time: 112, text: "Đôi khi anh trách em sao đây? Sống ra sao đây" },
+      { time: 120, text: "Anh đâu có biết em đâu tha thiết" },
+      { time: 128, text: "Hôm nay em giết anh cao tay" },
+      { time: 136, text: "Thật lòng mình đi à.." },
+      { time: 144, text: "Như dừng chân đôi khi em luyến lưu gì" },
+      { time: 152, text: "Dư tình thân em tô thêm nét nhu mì" },
+      { time: 160, text: "Cho vào thân mong thời cơ đến khi..." },
+      { time: 168, text: "Em rời đi đã trong suy đoán anh mà" },
+      { time: 176, text: "Chỉ là anh không tin nó đến nhanh và..." }
+    ];
+
+    let startTime = 0, currentLyricIndex = 0, isMuted = false;
+
     function generateQR() {
       const input = document.getElementById("customMessage").value.trim();
-      const message = input !== "" ? input : loveMessages[Math.floor(Math.random() * loveMessages.length)];
-      const qrCanvas = document.getElementById("qrcode");
-
-      QRCode.toCanvas(qrCanvas, message, { width: 120, margin: 1 }, function (error) {
-        if (error) console.error(error);
-      });
+      const message = input || "Gửi bạn lời yêu từ trái tim <3";
+      QRCode.toCanvas(document.getElementById("qrcode"), message, { width: 120 });
     }
 
     function downloadQR() {
-      const heartContainer = document.getElementById("heart-container");
-      const logo = document.getElementById("qr-logo");
-      logo.style.display = "none";
-
-      html2canvas(heartContainer).then(canvas => {
-        logo.style.display = "block";
+      html2canvas(document.getElementById("heart-container")).then(canvas => {
         const link = document.createElement("a");
         link.download = "qr_yeu_thuong.png";
-        link.href = canvas.toDataURL("image/png");
+        link.href = canvas.toDataURL();
         link.click();
       });
     }
 
-    // Hiệu ứng trái tim rơi
-    function createFallingHearts() {
-      const count = 20;
-      for (let i = 0; i < count; i++) {
-        let heart = document.createElement("div");
-        heart.className = "heart";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = (Math.random() * 5 + 5) + "s";
-        document.body.appendChild(heart);
-      }
+    function startLyrics() {
+      setInterval(() => {
+        const now = Math.floor((Date.now() - startTime) / 1000);
+        if (currentLyricIndex < lyrics.length && now >= lyrics[currentLyricIndex].time) {
+          document.getElementById("lyrics-text").innerText = lyrics[currentLyricIndex].text;
+          currentLyricIndex++;
+        }
+      }, 500);
     }
 
-    // Nút điều khiển nhạc
-    let isMuted = false;
     function toggleMusic() {
-      const iframe = document.querySelector("#yt-player iframe");
+      const player = document.getElementById("ytplayer");
       isMuted = !isMuted;
-      iframe.contentWindow.postMessage('{"event":"command","func":"' + (isMuted ? 'mute' : 'unMute') + '","args":""}', '*');
-      document.getElementById("toggleMusicBtn").innerText = isMuted ? '🔈 Bật nhạc' : '🔇 Tắt nhạc';
+      player.contentWindow.postMessage(JSON.stringify({ event: 'command', func: isMuted ? 'mute' : 'unMute', args: [] }), '*');
+      document.getElementById("toggleMusicBtn").innerText = isMuted ? "🔈" : "🔇";
     }
 
     window.onload = () => {
       generateQR();
-      createFallingHearts();
+      startTime = Date.now();
+      currentLyricIndex = 0;
+      startLyrics();
     };
   </script>
-
 </body>
 </html>
