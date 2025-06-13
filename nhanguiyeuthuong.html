@@ -104,29 +104,6 @@
       pointer-events: none;
       border-radius: 50%;
     }
-#yt-player {
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  z-index: -1;
-}
-
-#song-title {
-  position: fixed;
-  bottom: 10px;
-  left: 10px;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 15px;
-  font-family: 'Segoe UI', sans-serif;
-  color: #d81b60;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  z-index: 999;
-}
 
     footer {
       text-align: center;
@@ -135,7 +112,7 @@
       font-size: 14px;
     }
 
-    /* Heart falling effect */
+    /* Hiệu ứng trái tim rơi */
     .heart {
       position: fixed;
       top: -50px;
@@ -156,6 +133,44 @@
         transform: translateY(100vh) rotate(360deg);
         opacity: 0;
       }
+    }
+
+    #yt-player {
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      z-index: -1;
+    }
+
+    #song-title {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 15px;
+      font-family: 'Segoe UI', sans-serif;
+      color: #d81b60;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      z-index: 999;
+    }
+
+    #toggleMusicBtn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #d81b60;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 999;
     }
 
     @media (max-width: 500px) {
@@ -182,6 +197,11 @@
         width: 28px;
         height: 28px;
       }
+
+      #toggleMusicBtn {
+        padding: 6px 12px;
+        font-size: 13px;
+      }
     }
   </style>
 </head>
@@ -202,23 +222,24 @@
 
   <footer>✨ Made with love | <a href="#" style="color:#ec407a; text-decoration:none;">❤️</a> ✨</footer>
 
- 
-<!-- Hiển thị tên bài hát -->
-<div id="song-title">🎵 Đang phát: JACK - J97 | TRẠM DỪNG CHÂN | Track No.3</div>
+  <!-- Nút điều khiển nhạc -->
+  <button id="toggleMusicBtn" onclick="toggleMusic()">🔇 Tắt nhạc</button>
 
-<!-- Nhúng video YouTube "ẩn nhẹ", vẫn kích hoạt autoplay -->
-<div id="yt-player">
-  <iframe
-    width="1" height="1"  <!-- Giữ hiển thị nhưng cực nhỏ -->
-    src="https://www.youtube.com/embed/iK-Cji6J73Q?autoplay=1&mute=0&loop=1&playlist=iK-Cji6J73Q"
-    title="YouTube player"
-    frameborder="0"
-    allow="autoplay"
-    allowfullscreen>
-  </iframe>
-</div>
+  <!-- Hiển thị tên bài hát -->
+  <div id="song-title">🎵 Đang phát: JACK - J97 | TRẠM DỪNG CHÂN | Track No.3</div>
 
-
+  <!-- Nhúng video YouTube cực nhỏ + hỗ trợ điều khiển -->
+  <div id="yt-player">
+    <iframe
+      id="ytplayer"
+      width="1" height="1"
+      src="https://www.youtube.com/embed/iK-Cji6J73Q?autoplay=1&mute=0&loop=1&playlist=iK-Cji6J73Q&enablejsapi=1"
+      title="YouTube player"
+      frameborder="0"
+      allow="autoplay"
+      allowfullscreen>
+    </iframe>
+  </div>
 
   <script>
     function generateQR() {
@@ -245,11 +266,6 @@
       });
     }
 
-    window.onload = () => {
-      generateQR();
-      createFallingHearts();
-    };
-
     // Hiệu ứng trái tim rơi
     function createFallingHearts() {
       const count = 20;
@@ -261,6 +277,20 @@
         document.body.appendChild(heart);
       }
     }
+
+    // Nút điều khiển nhạc
+    let isMuted = false;
+    function toggleMusic() {
+      const iframe = document.querySelector("#yt-player iframe");
+      isMuted = !isMuted;
+      iframe.contentWindow.postMessage('{"event":"command","func":"' + (isMuted ? 'mute' : 'unMute') + '","args":""}', '*');
+      document.getElementById("toggleMusicBtn").innerText = isMuted ? '🔈 Bật nhạc' : '🔇 Tắt nhạc';
+    }
+
+    window.onload = () => {
+      generateQR();
+      createFallingHearts();
+    };
   </script>
 
 </body>
