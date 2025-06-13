@@ -104,6 +104,19 @@
       pointer-events: none;
       border-radius: 50%;
     }
+#song-title {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  color: #d81b60;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
 
     footer {
       text-align: center;
@@ -180,15 +193,16 @@
   <footer>✨ Made with love | <a href="#" style="color:#ec407a; text-decoration:none;">❤️</a> ✨</footer>
 
  
-  <div id="music-player">
-  <iframe width="280" height="158"
-    src="https://www.youtube.com/embed/iK-Cji6J73Q?autoplay=1&mute=0&loop=1&playlist=iK-Cji6J73Q&controls=1"
-    title="YouTube video player" frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen>
-  </iframe>
+ <!-- Hiển thị tên bài hát -->
+<div id="song-title">🎵 Đang phát:JACK - J97 | TRẠM DỪNG CHÂN | Track No.3</div>
+
+<!-- Nhúng video YouTube ẩn -->
+<div style="display: none;">
+  <iframe id="yt-hidden" width="0" height="0"
+    src="https://www.youtube.com/embed/iK-Cji6J73Q?autoplay=1&mute=0&loop=1&playlist=iK-Cji6J73Q"
+    frameborder="0" allow="autoplay"></iframe>
 </div>
->
+
 
   <script>
     function generateQR() {
