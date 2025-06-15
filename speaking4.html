@@ -41,41 +41,11 @@
     .english, .vietnamese {
       display: none;
     }
+    .line {
+      margin-bottom: 10px;
+    }
     ul {
       padding-left: 20px;
-    }
-    audio {
-      vertical-align: middle;
-    }
-    @media screen and (max-width: 600px) {
-      body {
-        padding: 15px;
-      }
-      .content {
-        padding: 15px;
-        font-size: 16px;
-      }
-      button {
-        width: 90%;
-        margin: 10px auto;
-        display: block;
-        font-size: 18px;
-      }
-    }
-    @media print {
-      body {
-        background: white;
-        color: black;
-        font-size: 14pt;
-      }
-      .controls, button, audio {
-        display: none !important;
-      }
-      .content {
-        box-shadow: none;
-        border: none;
-        max-width: 100%;
-      }
     }
   </style>
 </head>
@@ -89,51 +59,80 @@
 </div>
 
 <div class="content">
+  <!-- English Content -->
   <div class="english">
     <h2>Part 1: General Questions</h2>
     <ul>
       <li><strong>1. What do you like to do in your free time?</strong><br>
-      I like reading, listening to music, and walking. <button onclick="playAudio('q1')">🔊 Listen</button>
-      <audio id="q1" src="audio/q1.mp3"></audio></li>
+      I like reading books, listening to music, and going for walks. These help me relax and reduce stress.</li>
 
       <li><strong>2. What is your major and why did you choose it?</strong><br>
-      My major is Information Technology. I chose it because I like computers and want to work in tech. <button onclick="playAudio('q2')">🔊 Listen</button>
-      <audio id="q2" src="audio/q2.mp3"></audio></li>
+      My major is Information Technology. I chose it because I love technology and want to work with computers in the future.</li>
 
-      <li><strong>3. What are your strengths and weaknesses?</strong><br>
-      I work hard and learn quickly. I feel shy when speaking in front of people. <button onclick="playAudio('q3')">🔊 Listen</button>
-      <audio id="q3" src="audio/q3.mp3"></audio></li>
+      <li><strong>3. What are your main strengths and weaknesses?</strong><br>
+      My strength is that I work hard and learn quickly. My weakness is that I feel nervous when speaking in front of many people.</li>
 
-      <li><strong>4. What are your short-term and long-term goals?</strong><br>
-      Short-term: graduate with good grades. Long-term: become a software developer. <button onclick="playAudio('q4')">🔊 Listen</button>
-      <audio id="q4" src="audio/q4.mp3"></audio></li>
+      <li><strong>4. What are your short-term and long-term future goals?</strong><br>
+      My short-term goal is to graduate with good results. My long-term goal is to become a software developer and work for a good company.</li>
     </ul>
 
-    <h2>Part 2: Topic – Smartphone</h2>
-    <p>I want to talk about the smartphone. It’s a useful invention that many people use today. <button onclick="playAudio('t1')">🔊</button><audio id="t1" src="audio/t1.mp3"></audio></p>
-    <p>A smartphone is small, easy to carry, and has many functions. We can call, text, take photos, listen to music, and watch videos. <button onclick="playAudio('t2')">🔊</button><audio id="t2" src="audio/t2.mp3"></audio></p>
-    <p>It helps students learn better and workers to do their jobs. <button onclick="playAudio('t3')">🔊</button><audio id="t3" src="audio/t3.mp3"></audio></p>
-    <p>During COVID-19, smartphones supported online learning and working. <button onclick="playAudio('t4')">🔊</button><audio id="t4" src="audio/t4.mp3"></audio></p>
-    <p>Apps like Google Maps and YouTube save time and connect people. <button onclick="playAudio('t5')">🔊</button><audio id="t5" src="audio/t5.mp3"></audio></p>
-    <p>However, overusing phones can harm our health. <button onclick="playAudio('t6')">🔊</button><audio id="t6" src="audio/t6.mp3"></audio></p>
-    <p>In short, smartphones make life easier and more convenient. <button onclick="playAudio('t7')">🔊</button><audio id="t7" src="audio/t7.mp3"></audio></p>
+    <h2>Part 2: Topic Speaking – Invention: Smartphone</h2>
+    <p>I want to talk about the smartphone.</p>
+    <p>It is a very useful invention and almost everyone uses it today. A smartphone is small, easy to carry, and can do many things. We can use it to call people, send messages, take photos, listen to music, and watch videos.</p>
+    <p>Smartphones help us study and work better. For example, students can use them to learn English, search for information, and do homework. Workers can use phones to send emails, join online meetings, and work from home. During the COVID-19 time, many people used smartphones to study online or work online. That was very helpful.</p>
+    <p>I think smartphones are important because they save time and make life easier. We can use apps like Google Maps to find places or use social media to connect with friends. If we want to learn something new, we can watch YouTube or use learning apps.</p>
+    <p>However, using smartphones too much is not good. Some people play games or use social media all day, and that is bad for their eyes and health. We should use smartphones for good things like learning, working, and talking with family.</p>
+    <p>In short, I think the smartphone is a great invention. It helps people a lot in daily life and makes everything faster and easier.</p>
 
     <h2>Part 3: Further Questions</h2>
     <ul>
-      <li><strong>1. How has it changed people’s lives?</strong><br>
-      It helps people work, study, and connect. <button onclick="playAudio('f1')">🔊</button><audio id="f1" src="audio/f1.mp3"></audio></li>
+      <li><strong>1. How has this invention changed the way people live or work?</strong><br>
+      Smartphones help people work and study from anywhere. They also make it easy to connect with others.</li>
 
-      <li><strong>2. Any bad effects?</strong><br>
-      Yes. It can hurt our eyes and reduce face-to-face communication. <button onclick="playAudio('f2')">🔊</button><audio id="f2" src="audio/f2.mp3"></audio></li>
+      <li><strong>2. Do you think there are any negative effects of this invention?</strong><br>
+      Yes. Some people spend too much time on their phones. It can cause eye strain and less face-to-face talking.</li>
 
-      <li><strong>3. Who benefits the most?</strong><br>
-      Students and workers benefit most from smartphones. <button onclick="playAudio('f3')">🔊</button><audio id="f3" src="audio/f3.mp3"></audio></li>
+      <li><strong>3. Who do you think benefits the most from this invention, and why?</strong><br>
+      I think students and workers benefit most. They use smartphones for studying, working, and staying updated.</li>
     </ul>
   </div>
 
+  <!-- Vietnamese Content -->
   <div class="vietnamese">
-    <!-- Tiếng Việt giữ nguyên như bản trước, có thể chèn audio nếu cần -->
-    <!-- Rút gọn do dôi HTML, bạn có thể dán nội dung đã có từ trước -->
+    <h2>Phần 1: Câu hỏi chung</h2>
+    <ul>
+      <li><strong>1. Bạn thích làm gì vào thời gian rảnh?</strong><br>
+      Tôi thích đọc sách, nghe nhạc và đi dạo. Những hoạt động này giúp tôi thư giãn và giảm căng thẳng.</li>
+
+      <li><strong>2. Chuyên ngành của bạn là gì và tại sao bạn chọn nó?</strong><br>
+      Chuyên ngành của tôi là Công nghệ Thông tin. Tôi chọn ngành này vì tôi yêu thích công nghệ và muốn làm việc với máy tính trong tương lai.</li>
+
+      <li><strong>3. Điểm mạnh và điểm yếu chính của bạn là gì?</strong><br>
+      Điểm mạnh của tôi là tôi chăm chỉ và học nhanh. Điểm yếu của tôi là tôi cảm thấy lo lắng khi nói trước đám đông.</li>
+
+      <li><strong>4. Mục tiêu ngắn hạn và dài hạn của bạn là gì?</strong><br>
+      Mục tiêu ngắn hạn của tôi là tốt nghiệp với kết quả tốt. Mục tiêu dài hạn của tôi là trở thành lập trình viên phần mềm và làm việc cho một công ty tốt.</li>
+    </ul>
+
+    <h2>Phần 2: Nói theo chủ đề – Phát minh: Điện thoại thông minh</h2>
+    <p>Tôi muốn nói về điện thoại thông minh.</p>
+    <p>Đây là một phát minh rất hữu ích và hầu như ai cũng sử dụng hiện nay. Điện thoại thông minh nhỏ gọn, dễ mang theo và có thể làm được nhiều việc. Chúng ta có thể dùng nó để gọi điện, nhắn tin, chụp ảnh, nghe nhạc và xem video.</p>
+    <p>Điện thoại thông minh giúp chúng ta học tập và làm việc tốt hơn. Ví dụ, học sinh có thể dùng nó để học tiếng Anh, tìm kiếm thông tin và làm bài tập. Người đi làm có thể dùng điện thoại để gửi email, tham gia họp trực tuyến và làm việc tại nhà. Trong thời gian dịch COVID-19, nhiều người đã dùng điện thoại để học online hoặc làm việc online. Điều đó rất hữu ích.</p>
+    <p>Tôi nghĩ điện thoại thông minh rất quan trọng vì nó tiết kiệm thời gian và làm cho cuộc sống dễ dàng hơn. Chúng ta có thể dùng các ứng dụng như Google Maps để tìm đường hoặc dùng mạng xã hội để kết nối với bạn bè. Nếu muốn học điều gì mới, chúng ta có thể xem YouTube hoặc dùng ứng dụng học tập.</p>
+    <p>Tuy nhiên, sử dụng điện thoại thông minh quá nhiều thì không tốt. Một số người chơi game hoặc dùng mạng xã hội cả ngày, điều đó không tốt cho mắt và sức khỏe. Chúng ta nên dùng điện thoại vào những việc có ích như học tập, làm việc và trò chuyện với gia đình.</p>
+    <p>Tóm lại, tôi nghĩ điện thoại thông minh là một phát minh tuyệt vời. Nó giúp con người rất nhiều trong cuộc sống hằng ngày và làm mọi việc trở nên nhanh hơn, dễ dàng hơn.</p>
+
+    <h2>Phần 3: Câu hỏi mở rộng</h2>
+    <ul>
+      <li><strong>1. Phát minh này đã thay đổi cách mọi người sống hoặc làm việc như thế nào?</strong><br>
+      Điện thoại thông minh giúp mọi người có thể học tập và làm việc ở bất cứ đâu. Nó cũng giúp kết nối với người khác dễ dàng hơn.</li>
+
+      <li><strong>2. Bạn có nghĩ rằng phát minh này có tác động tiêu cực nào không?</strong><br>
+      Có. Một số người dành quá nhiều thời gian cho điện thoại. Nó có thể gây mỏi mắt và làm giảm việc giao tiếp trực tiếp ngoài đời.</li>
+
+      <li><strong>3. Bạn nghĩ ai là người được lợi nhiều nhất từ phát minh này, và tại sao?</strong><br>
+      Tôi nghĩ học sinh và người đi làm là những người được lợi nhiều nhất. Họ sử dụng điện thoại để học tập, làm việc và cập nhật thông tin.</li>
+    </ul>
   </div>
 </div>
 
@@ -154,13 +153,7 @@
     }
   }
 
-  function playAudio(id) {
-    const audio = document.getElementById(id);
-    if (audio) {
-      audio.play();
-    }
-  }
-
+  // Default to bilingual
   showLanguage('both');
 </script>
 
