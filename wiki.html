@@ -2,105 +2,158 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Wikipedia Trích Dẫn</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wikipedia Trích Dẫn</title>
   <style>
-    body {
+    :root {
+      --primary-color: #4a90e2;
+      --bg-color: #f0f2f5;
+      --white: #ffffff;
+      --text-color: #333;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
       font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
       margin: 0;
       padding: 20px;
-      background: #f0f2f5;
+      background: var(--bg-color);
+      color: var(--text-color);
     }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 30px;
+    }
+
     h1 {
       text-align: center;
-      color: #333;
+      color: var(--primary-color);
+      margin-bottom: 30px;
     }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+
     .search-box {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
       justify-content: center;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 25px;
     }
+
     input[type="text"] {
       flex: 1;
-      min-width: 200px;
-      padding: 10px;
+      min-width: 250px;
+      padding: 12px;
+      border: 2px solid #ccc;
+      border-radius: var(--radius);
       font-size: 16px;
     }
+
     button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
+      background: var(--primary-color);
+      color: var(--white);
       border: none;
-      border-radius: 5px;
-      background: #007bff;
-      color: #fff;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s ease;
     }
+
     button:hover {
-      background: #0056b3;
+      background: #357acc;
     }
+
+    #result {
+      margin-top: 25px;
+    }
+
     #result img {
       max-width: 100%;
-      margin-bottom: 10px;
-      border-radius: 8px;
+      border-radius: 10px;
+      margin-top: 10px;
     }
-    #result h2 {
-      margin-top: 0;
+
+    .info {
+      background: #f9fbfc;
+      padding: 15px;
+      margin-top: 10px;
+      border-left: 5px solid var(--primary-color);
+      border-radius: var(--radius);
     }
+
     .history {
-      margin-top: 30px;
+      margin-top: 40px;
     }
+
+    .history h3 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+
     .history ul {
       list-style: none;
       padding-left: 0;
     }
+
     .history li {
-      padding: 8px;
-      border-bottom: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 5px;
+      background: #eef2f5;
       cursor: pointer;
-      color: #007bff;
+      transition: 0.2s ease;
     }
+
     .history li:hover {
-      text-decoration: underline;
+      background: #d8e5f2;
     }
+
     .clear-history {
-      margin-top: 10px;
       text-align: right;
+      margin-top: 10px;
     }
+
+    .clear-history button {
+      background: #ff4d4f;
+    }
+
     @media (max-width: 600px) {
       .search-box {
         flex-direction: column;
-        align-items: center;
+      }
+      input, button {
+        width: 100%;
       }
     }
   </style>
 </head>
 <body>
 
-  <h1>🔍 Tìm kiếm trích dẫn Wikipedia</h1>
-
   <div class="container">
+    <h1>📖 Wikipedia Trích Dẫn</h1>
+
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Nhập từ khóa...">
-      <button onclick="searchWikipedia()">Tìm kiếm</button>
+      <button onclick="searchWikipedia()">🔍 Tìm kiếm</button>
     </div>
 
     <div id="result"></div>
 
     <div class="history">
-      <h3>Lịch sử tìm kiếm:</h3>
+      <h3>📜 Lịch sử tìm kiếm</h3>
       <ul id="historyList"></ul>
       <div class="clear-history">
-        <button onclick="clearHistory()" style="background-color: crimson;">Xóa lịch sử</button>
+        <button onclick="clearHistory()">🗑️ Xóa lịch sử</button>
       </div>
     </div>
   </div>
@@ -109,7 +162,7 @@
     function searchWikipedia(queryFromHistory = null) {
       const query = queryFromHistory || document.getElementById('searchInput').value.trim();
       if (!query) {
-        alert("Vui lòng nhập từ khóa");
+        alert("Vui lòng nhập từ khóa.");
         return;
       }
 
@@ -123,13 +176,21 @@
         .then(data => {
           const resultDiv = document.getElementById('result');
           let html = `<h2>${data.title}</h2>`;
-          if (data.thumbnail && data.thumbnail.source) {
-            html += `<img src="${data.thumbnail.source}" alt="Ảnh minh họa">`;
-          }
-          html += `<p>${data.extract}</p>`;
-          html += `<a href="https://vi.wikipedia.org/wiki/${encodeURIComponent(query)}" target="_blank">🔗 Xem chi tiết trên Wikipedia</a>`;
-          resultDiv.innerHTML = html;
 
+          if (data.thumbnail?.source) {
+            html += `<img src="${data.thumbnail.source}" alt="Thumbnail">`;
+          }
+
+          html += `<p>${data.extract}</p>`;
+          html += `
+            <div class="info">
+              <strong>Loại trang:</strong> ${data.type || 'Không xác định'}<br>
+              <strong>Cập nhật lần cuối:</strong> ${new Date(data.timestamp).toLocaleString('vi-VN')}<br>
+              🔗 <a href="https://vi.wikipedia.org/wiki/${encodeURIComponent(data.title)}" target="_blank">Xem đầy đủ trên Wikipedia</a>
+            </div>
+          `;
+
+          resultDiv.innerHTML = html;
           if (!queryFromHistory) saveToHistory(query);
         })
         .catch(err => {
@@ -160,13 +221,12 @@
     }
 
     function clearHistory() {
-      if (confirm("Bạn có chắc muốn xóa toàn bộ lịch sử tìm kiếm?")) {
+      if (confirm("Bạn có chắc muốn xóa lịch sử tìm kiếm không?")) {
         localStorage.removeItem('wikiHistory');
         renderHistory();
       }
     }
 
-    // Hiển thị lịch sử khi tải trang
     window.onload = renderHistory;
   </script>
 
