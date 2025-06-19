@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Wikipedia Trích Dẫn</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f0f2f5;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .search-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background: #007bff;
+      color: #fff;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #result img {
+      max-width: 100%;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+    #result h2 {
+      margin-top: 0;
+    }
+    .history {
+      margin-top: 30px;
+    }
+    .history ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .history li {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+      color: #007bff;
+    }
+    .history li:hover {
+      text-decoration: underline;
+    }
+    .clear-history {
+      margin-top: 10px;
+      text-align: right;
+    }
+    @media (max-width: 600px) {
+      .search-box {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔍 Tìm kiếm trích dẫn Wikipedia</h1>
+
+  <div class="container">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Nhập từ khóa...">
+      <button onclick="searchWikipedia()">Tìm kiếm</button>
+    </div>
+
+    <div id="result"></div>
+
+    <div class="history">
+      <h3>Lịch sử tìm kiếm:</h3>
+      <ul id="historyList"></ul>
+      <div class="clear-history">
+        <button onclick="clearHistory()" style="background-color: crimson;">Xóa lịch sử</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function searchWikipedia(queryFromHistory = null) {
+      const query = queryFromHistory || document.getElementById('searchInput').value.trim();
+      if (!query) {
+        alert("Vui lòng nhập từ khóa");
+        return;
+      }
+
+      const apiUrl = `https://vi.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) throw new Error("Không tìm thấy trang.");
+          return response.json();
+        })
+        .then(data => {
+          const resultDiv = document.getElementById('result');
+          let html = `<h2>${data.title}</h2>`;
+          if (data.thumbnail && data.thumbnail.source) {
+            html += `<img src="${data.thumbnail.source}" alt="Ảnh minh họa">`;
+          }
+          html += `<p>${data.extract}</p>`;
+          html += `<a href="https://vi.wikipedia.org/wiki/${encodeURIComponent(query)}" target="_blank">🔗 Xem chi tiết trên Wikipedia</a>`;
+          resultDiv.innerHTML = html;
+
+          if (!queryFromHistory) saveToHistory(query);
+        })
+        .catch(err => {
+          document.getElementById('result').innerHTML = `<p style="color:red;">❌ ${err.message}</p>`;
+        });
+    }
+
+    function saveToHistory(keyword) {
+      let history = JSON.parse(localStorage.getItem('wikiHistory')) || [];
+      if (!history.includes(keyword)) {
+        history.unshift(keyword);
+        if (history.length > 10) history.pop();
+        localStorage.setItem('wikiHistory', JSON.stringify(history));
+        renderHistory();
+      }
+    }
+
+    function renderHistory() {
+      const history = JSON.parse(localStorage.getItem('wikiHistory')) || [];
+      const list = document.getElementById('historyList');
+      list.innerHTML = "";
+      history.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        li.onclick = () => searchWikipedia(item);
+        list.appendChild(li);
+      });
+    }
+
+    function clearHistory() {
+      if (confirm("Bạn có chắc muốn xóa toàn bộ lịch sử tìm kiếm?")) {
+        localStorage.removeItem('wikiHistory');
+        renderHistory();
+      }
+    }
+
+    // Hiển thị lịch sử khi tải trang
+    window.onload = renderHistory;
+  </script>
+
+</body>
+</html>
