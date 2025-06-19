@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Wiki Trích Dẫn Đa Ngôn Ngữ</title>
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,12 +12,16 @@
       margin: 0;
       background: #f9f9f9;
       color: #333;
+      transition: all 0.3s ease-in-out;
     }
-    h1 {
+    body.dark {
+      background: #121212;
+      color: #e0e0e0;
+    }
+    h1, h2, h3 {
       text-align: center;
-      margin-bottom: 10px;
     }
-    form {
+    form, .controls {
       text-align: center;
       margin-bottom: 20px;
     }
@@ -27,13 +32,25 @@
       border: 1px solid #ccc;
       font-size: 16px;
     }
+    button {
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      background-color: #2563eb;
+      color: white;
+    }
     #results {
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
       background: white;
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    body.dark #results {
+      background: #1e1e1e;
     }
     img.thumbnail {
       max-width: 100%;
@@ -48,9 +65,13 @@
       margin: 15px 0;
       border-radius: 5px;
     }
-    .date, .last-edited {
+    body.dark .quote {
+      background: #2a2a2a;
+      border-left-color: #90caf9;
+    }
+    .last-edited {
       font-size: 0.9em;
-      color: #555;
+      color: #666;
     }
     .fav-btn {
       background: #ff4d4f;
@@ -58,7 +79,7 @@
       border: none;
       border-radius: 6px;
       padding: 8px 12px;
-      cursor: pointer;
+      margin-top: 10px;
     }
     .favorites {
       margin-top: 30px;
@@ -73,10 +94,12 @@
 </head>
 <body>
   <h1>🔍 Tìm Trích Dẫn Wikipedia</h1>
-  <form id="searchForm">
-    <input type="text" id="searchInput" placeholder="Nhập từ khóa (ví dụ: Albert Einstein)" required />
-    <select id="langSelect">
-     <option value="en">English</option>
+
+  <div class="controls">
+    <form id="searchForm">
+      <input type="text" id="searchInput" placeholder="Nhập từ khóa (ví dụ: Albert Einstein)" required />
+      <select id="langSelect">
+        <option value="en">English</option>
   <option value="vi">Tiếng Việt</option>
   <option value="es">Español</option>
   <option value="fr">Français</option>
@@ -182,22 +205,43 @@
   <option value="tr">Türkçe (Turkish)</option>
   <option value="uk">Українська (Ukrainian)</option>
   <option value="ur">اردو (Urdu)</option>
-      <!-- Add more if needed -->
-    </select>
-    <button type="submit">Tìm</button>
-  </form>
+        <!-- ... bạn có thể thêm thêm nhiều ngôn ngữ -->
+      </select>
+      <button type="submit">Tìm</button>
+    </form>
 
-  <div id="results"></div>
+    <button onclick="toggleTheme()" id="themeToggle">🌙 Chế độ tối</button>
+  </div>
+
+  <div id="results">
+    <div>
+      <button onclick="showTab('summary')">📄 Tóm tắt</button>
+      <button onclick="showTab('detail')">📚 Chi tiết</button>
+    </div>
+    <div id="summaryTab"></div>
+    <div id="detailTab" style="display:none;"></div>
+  </div>
 
   <div class="favorites">
     <h2>❤️ Trích dẫn yêu thích</h2>
+    <input type="text" id="filterFav" placeholder="Lọc trích dẫn..." />
     <ul id="favList"></ul>
   </div>
 
   <script>
     const form = document.getElementById('searchForm');
-    const results = document.getElementById('results');
+    const summaryTab = document.getElementById('summaryTab');
+    const detailTab = document.getElementById('detailTab');
     const favList = document.getElementById('favList');
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+
+    function showTab(tab) {
+      summaryTab.style.display = tab === 'summary' ? 'block' : 'none';
+      detailTab.style.display = tab === 'detail' ? 'block' : 'none';
+    }
 
     function saveFavorite(title, extract) {
       const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
@@ -216,35 +260,48 @@
       });
     }
 
+    document.getElementById('filterFav').addEventListener('input', function () {
+      const keyword = this.value.toLowerCase();
+      const lis = favList.querySelectorAll('li');
+      lis.forEach(li => {
+        li.style.display = li.textContent.toLowerCase().includes(keyword) ? 'block' : 'none';
+      });
+    });
+
     async function searchWiki(term, lang) {
-      results.innerHTML = `<p>⏳ Đang tìm kiếm...</p>`;
+      summaryTab.innerHTML = `<p>⏳ Đang tìm kiếm...</p>`;
+      detailTab.innerHTML = "";
+
       try {
-        // Lấy dữ liệu chính (summary)
         const summaryRes = await fetch(`https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`);
         const summary = await summaryRes.json();
 
-        // Lấy ngày chỉnh sửa cuối
         const metaRes = await fetch(`https://${lang}.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=timestamp&format=json&origin=*&titles=${encodeURIComponent(term)}`);
         const metaData = await metaRes.json();
         const pageId = Object.keys(metaData.query.pages)[0];
         const lastEdited = metaData.query.pages[pageId]?.revisions?.[0]?.timestamp || "Không rõ";
 
-        // Lấy toàn bộ nội dung nếu có
         const fullRes = await fetch(`https://${lang}.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(term)}&format=json&origin=*`);
         const fullData = await fullRes.json();
 
-        results.innerHTML = `
+        summaryTab.innerHTML = `
           <h2>${summary.title}</h2>
-          ${summary.thumbnail ? `<img src="${summary.thumbnail.source}" class="thumbnail" alt="${summary.title}" />` : ''}
+          ${summary.thumbnail ? `<img src="${summary.thumbnail.source}" class="thumbnail" loading="lazy" alt="${summary.title}" />` : ''}
           <div class="quote">${summary.extract}</div>
           <div class="last-edited">🕓 Sửa lần cuối: ${new Date(lastEdited).toLocaleString()}</div>
           <button class="fav-btn" onclick="saveFavorite('${summary.title}', \`${summary.extract}\`)">❤️ Lưu trích dẫn</button>
-          <hr/>
+        `;
+
+        detailTab.innerHTML = `
           <h3>Nội dung chi tiết</h3>
           <div>${fullData.parse?.text["*"] || "Không tìm thấy nội dung chi tiết."}</div>
         `;
+
+        showTab('summary');
+
       } catch (e) {
-        results.innerHTML = `<p>❌ Không thể tìm thấy thông tin. Hãy thử lại.</p>`;
+        summaryTab.innerHTML = `<p>❌ Không thể tìm thấy thông tin. Hãy thử lại.</p>`;
+        detailTab.innerHTML = '';
       }
     }
 
