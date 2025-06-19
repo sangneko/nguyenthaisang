@@ -1,136 +1,261 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Wikipedia Tìm Kiếm Đa Ngôn Ngữ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wiki Trích Dẫn Đa Ngôn Ngữ</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f2f2f2;
+      font-family: Arial, sans-serif;
+      padding: 20px;
       margin: 0;
-      padding: 0;
+      background: #f9f9f9;
       color: #333;
     }
-    header {
-      background: #0078d4;
-      color: white;
-      padding: 20px;
+    h1 {
       text-align: center;
+      margin-bottom: 10px;
     }
-    main {
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 0 20px;
-    }
-    .search-box {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
+    form {
+      text-align: center;
       margin-bottom: 20px;
     }
     input, select, button {
       padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
+      margin: 5px;
+      border-radius: 6px;
       border: 1px solid #ccc;
+      font-size: 16px;
     }
-    button {
-      background-color: #0078d4;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background-color: #005fa3;
-    }
-    #result {
+    #results {
+      max-width: 800px;
+      margin: auto;
       background: white;
+      border-radius: 10px;
       padding: 20px;
-      border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    img {
+    img.thumbnail {
       max-width: 100%;
-      border-radius: 10px;
-      margin-top: 10px;
+      max-height: 200px;
+      margin: 10px 0;
+      border-radius: 8px;
     }
-    .note {
-      font-size: 14px;
-      margin-top: 10px;
-      color: #666;
+    .quote {
+      background: #f0f0f0;
+      padding: 10px;
+      border-left: 5px solid #3b82f6;
+      margin: 15px 0;
+      border-radius: 5px;
     }
-    @media screen and (max-width: 600px) {
+    .date, .last-edited {
+      font-size: 0.9em;
+      color: #555;
+    }
+    .fav-btn {
+      background: #ff4d4f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .favorites {
+      margin-top: 30px;
+    }
+    @media (max-width: 600px) {
       input, select, button {
-        width: 100%;
+        width: 90%;
+        margin: 8px 0;
       }
     }
   </style>
 </head>
 <body>
+  <h1>🔍 Tìm Trích Dẫn Wikipedia</h1>
+  <form id="searchForm">
+    <input type="text" id="searchInput" placeholder="Nhập từ khóa (ví dụ: Albert Einstein)" required />
+    <select id="langSelect">
+     <option value="en">English</option>
+  <option value="vi">Tiếng Việt</option>
+  <option value="es">Español</option>
+  <option value="fr">Français</option>
+  <option value="de">Deutsch</option>
+  <option value="ru">Русский</option>
+  <option value="zh">中文</option>
+  <option value="ja">日本語</option>
+  <option value="pt">Português</option>
+  <option value="it">Italiano</option>
+  <option value="ar">العربية</option>
+  <option value="ko">한국어</option>
+  <option value="pl">Polski</option>
+  <option value="nl">Nederlands</option>
+  <option value="tr">Türkçe</option>
+  <option value="uk">Українська</option>
+  <option value="cs">Čeština</option>
+  <option value="th">ไทย</option>
+  <option value="sv">Svenska</option>
+  <option value="fi">Suomi</option>
+  <option value="no">Norsk</option>
+  <option value="da">Dansk</option>
+  <option value="id">Bahasa Indonesia</option>
+  <option value="ms">Bahasa Melayu</option>
+  <option value="ro">Română</option>
+  <option value="he">עברית</option>
+  <option value="el">Ελληνικά</option>
+  <option value="hu">Magyar</option>
+  <option value="bg">Български</option>
+  <option value="sr">Српски / Srpski</option>
+  <option value="hr">Hrvatski</option>
+  <option value="sk">Slovenčina</option>
+  <option value="sl">Slovenščina</option>
+  <option value="et">Eesti</option>
+  <option value="lt">Lietuvių</option>
+  <option value="lv">Latviešu</option>
+  <option value="hi">हिन्दी</option>
+  <option value="bn">বাংলা</option>
+  <option value="ur">اردو</option>
+      <option value="ab">Abkhazian</option>
+  <option value="af">Afrikaans</option>
+  <option value="ar">العربية (Arabic)</option>
+  <option value="az">Azerbaijani</option>
+  <option value="ba">Bashkir</option>
+  <option value="be">Belarusian</option>
+  <option value="bg">Български (Bulgarian)</option>
+  <option value="bn">বাংলা (Bengali)</option>
+  <option value="bs">Bosnian</option>
+  <option value="ca">Català (Catalan)</option>
+  <option value="ceb">Cebuano</option>
+  <option value="cs">Čeština (Czech)</option>
+  <option value="cv">Chuvash</option>
+  <option value="cy">Cymraeg (Welsh)</option>
+  <option value="da">Dansk (Danish)</option>
+  <option value="de">Deutsch (German)</option>
+  <option value="el">Ελληνικά (Greek)</option>
+  <option value="en">English</option>
+  <option value="eo">Esperanto</option>
+  <option value="es">Español (Spanish)</option>
+  <option value="et">Eesti (Estonian)</option>
+  <option value="eu">Euskara (Basque)</option>
+  <option value="fa">فارسی (Persian)</option>
+  <option value="fi">Suomi (Finnish)</option>
+  <option value="fr">Français (French)</option>
+  <option value="ga">Gaeilge (Irish)</option>
+  <option value="gl">Galego (Galician)</option>
+  <option value="gu">ગુજરાતી (Gujarati)</option>
+  <option value="he">עברית (Hebrew)</option>
+  <option value="hi">हिन्दी (Hindi)</option>
+  <option value="hr">Hrvatski (Croatian)</option>
+  <option value="ht">Kreyòl ayisyen (Haitian)</option>
+  <option value="hu">Magyar (Hungarian)</option>
+  <option value="hy">Հայերեն (Armenian)</option>
+  <option value="id">Bahasa Indonesia</option>
+  <option value="is">Íslenska (Icelandic)</option>
+  <option value="it">Italiano</option>
+  <option value="ja">日本語 (Japanese)</option>
+  <option value="ka">ქართული (Georgian)</option>
+  <option value="kn">ಕನ್ನಡ (Kannada)</option>
+  <option value="ko">한국어 (Korean)</option>
+  <option value="la">Latin</option>
+  <option value="lt">Lietuvių (Lithuanian)</option>
+  <option value="lv">Latviešu (Latvian)</option>
+  <option value="mk">Македонски (Macedonian)</option>
+  <option value="ml">മലയാളം (Malayalam)</option>
+  <option value="mr">मराठी (Marathi)</option>
+  <option value="ms">Bahasa Melayu</option>
+  <option value="mt">Malti (Maltese)</option>
+  <option value="nl">Nederlands (Dutch)</option>
+  <option value="no">Norsk (Norwegian)</option>
+  <option value="pl">Polski (Polish)</option>
+  <option value="pt">Português</option>
+  <option value="ro">Română (Romanian)</option>
+  <option value="ru">Русский (Russian)</option>
+  <option value="sa">संस्कृतम् (Sanskrit)</option>
+  <option value="sh">Serbo‑Croatian</option>
+  <option value="sk">Slovenčina (Slovak)</option>
+  <option value="sl">Slovenščina (Slovenian)</option>
+  <option value="sq">Shqip (Albanian)</option>
+  <option value="sv">Svenska (Swedish)</option>
+  <option value="ta">தமிழ் (Tamil)</option>
+  <option value="te">తెలుగు (Telugu)</option>
+  <option value="th">ไทย (Thai)</option>
+  <option value="tr">Türkçe (Turkish)</option>
+  <option value="uk">Українська (Ukrainian)</option>
+  <option value="ur">اردو (Urdu)</option>
+      <!-- Add more if needed -->
+    </select>
+    <button type="submit">Tìm</button>
+  </form>
 
-  <header>
-    <h1>🔍 Tìm kiếm Wikipedia Đa Ngôn Ngữ</h1>
-    <p class="note">Nhập từ khóa, chọn ngôn ngữ và nhấn tìm kiếm. Ví dụ: "Albert Einstein", "Việt Nam", "人工知能"</p>
-  </header>
+  <div id="results"></div>
 
-  <main>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Nhập từ khóa...">
-      <select id="langSelect">
-        <option value="vi">Tiếng Việt</option>
-        <option value="en">English</option>
-        <option value="ja">日本語 (Japanese)</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
-        <option value="es">Español</option>
-        <option value="zh">中文 (Chinese)</option>
-        <!-- Có thể thêm ngôn ngữ khác nếu cần -->
-      </select>
-      <button onclick="searchWikipedia()">Tìm kiếm</button>
-    </div>
-
-    <div id="result"></div>
-  </main>
+  <div class="favorites">
+    <h2>❤️ Trích dẫn yêu thích</h2>
+    <ul id="favList"></ul>
+  </div>
 
   <script>
-    function searchWikipedia() {
-      const query = document.getElementById('searchInput').value.trim();
-      const lang = document.getElementById('langSelect').value;
-      const resultDiv = document.getElementById('result');
+    const form = document.getElementById('searchForm');
+    const results = document.getElementById('results');
+    const favList = document.getElementById('favList');
 
-      if (!query) {
-        alert("Vui lòng nhập từ khóa.");
-        return;
-      }
-
-      resultDiv.innerHTML = "<p>🔄 Đang tìm kiếm...</p>";
-
-      const apiUrl = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
-
-      fetch(apiUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Không tìm thấy kết quả.");
-          }
-          return response.json();
-        })
-        .then(data => {
-          let html = `<h2>${data.title}</h2>`;
-          if (data.thumbnail) {
-            html += `<img src="${data.thumbnail.source}" alt="Thumbnail">`;
-          }
-          html += `<p>${data.extract}</p>`;
-          html += `<p><a href="${data.content_urls.desktop.page}" target="_blank">🔗 Xem chi tiết trên Wikipedia (${lang})</a></p>`;
-          resultDiv.innerHTML = html;
-        })
-        .catch(error => {
-          resultDiv.innerHTML = `<p style="color: red;">❌ ${error.message}</p>`;
-        });
+    function saveFavorite(title, extract) {
+      const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
+      favs.push({ title, extract });
+      localStorage.setItem('favorites', JSON.stringify(favs));
+      loadFavorites();
     }
-  </script>
 
+    function loadFavorites() {
+      const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
+      favList.innerHTML = '';
+      favs.forEach(fav => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${fav.title}:</strong> ${fav.extract}`;
+        favList.appendChild(li);
+      });
+    }
+
+    async function searchWiki(term, lang) {
+      results.innerHTML = `<p>⏳ Đang tìm kiếm...</p>`;
+      try {
+        // Lấy dữ liệu chính (summary)
+        const summaryRes = await fetch(`https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`);
+        const summary = await summaryRes.json();
+
+        // Lấy ngày chỉnh sửa cuối
+        const metaRes = await fetch(`https://${lang}.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=timestamp&format=json&origin=*&titles=${encodeURIComponent(term)}`);
+        const metaData = await metaRes.json();
+        const pageId = Object.keys(metaData.query.pages)[0];
+        const lastEdited = metaData.query.pages[pageId]?.revisions?.[0]?.timestamp || "Không rõ";
+
+        // Lấy toàn bộ nội dung nếu có
+        const fullRes = await fetch(`https://${lang}.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(term)}&format=json&origin=*`);
+        const fullData = await fullRes.json();
+
+        results.innerHTML = `
+          <h2>${summary.title}</h2>
+          ${summary.thumbnail ? `<img src="${summary.thumbnail.source}" class="thumbnail" alt="${summary.title}" />` : ''}
+          <div class="quote">${summary.extract}</div>
+          <div class="last-edited">🕓 Sửa lần cuối: ${new Date(lastEdited).toLocaleString()}</div>
+          <button class="fav-btn" onclick="saveFavorite('${summary.title}', \`${summary.extract}\`)">❤️ Lưu trích dẫn</button>
+          <hr/>
+          <h3>Nội dung chi tiết</h3>
+          <div>${fullData.parse?.text["*"] || "Không tìm thấy nội dung chi tiết."}</div>
+        `;
+      } catch (e) {
+        results.innerHTML = `<p>❌ Không thể tìm thấy thông tin. Hãy thử lại.</p>`;
+      }
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const term = document.getElementById('searchInput').value;
+      const lang = document.getElementById('langSelect').value;
+      searchWiki(term, lang);
+    });
+
+    loadFavorites();
+  </script>
 </body>
 </html>
