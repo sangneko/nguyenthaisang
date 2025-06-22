@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông số Bot Discord của tôi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            color: #7289DA; /* Discord Blurple */
+            margin-bottom: 20px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .stat-item {
+            background-color: #e8f0fe; /* Light blue background for items */
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .stat-item strong {
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .stat-item span {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+        .last-updated {
+            margin-top: 25px;
+            font-size: 0.85em;
+            color: #777;
+        }
+        .loading {
+            font-style: italic;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Discord Bot Status</h1>
+        <div id="stats-display" class="stat-grid">
+            <p class="loading">Đang tải thông số...</p>
+        </div>
+        <p class="last-updated" id="last-updated">Cập nhật lần cuối: Đang tải...</p>
+    </div>
+
+    <script>
+        // *** ĐÂY LÀ ĐIỂM QUAN TRỌNG NHẤT: THAY THẾ BẰNG URL CÔNG KHAI CỦA BOT CỦA BẠN ***
+        // Nếu bạn dùng Replit, đó sẽ là URL hiển thị khi bạn nhấn "Open Website" + "/api/bot-stats"
+        // Ví dụ: 'https://my-bot-project.replit.dev/api/bot-stats'
+        const API_URL = 'https://YOUR_BOT_PUBLIC_URL/api/bot-stats'; // <<< THAY THẾ LINK NÀY!
+
+        async function fetchBotStats() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('Dữ liệu nhận được:', data); // Để debug trong console trình duyệt
+
+                document.getElementById('stats-display').innerHTML = `
+                    <div class="stat-item"><strong>Trạng thái:</strong> <span>${data.status === 'online' ? '🟢 Online' : '🔴 Offline'}</span></div>
+                    <div class="stat-item"><strong>Độ trễ API:</strong> <span>${data.apiLatency}</span></div>
+                    <div class="stat-item"><strong>Uptime:</strong> <span>${formatUptime(data.uptime)}</span></div>
+                    <div class="stat-item"><strong>Số Máy chủ:</strong> <span>${data.guildCount}</span></div>
+                    <div class="stat-item"><strong>Số Người dùng:</strong> <span>${data.userCount}</span></div>
+                    <div class="stat-item"><strong>Số Kênh:</strong> <span>${data.channelCount}</span></div>
+                    <div class="stat-item"><strong>RAM (Tổng):</strong> <span>${data.memoryUsage.rss}</span></div>
+                    <div class="stat-item"><strong>RAM (Heap):</strong> <span>${data.memoryUsage.heapUsed}</span></div>
+                    <div class="stat-item"><strong>Tải CPU (1p):</strong> <span>${data.cpuLoad.oneMin}</span></div>
+                    <div class="stat-item"><strong>Tải CPU (5p):</strong> <span>${data.cpuLoad.fiveMin}</span></div>
+                    <div class="stat-item"><strong>Tải CPU (15p):</strong> <span>${data.cpuLoad.fifteenMin}</span></div>
+                `;
+
+                document.getElementById('last-updated').textContent = `Cập nhật lần cuối: ${new Date(data.lastUpdated).toLocaleString('vi-VN')}`;
+
+            } catch (error) {
+                console.error('Lỗi khi tải thông số bot:', error);
+                document.getElementById('stats-display').innerHTML = '<p style="color: red;">Không thể tải thông số bot. Vui lòng kiểm tra bot và URL API.</p>';
+                document.getElementById('last-updated').textContent = 'Cập nhật lần cuối: Lỗi!';
+            }
+        }
+
+        // Hàm định dạng uptime từ miligiây sang định dạng dễ đọc
+        function formatUptime(ms) {
+            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            ms %= (1000 * 60 * 60 * 24);
+            const hours = Math.floor(ms / (1000 * 60 * 60));
+            ms %= (1000 * 60 * 60);
+            const minutes = Math.floor(ms / (1000 * 60));
+            ms %= (1000 * 60);
+            const seconds = Math.floor(ms / 1000);
+
+            let parts = [];
+            if (days > 0) parts.push(`${days} ngày`);
+            if (hours > 0) parts.push(`${hours} giờ`);
+            if (minutes > 0) parts.push(`${minutes} phút`);
+            if (seconds > 0 || parts.length === 0) parts.push(`${seconds} giây`); // Luôn hiển thị giây nếu không có gì khác
+
+            return parts.join(', ');
+        }
+
+        // Tải thông số khi trang được tải
+        fetchBotStats();
+
+        // Cập nhật thông số mỗi 5 giây
+        setInterval(fetchBotStats, 5000);
+    </script>
+</body>
+</html>
