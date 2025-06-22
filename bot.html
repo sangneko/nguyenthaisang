@@ -4,18 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trạng thái Discord Bot của NGUYEN THAI SANG</title>
-    <meta name="description" content="Xem trạng thái hoạt động, số liệu thống kê máy chủ, người dùng và hiệu suất của Discord Bot của NGUYEN THAI SANG.">
-    <meta name="keywords" content="Discord bot, trạng thái bot, bot status, thống kê Discord, bot uptime, NGUYEN THAI SANG bot">
-    <meta name="author" content="NGUYEN THAI SANG">
-
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourusername.github.io/your-repo-name/"> <meta property="og:title" content="Trạng thái Discord Bot của NGUYEN THAI SANG">
-    <meta property="og:description" content="Xem trạng thái hoạt động, số liệu thống kê máy chủ, người dùng và hiệu suất của Discord Bot của NGUYEN THAI SANG.">
-    <meta property="og:image" content="https://i.imgur.com/your_bot_thumbnail.png"> <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://yourusername.github.io/your-repo-name/"> <meta property="twitter:title" content="Trạng thái Discord Bot của NGUYEN THAI SANG">
-    <meta property="twitter:description" content="Xem trạng thái hoạt động, số liệu thống kê máy chủ, người dùng và hiệu suất của Discord Bot của NGUYEN THAI SANG.">
-    <meta property="twitter:image" content="https://i.imgur.com/your_bot_thumbnail.png"> <style>
-        /* CSS cho giao diện trang web */
+    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f2f5;
@@ -37,23 +26,23 @@
             text-align: center;
         }
         h1 {
-            color: #7289DA; /* Màu Discord Blurple */
+            color: #7289DA; 
             margin-bottom: 25px;
             font-size: 2.2em;
         }
         .stat-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Cột tự động căn chỉnh */
-            gap: 20px; /* Khoảng cách giữa các mục */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 20px; 
             margin-top: 20px;
             text-align: left;
         }
         .stat-item {
-            background-color: #e8f0fe; /* Nền xanh nhạt cho các mục thông số */
+            background-color: #e8f0fe; 
             padding: 18px; 
             border-radius: 8px; 
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08); 
-            transition: transform 0.2s ease-in-out; /* Hiệu ứng nhẹ khi di chuột */
+            transition: transform 0.2s ease-in-out;
         }
         .stat-item:hover {
             transform: translateY(-5px); 
@@ -78,7 +67,6 @@
             font-style: italic;
             color: #888;
         }
-        /* Các chấm tròn biểu thị trạng thái */
         .status-indicator {
             display: inline-block;
             width: 12px;
@@ -87,9 +75,9 @@
             margin-right: 8px;
             vertical-align: middle;
         }
-        .status-online { background-color: #2ECC71; } /* Xanh lá cây */
-        .status-offline { background-color: #E74C3C; } /* Đỏ */
-        .status-loading { background-color: #F1C40F; } /* Vàng */
+        .status-online { background-color: #2ECC71; } 
+        .status-offline { background-color: #E74C3C; }
+        .status-loading { background-color: #F1C40F; }
     </style>
 </head>
 <body>
@@ -103,34 +91,36 @@
 
     <script>
         // =========================================================================
-        // *** RẤT QUAN TRỌNG: THAY THẾ 'YOUR_BIN_ID_HERE' BẰNG BIN ID CỦA BẠN TỪ JSONbin.io ***
+        // *** THAY THẾ 'YOUR_BIN_ID_HERE' BẰNG BIN ID CỦA BẠN TỪ JSONbin.io ***
         // BIN ID của bạn đã được xác định là: 657755785561e97a502925f3
         const API_URL = 'https://api.jsonbin.io/v3/b/685776368561e97a502925f3'; 
         // =========================================================================
 
         async function fetchBotStats() {
+            console.log('Đang cố gắng tải dữ liệu từ:', API_URL); // Debug: In URL đang dùng
             try {
                 const response = await fetch(API_URL);
+                
+                console.log('Phản hồi từ API:', response.status, response.statusText); // Debug: In trạng thái phản hồi
                 if (!response.ok) {
+                    console.error('Lỗi HTTP khi tải dữ liệu:', response.status, response.statusText); // Debug: Lỗi HTTP
                     displayOfflineStats();
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log('Dữ liệu nhận được:', data); 
+                console.log('Dữ liệu nhận được:', data); // Debug: In toàn bộ dữ liệu nhận được
 
-                // Xác định trạng thái của bot và gán lớp CSS tương ứng
                 let statusText = 'Offline';
                 let statusClass = 'status-offline';
 
                 if (data.status === 'online') {
                     statusText = 'Online';
                     statusClass = 'status-online';
-                } else if (data.status === 'loading') { // Trạng thái ban đầu nếu bot chưa cập nhật
+                } else if (data.status === 'loading') {
                     statusText = 'Đang tải...';
                     statusClass = 'status-loading';
                 }
 
-                // Cập nhật các thông số lên trang HTML
                 document.getElementById('stats-display').innerHTML = `
                     <div class="stat-item"><strong>Trạng thái:</strong> <span class="${statusClass} status-indicator"></span> <span>${statusText}</span></div>
                     <div class="stat-item"><strong>Độ trễ API:</strong> <span>${data.apiLatency || 'N/A'}</span></div>
@@ -145,17 +135,15 @@
                     <div class="stat-item"><strong>Tải CPU (15p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fifteenMin) || 'N/A'}</span></div>
                 `;
 
-                // Cập nhật thời gian hiển thị cuối cùng
                 const lastUpdatedTime = data.lastUpdated ? new Date(data.lastUpdated).toLocaleString('vi-VN') : 'Đang chờ dữ liệu...';
                 document.getElementById('last-updated').textContent = `Cập nhật lần cuối: ${lastUpdatedTime}`;
 
             } catch (error) {
-                console.error('Lỗi khi tải thông số bot:', error);
-                displayOfflineStats(); // Hiển thị trạng thái offline khi có lỗi
+                console.error('Lỗi khi tải thông số bot (catch block):', error); // Debug: Lỗi trong khối catch
+                displayOfflineStats();
             }
         }
 
-        // Hàm hiển thị trạng thái offline và thông báo lỗi khi không thể tải dữ liệu
         function displayOfflineStats() {
             document.getElementById('stats-display').innerHTML = `
                 <div class="stat-item"><strong>Trạng thái:</strong> <span class="status-offline status-indicator"></span> <span>Offline</span></div>
@@ -173,7 +161,6 @@
             document.getElementById('last-updated').textContent = `Cập nhật lần cuối: Lỗi! ${new Date().toLocaleString('vi-VN')}`;
         }
 
-        // Hàm hỗ trợ định dạng thời gian uptime từ miligiây sang chuỗi dễ đọc
         function formatUptime(ms) {
             if (ms === undefined || ms === null || isNaN(ms)) return 'Không có dữ liệu';
             const days = Math.floor(ms / (1000 * 60 * 60 * 24));
@@ -188,16 +175,12 @@
             if (days > 0) parts.push(`${days} ngày`);
             if (hours > 0) parts.push(`${hours} giờ`);
             if (minutes > 0) parts.push(`${minutes} phút`);
-            // Hiển thị giây chỉ khi không có phần thời gian lớn hơn, hoặc nếu là thời gian ngắn
             if (seconds > 0 || parts.length === 0) parts.push(`${seconds} giây`); 
 
             return parts.join(', ');
         }
 
-        // Tải thông số khi trang được tải lần đầu
         fetchBotStats();
-
-        // Thiết lập để cập nhật thông số mỗi 5 giây
         setInterval(fetchBotStats, 5000);
     </script>
 </body>
