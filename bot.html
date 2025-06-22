@@ -32,44 +32,44 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 30px;
             width: 100%;
-            max-width: 650px; /* Tăng chiều rộng một chút */
+            max-width: 650px;
             text-align: center;
         }
         h1 {
-            color: #7289DA; /* Discord Blurple */
+            color: #7289DA;
             margin-bottom: 25px;
             font-size: 2.2em;
         }
         .stat-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Điều chỉnh cột */
-            gap: 20px; /* Tăng khoảng cách */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
             margin-top: 20px;
             text-align: left;
         }
         .stat-item {
-            background-color: #e8f0fe; /* Light blue background for items */
-            padding: 18px; /* Tăng padding */
-            border-radius: 8px; /* Bo tròn góc hơn */
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08); /* Đổ bóng rõ hơn */
+            background-color: #e8f0fe;
+            padding: 18px;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
             transition: transform 0.2s ease-in-out;
         }
         .stat-item:hover {
-            transform: translateY(-5px); /* Hiệu ứng hover nhẹ */
+            transform: translateY(-5px);
         }
         .stat-item strong {
             color: #555;
             display: block;
-            margin-bottom: 8px; /* Tăng khoảng cách */
-            font-size: 1em; /* Kích thước chữ lớn hơn */
+            margin-bottom: 8px;
+            font-size: 1em;
         }
         .stat-item span {
-            font-size: 1.4em; /* Kích thước chữ lớn hơn */
+            font-size: 1.4em;
             font-weight: bold;
             color: #333;
         }
         .last-updated {
-            margin-top: 30px; /* Tăng khoảng cách */
+            margin-top: 30px;
             font-size: 0.9em;
             color: #777;
         }
@@ -85,8 +85,8 @@
             margin-right: 8px;
             vertical-align: middle;
         }
-        .status-online { background-color: #2ECC71; } /* Xanh lá cây */
-        .status-offline { background-color: #E74C3C; } /* Đỏ */
+        .status-online { background-color: #2ECC71; }
+        .status-offline { background-color: #E74C3C; }
     </style>
 </head>
 <body>
@@ -99,93 +99,24 @@
     </div>
 
     <script>
-        // *** ĐÂY LÀ ĐIỂM QUAN TRỌNG NHẤT: THAY THẾ BẰNG IP CÔNG KHAI CỦA SERVER VÀ CỔNG CỦA BẠN ***
-        // Địa chỉ IP bạn đã cung cấp là 160.25.233.243 và bot lắng nghe trên cổng 3000.
-        const API_URL = 'http://160.25.233.243:3000/api/bot-stats'; 
+        // === RẤT QUAN TRỌNG: THAY THẾ NÀY BẰNG PUBLIC URL CỦA BIN CỦA BẠN TỪ JSONbin.io ===
+        // Bin ID của bạn là 657755785561e97a502925a7
+        const API_URL = 'https://api.jsonbin.io/v3/b/685776368561e97a502925f3'; 
+        // =================================================================================
 
         async function fetchBotStats() {
             try {
                 const response = await fetch(API_URL);
                 if (!response.ok) {
-                    // Nếu phản hồi không OK (ví dụ: 404, 500, hoặc kết nối bị từ chối)
-                    // Thiết lập trạng thái bot là offline
                     displayOfflineStats();
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log('Dữ liệu nhận được:', data); // Để debug trong console trình duyệt
+                console.log('Dữ liệu nhận được:', data); 
 
-                // Xác định trạng thái và màu cho biểu tượng
                 const statusText = data.status === 'online' ? 'Online' : 'Offline';
                 const statusClass = data.status === 'online' ? 'status-online' : 'status-offline';
 
                 document.getElementById('stats-display').innerHTML = `
-                    <div class="stat-item"><strong>Trạng thái:</strong> <span class="${statusClass} status-indicator"></span> <span>${statusText}</span></div>
-                    <div class="stat-item"><strong>Độ trễ API:</strong> <span>${data.apiLatency}</span></div>
-                    <div class="stat-item"><strong>Uptime:</strong> <span>${formatUptime(data.uptime)}</span></div>
-                    <div class="stat-item"><strong>Số Máy chủ:</strong> <span>${data.guildCount}</span></div>
-                    <div class="stat-item"><strong>Số Người dùng:</strong> <span>${data.userCount}</span></div>
-                    <div class="stat-item"><strong>Số Kênh:</strong> <span>${data.channelCount}</span></div>
-                    <div class="stat-item"><strong>RAM (Tổng):</strong> <span>${data.memoryUsage.rss}</span></div>
-                    <div class="stat-item"><strong>RAM (Heap):</strong> <span>${data.memoryUsage.heapUsed}</span></div>
-                    <div class="stat-item"><strong>Tải CPU (1p):</strong> <span>${data.cpuLoad.oneMin}</span></div>
-                    <div class="stat-item"><strong>Tải CPU (5p):</strong> <span>${data.cpuLoad.fiveMin}</span></div>
-                    <div class="stat-item"><strong>Tải CPU (15p):</strong> <span>${data.cpuLoad.fifteenMin}</span></div>
-                `;
-
-                document.getElementById('last-updated').textContent = `Cập nhật lần cuối: ${new Date().toLocaleString('vi-VN')}`; // Dùng thời gian hiện tại khi cập nhật thành công
-
-            } catch (error) {
-                console.error('Lỗi khi tải thông số bot:', error);
-                displayOfflineStats(); // Hiển thị trạng thái offline khi có lỗi
-            }
-        }
-
-        // Hàm hiển thị trạng thái offline và thông báo lỗi
-        function displayOfflineStats() {
-            document.getElementById('stats-display').innerHTML = `
-                <div class="stat-item"><strong>Trạng thái:</strong> <span class="status-offline status-indicator"></span> <span>Offline</span></div>
-                <div class="stat-item"><strong>Độ trễ API:</strong> <span>Không có dữ liệu</span></div>
-                <div class="stat-item"><strong>Uptime:</strong> <span>Không có dữ liệu</span></div>
-                <div class="stat-item"><strong>Số Máy chủ:</strong> <span>Không có dữ liệu</span></div>
-                <div class="stat-item"><strong>Số Người dùng:</strong> <span>Không có dữ liệu</span></div>
-                <div class="stat-item"><strong>Số Kênh:</strong> <span>Không có dữ liệu</span></div>
-                <div class="stat-item"><strong>RAM (Tổng):</strong> <span>Không có dữ liệu</span></div>
-                <div class="stat-item"><strong>RAM (Heap):</strong> <span>Không có dữ liệu</span></div>
-                <div class="stat-item"><strong>Tải CPU (1p):</strong> <span>Không có dữ liệu</span></div>
-                <div class="stat-item"><strong>Tải CPU (5p):</strong> <span>Không có dữ liệu</span></div>
-                <div class="stat-item"><strong>Tải CPU (15p):</strong> <span>Không có dữ liệu</span></div>
-            `;
-            document.getElementById('last-updated').textContent = `Cập nhật lần cuối: Lỗi! ${new Date().toLocaleString('vi-VN')}`;
-        }
-
-
-        // Hàm định dạng uptime từ miligiây sang định dạng dễ đọc
-        function formatUptime(ms) {
-            if (ms === undefined || ms === null) return 'N/A';
-            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-            ms %= (1000 * 60 * 60 * 24);
-            const hours = Math.floor(ms / (1000 * 60 * 60));
-            ms %= (1000 * 60 * 60);
-            const minutes = Math.floor(ms / (1000 * 60));
-            ms %= (1000 * 60);
-            const seconds = Math.floor(ms / 1000);
-
-            let parts = [];
-            if (days > 0) parts.push(`${days} ngày`);
-            if (hours > 0) parts.push(`${hours} giờ`);
-            if (minutes > 0) parts.push(`${minutes} phút`);
-            // Hiển thị giây chỉ khi không có phần thời gian lớn hơn, hoặc nếu là thời gian ngắn
-            if (seconds > 0 || parts.length === 0) parts.push(`${seconds} giây`); 
-
-            return parts.join(', ');
-        }
-
-        // Tải thông số khi trang được tải
-        fetchBotStats();
-
-        // Cập nhật thông số mỗi 5 giây
-        setInterval(fetchBotStats, 5000);
-    </script>
-</body>
-</html>
+                    <div class="stat-item"><strong>Trạng thái:</strong> <span class="<span class="math-inline">\{statusClass\} status\-indicator"\></span\> <span\></span>{statusText}</span></div>
+                    <div class="stat-item"><strong>Độ trễ API:</strong> <span><span class="math-inline">\{data\.apiLatency \|\| 'N/A'\}</span\></div\>
