@@ -663,23 +663,23 @@
                 </div>
                 <div class="modal-stat-item">
                     <i class="fas fa-memory"></i> 
-                    <strong>RAM (Tổng):</strong> <span>${(data.memoryUsage && data.memoryUsage.rss) ? `${data.memoryUsage.rss.toFixed(2)} MB` : 'N/A'}</span>
+                    <strong>RAM (Tổng):</strong> <span>${(data.memoryUsage && data.memoryUsage.rss) ? `${parseFloat(data.memoryUsage.rss).toFixed(2)} MB` : 'N/A'}</span>
                 </div>
                 <div class="modal-stat-item">
                     <i class="fas fa-hdd"></i> 
-                    <strong>RAM (Heap):</strong> <span>${(data.memoryUsage && data.memoryUsage.heapUsed) ? `${data.memoryUsage.heapUsed.toFixed(2)} MB` : 'N/A'}</span>
+                    <strong>RAM (Heap):</strong> <span>${(data.memoryUsage && data.memoryUsage.heapUsed) ? `${parseFloat(data.memoryUsage.heapUsed).toFixed(2)} MB` : 'N/A'}</span>
                 </div>
                 <div class="modal-stat-item">
                     <i class="fas fa-microchip"></i> 
-                    <strong>Tải CPU (1p):</strong> <span>${(data.cpuLoad && data.cpuLoad.oneMin) ? `${data.cpuLoad.oneMin.toFixed(2)}%` : 'N/A'}</span>
+                    <strong>Tải CPU (1p):</strong> <span>${(data.cpuLoad && data.cpuLoad.oneMin) ? `${parseFloat(data.cpuLoad.oneMin).toFixed(2)}%` : 'N/A'}</span>
                 </div>
                 <div class="modal-stat-item">
                     <i class="fas fa-microchip"></i> 
-                    <strong>Tải CPU (5p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fiveMin) ? `${data.cpuLoad.fiveMin.toFixed(2)}%` : 'N/A'}</span>
+                    <strong>Tải CPU (5p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fiveMin) ? `${parseFloat(data.cpuLoad.fiveMin).toFixed(2)}%` : 'N/A'}</span>
                 </div>
                 <div class="modal-stat-item">
                     <i class="fas fa-microchip"></i> 
-                    <strong>Tải CPU (15p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fifteenMin) ? `${data.cpuLoad.fifteenMin.toFixed(2)}%` : 'N/A'}</span>
+                    <strong>Tải CPU (15p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fifteenMin) ? `${parseFloat(data.cpuLoad.fifteenMin).toFixed(2)}%` : 'N/A'}</span>
                 </div>
             `;
         }
