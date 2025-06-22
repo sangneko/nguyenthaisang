@@ -53,6 +53,12 @@
             font-weight: 700;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); /* Bóng chữ nhẹ */
         }
+        .current-time {
+            font-size: 1.1em;
+            color: var(--light-text-color);
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
         .stat-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Tự động điều chỉnh cột */
@@ -142,6 +148,7 @@
 <body>
     <div class="container">
         <h1>Trạng thái Discord Bot của NGUYEN THAI SANG</h1>
+        <p class="current-time" id="current-time">Thời gian hiện tại: Đang tải...</p>
         <div id="stats-display" class="stat-grid">
             <p class="loading">Đang tải thông số...</p>
         </div>
@@ -151,25 +158,25 @@
     <script>
         // =========================================================================
         // *** BIN ID CỦA BẠN TỪ JSONbin.io ***
-        // BIN ID của bạn đã được xác định là: 685776368561e97a502925f3
+        // BIN ID đã được xác định là: 685776368561e97a502925f3
         const API_URL = 'https://api.jsonbin.io/v3/b/685776368561e97a502925f3'; 
         // =========================================================================
 
         async function fetchBotStats() {
-            console.log('Đang cố gắng tải dữ liệu từ:', API_URL); // Debug: In URL đang dùng
+            // console.log('Đang cố gắng tải dữ liệu từ:', API_URL); // Có thể bỏ comment để debug
             try {
                 const response = await fetch(API_URL);
                 
-                console.log('Phản hồi từ API:', response.status, response.statusText); // Debug: In trạng thái phản hồi
+                // console.log('Phản hồi từ API:', response.status, response.statusText); // Có thể bỏ comment để debug
                 if (!response.ok) {
-                    console.error('Lỗi HTTP khi tải dữ liệu:', response.status, response.statusText); // Debug: Lỗi HTTP
+                    // console.error('Lỗi HTTP khi tải dữ liệu:', response.status, response.statusText); // Có thể bỏ comment để debug
                     displayOfflineStats();
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const responseData = await response.json();
-                // Vì JSONbin.io có thể bọc dữ liệu trong một object 'record', chúng ta cần lấy dữ liệu từ đó.
+                // Vì JSONbin.io bọc dữ liệu trong một object 'record', chúng ta cần lấy dữ liệu từ đó.
                 const data = responseData.record; 
-                console.log('Dữ liệu đã xử lý:', data); // Debug: In dữ liệu sau khi xử lý
+                // console.log('Dữ liệu đã xử lý:', data); // Có thể bỏ comment để debug
 
                 let statusText = 'Offline';
                 let statusClass = 'status-offline';
@@ -177,7 +184,7 @@
                 if (data.status === 'online') {
                     statusText = 'Online';
                     statusClass = 'status-online';
-                } else if (data.status === 'loading') { // Trạng thái ban đầu nếu bot chưa cập nhật
+                } else if (data.status === 'loading') { 
                     statusText = 'Đang tải...';
                     statusClass = 'status-loading';
                 }
@@ -190,7 +197,7 @@
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-network-wired icon"></i>
-                        <strong>Độ trễ API:</strong> <span>${data.apiLatency || 'N/A'}</span>
+                        <strong>Độ trễ API:</strong> <span>${data.apiLatency ? `${data.apiLatency} ms` : 'N/A'}</span>
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-clock icon"></i>
@@ -210,23 +217,23 @@
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-memory icon"></i>
-                        <strong>RAM (Tổng):</strong> <span>${(data.memoryUsage && data.memoryUsage.rss) || 'N/A'}</span>
+                        <strong>RAM (Tổng):</strong> <span>${(data.memoryUsage && data.memoryUsage.rss) ? `${data.memoryUsage.rss} MB` : 'N/A'}</span>
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-hdd icon"></i>
-                        <strong>RAM (Heap):</strong> <span>${(data.memoryUsage && data.memoryUsage.heapUsed) || 'N/A'}</span>
+                        <strong>RAM (Heap):</strong> <span>${(data.memoryUsage && data.memoryUsage.heapUsed) ? `${data.memoryUsage.heapUsed} MB` : 'N/A'}</span>
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-microchip icon"></i>
-                        <strong>Tải CPU (1p):</strong> <span>${(data.cpuLoad && data.cpuLoad.oneMin) || 'N/A'}</span>
+                        <strong>Tải CPU (1p):</strong> <span>${(data.cpuLoad && data.cpuLoad.oneMin) ? `${data.cpuLoad.oneMin.toFixed(2)}%` : 'N/A'}</span>
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-microchip icon"></i>
-                        <strong>Tải CPU (5p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fiveMin) || 'N/A'}</span>
+                        <strong>Tải CPU (5p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fiveMin) ? `${data.cpuLoad.fiveMin.toFixed(2)}%` : 'N/A'}</span>
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-microchip icon"></i>
-                        <strong>Tải CPU (15p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fifteenMin) || 'N/A'}</span>
+                        <strong>Tải CPU (15p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fifteenMin) ? `${data.cpuLoad.fifteenMin.toFixed(2)}%` : 'N/A'}</span>
                     </div>
                 `;
 
@@ -235,7 +242,7 @@
                 document.getElementById('last-updated').textContent = `Cập nhật lần cuối: ${lastUpdatedTime}`;
 
             } catch (error) {
-                console.error('Lỗi khi tải thông số bot (catch block):', error); 
+                // console.error('Lỗi khi tải thông số bot (catch block):', error); 
                 displayOfflineStats(); // Hiển thị trạng thái offline khi có lỗi
             }
         }
@@ -312,11 +319,33 @@
             return parts.join(', ');
         }
 
+        // Hàm cập nhật đồng hồ thời gian thực
+        function updateRealTimeClock() {
+            const now = new Date();
+            const timeString = now.toLocaleString('vi-VN', {
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'numeric', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit', 
+                hour12: false 
+            });
+            document.getElementById('current-time').textContent = `Thời gian hiện tại: ${timeString}`;
+        }
+
+
         // Tải thông số khi trang được tải lần đầu
         fetchBotStats();
+        // Cập nhật đồng hồ khi trang được tải lần đầu
+        updateRealTimeClock();
 
-        // Thiết lập để cập nhật thông số mỗi 5 giây
-        setInterval(fetchBotStats, 5000);
+        // Thiết lập để cập nhật thông số mỗi 3 giây (tạo cảm giác liên tục)
+        setInterval(fetchBotStats, 3000); 
+        // Thiết lập để cập nhật đồng hồ thời gian thực mỗi 1 giây
+        setInterval(updateRealTimeClock, 1000);
+
     </script>
 </body>
 </html>
