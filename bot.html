@@ -104,7 +104,7 @@
     <script>
         // =========================================================================
         // *** RẤT QUAN TRỌNG: THAY THẾ 'YOUR_BIN_ID_HERE' BẰNG BIN ID CỦA BẠN TỪ JSONbin.io ***
-        // Ví dụ: const API_URL = 'https://api.jsonbin.io/v3/b/657755785561e97a502925a7';
+        // BIN ID của bạn đã được xác định là: 657755785561e97a502925f3
         const API_URL = 'https://api.jsonbin.io/v3/b/685776368561e97a502925f3'; 
         // =========================================================================
 
@@ -112,12 +112,11 @@
             try {
                 const response = await fetch(API_URL);
                 if (!response.ok) {
-                    // Nếu có lỗi HTTP (ví dụ: Bin không public, hoặc lỗi server của JSONbin.io)
                     displayOfflineStats();
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const data = await response.json(); // Phân tích phản hồi JSON
-                console.log('Dữ liệu nhận được:', data); // In ra console để gỡ lỗi
+                const data = await response.json();
+                console.log('Dữ liệu nhận được:', data); 
 
                 // Xác định trạng thái của bot và gán lớp CSS tương ứng
                 let statusText = 'Offline';
