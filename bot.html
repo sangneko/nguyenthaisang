@@ -1,297 +1,584 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trạng thái Discord Bot của NGUYEN THAI SANG</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trang chính</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/857/857681.png" type="image/png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Các biến CSS để dễ dàng thay đổi màu sắc và kích thước */
         :root {
+            --bg-light: linear-gradient(135deg, #74ebd5, #acb6e5);
+            --bg-dark: linear-gradient(135deg, #1e1e1e, #111);
+            --text-light: #fff;
+            --text-dark: #111;
+            --glass-bg: rgba(255, 255, 255, 0.2);
+
+            /* Các biến CSS riêng cho phần trạng thái bot */
             --discord-blurple: #7289DA;
-            --dark-background: #23272A;
-            --card-background: #F8F9FA; /* Màu nền thẻ nhẹ */
-            --text-color: #343A40; /* Màu chữ chính */
-            --light-text-color: #6C757D; /* Màu chữ phụ */
-            --online-color: #28A745; /* Màu xanh lá cho online */
-            --offline-color: #DC3545; /* Màu đỏ cho offline */
-            --loading-color: #FFC107; /* Màu vàng cho đang tải */
-            --border-radius: 12px; /* Bo tròn góc */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); /* Đổ bóng nhẹ */
-            --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.15); /* Đổ bóng khi di chuột qua */
+            --bot-card-bg: rgba(255, 255, 255, 0.9); /* Nền nhẹ cho bot status */
+            --bot-card-bg-dark: rgba(0, 0, 0, 0.5); /* Nền tối cho bot status */
+            --modal-bg: rgba(255, 255, 255, 0.95);
+            --modal-bg-dark: rgba(23, 27, 30, 0.95);
+            --online-color: #28A745;
+            --offline-color: #DC3545;
+            --loading-color: #FFC107;
+            --border-radius-small: 8px; /* Bo tròn góc nhỏ hơn */
+            --border-radius-medium: 12px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            background-color: #f0f2f5;
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            box-sizing: border-box; /* Bao gồm padding trong tổng kích thước */
-        }
-        .container {
-            background-color: #fff;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-light);
-            padding: 30px;
-            width: 100%;
-            max-width: 750px; /* Tăng chiều rộng tối đa của container */
-            text-align: center;
-            transition: all 0.3s ease; /* Hiệu ứng chuyển động mượt mà */
-        }
-        .container:hover {
-            box-shadow: var(--shadow-hover); /* Đổ bóng mạnh hơn khi di chuột */
-        }
-        h1 {
-            color: var(--discord-blurple); /* Màu xanh tím đặc trưng của Discord */
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            font-weight: 700;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); /* Bóng chữ nhẹ */
-        }
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Tự động điều chỉnh cột */
-            gap: 20px; /* Khoảng cách giữa các thẻ thông số */
-            margin-top: 20px;
-            text-align: left;
-        }
-        .stat-item {
-            background-color: var(--card-background);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Hiệu ứng di chuột */
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: center;
-            align-items: flex-start;
-            min-height: 100px; /* Chiều cao tối thiểu cho mỗi thẻ */
+            padding: 40px 20px 80px;
+            text-align: center;
+            background: var(--bg-light);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+            color: var(--text-dark);
+            transition: all 0.4s ease-in-out;
+            position: relative;
         }
-        .stat-item:hover {
-            transform: translateY(-7px); /* Nhấc nhẹ thẻ lên */
-            box-shadow: var(--shadow-hover);
+
+        body.dark-mode {
+            background: var(--bg-dark);
+            color: var(--text-light);
         }
-        .stat-item .icon {
-            font-size: 1.8em; /* Kích thước biểu tượng */
-            color: var(--discord-blurple);
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05) rotate(3deg);
+        }
+
+        h1 {
+            font-size: 2.4em;
             margin-bottom: 10px;
+            animation: fadeIn 1.5s ease;
         }
-        .stat-item strong {
+
+        .greeting {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            animation: fadeIn 2s ease;
+        }
+
+        .link-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+        }
+
+        .button-link {
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #222;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-link:hover {
+            background: #222;
+            color: white;
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        footer {
+            position: absolute;
+            bottom: 15px;
+            font-size: 14px;
+            color: #eee;
+        }
+
+        .clock {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            backdrop-filter: blur(8px);
+            color: #fff;
+            z-index: 101; /* Đảm bảo trên mọi thứ */
+        }
+
+        .toggle-mode {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            background: rgba(255, 255, 255, 0.8);
+            color: #111;
+            cursor: pointer;
+            transition: 0.3s ease;
+            z-index: 101; /* Đảm bảo trên mọi thứ */
+        }
+
+        .toggle-mode:hover {
+            background: #111;
+            color: #fff;
+        }
+
+        body.dark-mode .button-link {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
+
+        body.dark-mode .button-link:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        body.dark-mode .toggle-mode {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        body.dark-mode .clock {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Styles cho phần trạng thái bot (compact view) */
+        .bot-status-container {
+            position: absolute;
+            bottom: 15px; /* Đặt ở dưới */
+            right: 15px; /* Đặt ở góc phải */
+            width: 180px; /* Chiều rộng nhỏ gọn */
+            background: var(--bot-card-bg);
+            border-radius: var(--border-radius-small);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            padding: 12px;
+            text-align: left;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px); /* Hiệu ứng mờ nền */
+            z-index: 100; /* Đảm bảo nó nằm trên các phần tử khác */
+            color: var(--text-dark); /* Màu chữ mặc định cho light mode */
+            border: 1px solid rgba(255,255,255,0.5); /* Viền nhẹ */
+        }
+
+        body.dark-mode .bot-status-container {
+            background: var(--bot-card-bg-dark);
+            color: var(--text-light); /* Màu chữ cho dark mode */
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .bot-status-container:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .bot-status-container h3 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            color: var(--discord-blurple);
+        }
+
+        .bot-status-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .bot-status-item i {
+            font-size: 1em;
+            margin-right: 8px;
+            color: var(--discord-blurple);
+        }
+
+        .bot-status-item strong {
+            font-weight: 600;
+            margin-right: 5px;
+            color: inherit; /* Kế thừa màu chữ từ container */
+        }
+
+        .bot-status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+            box-shadow: 0 0 3px rgba(0,0,0,0.2);
+        }
+        .bot-status-online { background-color: var(--online-color); }
+        .bot-status-offline { background-color: var(--offline-color); }
+        .bot-status-loading { background-color: var(--loading-color); }
+
+        .bot-last-updated {
+            font-size: 0.7em;
             color: var(--light-text-color);
-            display: block;
+            margin-top: 10px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-top: 5px;
+        }
+
+        body.dark-mode .bot-last-updated {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Nút xem chi tiết */
+        .view-details-btn {
+            background: var(--discord-blurple);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s ease;
+            width: 100%; /* Chiếm toàn bộ chiều rộng của khung nhỏ */
+        }
+        .view-details-btn:hover {
+            background: #5d6fb9;
+        }
+
+
+        /* Styles cho Modal (popup) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Nền tối mờ */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Cao nhất */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            backdrop-filter: blur(3px); /* Hiệu ứng mờ nền */
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--modal-bg);
+            padding: 30px;
+            border-radius: var(--border-radius-medium);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px; /* Kích thước tối đa trên PC */
+            position: relative;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            color: var(--text-dark); /* Màu chữ mặc định */
+        }
+
+        body.dark-mode .modal-content {
+            background: var(--modal-bg-dark);
+            color: var(--text-light); /* Màu chữ cho dark mode */
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.2s ease;
+        }
+        .modal-close-btn:hover {
+            color: #333;
+        }
+        body.dark-mode .modal-close-btn {
+            color: #ccc;
+        }
+        body.dark-mode .modal-close-btn:hover {
+            color: #fff;
+        }
+
+
+        .modal-content h2 {
+            color: var(--discord-blurple);
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 10px;
+        }
+        body.dark-mode .modal-content h2 {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 cột trên PC */
+            gap: 15px;
+            text-align: left;
+        }
+
+        .modal-stat-item {
+            padding: 10px 0;
+        }
+        .modal-stat-item i {
+            font-size: 1.2em;
+            margin-right: 10px;
+            color: var(--discord-blurple);
+        }
+        .modal-stat-item strong {
+            font-weight: 600;
+            display: block; /* Để giá trị xuống dòng dưới tên */
             margin-bottom: 5px;
             font-size: 0.9em;
-            text-transform: uppercase; /* Chữ in hoa cho tiêu đề */
-            letter-spacing: 0.5px; /* Khoảng cách giữa các chữ cái */
-        }
-        .stat-item span {
-            font-size: 1.6em; /* Kích thước giá trị thông số */
-            font-weight: bold;
-            color: var(--text-color);
-            word-break: break-all; /* Ngắt từ dài để tránh tràn */
-        }
-        .last-updated {
-            margin-top: 40px;
-            font-size: 0.85em;
             color: var(--light-text-color);
-            font-style: italic;
         }
-        .loading {
-            font-style: italic;
-            color: #888;
-            grid-column: 1 / -1; /* Chiếm toàn bộ chiều rộng grid khi tải */
-            text-align: center;
-            padding: 20px;
+        .modal-stat-item span {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: var(--text-dark);
         }
-        .status-indicator {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            margin-right: 10px;
-            vertical-align: middle;
-            box-shadow: 0 0 5px rgba(0,0,0,0.2); /* Bóng nhẹ cho chấm trạng thái */
+        body.dark-mode .modal-stat-item span {
+            color: var(--text-light);
         }
-        .status-online { background-color: var(--online-color); }
-        .status-offline { background-color: var(--offline-color); }
-        .status-loading { background-color: var(--loading-color); }
 
-        /* Điều chỉnh responsive cho màn hình nhỏ hơn */
-        @media (max-width: 500px) {
-            .container {
+
+        /* Điều chỉnh responsive */
+        @media (max-width: 768px) {
+            .bot-status-container {
+                position: static; /* Không dùng absolute trên mobile */
+                margin-top: 20px; /* Tạo khoảng cách với các button */
+                width: 90%; /* Chiếm phần lớn chiều rộng */
+                max-width: 300px; /* Giới hạn để không quá to */
+                margin-left: auto;
+                margin-right: auto;
+                align-self: center; /* Căn giữa trong flex column */
+            }
+            body {
+                padding-bottom: 20px; /* Giảm padding bottom để bot status không quá xa */
+            }
+            footer {
+                position: static; /* Không dùng absolute trên mobile */
+                margin-top: 20px;
+                color: var(--light-text-color); /* Đảm bảo dễ đọc */
+            }
+
+            .modal-content {
+                width: 95%; /* Chiếm gần toàn màn hình trên mobile */
+                height: 90%; /* Chiếm gần toàn màn hình trên mobile */
+                max-height: 600px; /* Giới hạn chiều cao */
+                overflow-y: auto; /* Thêm scroll nếu nội dung quá dài */
                 padding: 20px;
             }
-            h1 {
-                font-size: 2em;
+            .modal-content h2 {
+                font-size: 1.5em;
             }
-            .stat-grid {
-                grid-template-columns: 1fr; /* Một cột duy nhất trên màn hình nhỏ */
+            .modal-stats-grid {
+                grid-template-columns: 1fr; /* 1 cột trên mobile */
             }
-            .stat-item {
-                align-items: center; /* Căn giữa nội dung thẻ */
-                text-align: center;
+            .modal-stat-item {
+                text-align: center; /* Căn giữa trên mobile */
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Trạng thái Discord Bot của NGUYEN THAI SANG</h1>
-        <div id="stats-display" class="stat-grid">
-            <p class="loading">Đang tải thông số...</p>
-        </div>
-        <p class="last-updated" id="last-updated">Cập nhật lần cuối: Đang tải...</p>
+    <button class="toggle-mode" onclick="toggleMode()">🌗 Đổi nền</button>
+    <div class="clock" id="clock">--:--:--</div>
+
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo" class="logo">
+
+    <h1>Chào mừng bạn!</h1>
+    <div class="greeting" id="greeting">Chào bạn!</div>
+
+    <div class="link-container">
+        <a class="button-link" href="thoitietdoam.html" onclick="playClick()">🌦️ Xem Thời tiết và Độ ẩm</a>
+        <a class="button-link" href="demnguoc.html" onclick="playClick()">⏳ Đếm ngược đến 2026</a>
+        <a class="button-link" href="tdkthp.html" onclick="playClick()">📚 Tính điểm KTHP</a>
+        <a class="button-link" href="baomoi.html" onclick="playClick()">📰 Báo mới hàng ngày</a>
+        <a class="button-link" href="Lock.html" onclick="playClick()">🔒 Tính năng khóa</a>
+        <a class="button-link" href="Bua.html" onclick="playClick()">🔨 Búa</a>
+        <a class="button-link" href="nhanguiyeuthuong.html" onclick="playClick()">Nhắn gửi yêu thương</a>
+        <a class="button-link" href="wiki.html" onclick="playClick()">Wikipedia</a>
     </div>
+
+    <div class="bot-status-container" id="bot-status-container">
+        <h3>Discord Bot</h3>
+        <div id="bot-status-compact">
+            <div class="bot-status-item">
+                <i class="fas fa-signal"></i> <strong>Trạng thái:</strong> <span class="bot-status-loading bot-status-indicator"></span> <span>Đang tải...</span>
+            </div>
+            <div class="bot-status-item">
+                <i class="fas fa-clock"></i> <strong>Uptime:</strong> <span>Đang tải...</span>
+            </div>
+        </div>
+        <button class="view-details-btn" onclick="openBotDetailsModal()">Xem chi tiết</button>
+        <div class="bot-last-updated" id="bot-last-updated">Cập nhật: Đang tải...</div>
+    </div>
+    <div class="modal-overlay" id="bot-details-modal-overlay" onclick="closeBotDetailsModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close-btn" onclick="closeBotDetailsModal()">&times;</button>
+            <h2>Chi tiết Trạng thái Bot</h2>
+            <div class="modal-stats-grid" id="bot-details-content">
+                <p>Đang tải thông số chi tiết...</p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        &copy; 2025 | Thiết kế bởi Tôi
+    </footer>
+
+    <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
 
     <script>
         // =========================================================================
         // *** BIN ID CỦA BẠN TỪ JSONbin.io ***
-        // BIN ID của bạn đã được xác định là: 685776368561e97a502925f3
         const API_URL = 'https://api.jsonbin.io/v3/b/685776368561e97a502925f3'; 
         // =========================================================================
 
-        async function fetchBotStats() {
-            console.log('Đang cố gắng tải dữ liệu từ:', API_URL); // Debug: In URL đang dùng
-            try {
-                const response = await fetch(API_URL);
-                
-                console.log('Phản hồi từ API:', response.status, response.statusText); // Debug: In trạng thái phản hồi
-                if (!response.ok) {
-                    console.error('Lỗi HTTP khi tải dữ liệu:', response.status, response.statusText); // Debug: Lỗi HTTP
-                    displayOfflineStats();
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const responseData = await response.json();
-                // Vì JSONbin.io có thể bọc dữ liệu trong một object 'record', chúng ta cần lấy dữ liệu từ đó.
-                const data = responseData.record; 
-                console.log('Dữ liệu đã xử lý:', data); // Debug: In dữ liệu sau khi xử lý
+        let botData = null; // Biến để lưu trữ toàn bộ dữ liệu bot
 
-                let statusText = 'Offline';
-                let statusClass = 'status-offline';
+        function updateClock() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('vi-VN');
+            const date = now.toLocaleDateString('vi-VN');
+            document.getElementById('clock').textContent = `${time} | ${date}`;
 
-                if (data.status === 'online') {
-                    statusText = 'Online';
-                    statusClass = 'status-online';
-                } else if (data.status === 'loading') { // Trạng thái ban đầu nếu bot chưa cập nhật
-                    statusText = 'Đang tải...';
-                    statusClass = 'status-loading';
-                }
+            const hour = now.getHours();
+            let greeting = "Chào bạn!";
+            if (hour >= 5 && hour < 11) greeting = "🌅 Chúc bạn buổi sáng tốt lành!";
+            else if (hour >= 11 && hour < 14) greeting = "🍽️ Buổi trưa vui vẻ nhé!";
+            else if (hour >= 14 && hour < 18) greeting = "☕ Buổi chiều an lành!";
+            else if (hour >= 18 && hour < 22) greeting = "🌇 Chúc buổi tối thư giãn!";
+            else greeting = "🌙 Khuya rồi, nhớ ngủ sớm nhé!";
+            document.getElementById('greeting').textContent = greeting;
+        }
 
-                // Cập nhật các thông số lên trang HTML với biểu tượng và cấu trúc mới
-                document.getElementById('stats-display').innerHTML = `
-                    <div class="stat-item">
-                        <i class="fas fa-signal icon"></i>
-                        <strong>Trạng thái:</strong> <span class="${statusClass} status-indicator"></span> <span>${statusText}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-network-wired icon"></i>
-                        <strong>Độ trễ API:</strong> <span>${data.apiLatency || 'N/A'}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-clock icon"></i>
-                        <strong>Uptime:</strong> <span>${formatUptime(data.uptime)}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-server icon"></i>
-                        <strong>Số Máy chủ:</strong> <span>${data.guildCount || 'N/A'}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-users icon"></i>
-                        <strong>Số Người dùng:</strong> <span>${data.userCount || 'N/A'}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-hashtag icon"></i>
-                        <strong>Số Kênh:</strong> <span>${data.channelCount || 'N/A'}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-memory icon"></i>
-                        <strong>RAM (Tổng):</strong> <span>${(data.memoryUsage && data.memoryUsage.rss) || 'N/A'}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-hdd icon"></i>
-                        <strong>RAM (Heap):</strong> <span>${(data.memoryUsage && data.memoryUsage.heapUsed) || 'N/A'}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-microchip icon"></i>
-                        <strong>Tải CPU (1p):</strong> <span>${(data.cpuLoad && data.cpuLoad.oneMin) || 'N/A'}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-microchip icon"></i>
-                        <strong>Tải CPU (5p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fiveMin) || 'N/A'}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-microchip icon"></i>
-                        <strong>Tải CPU (15p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fifteenMin) || 'N/A'}</span>
-                    </div>
-                `;
-
-                // Cập nhật thời gian hiển thị cuối cùng
-                const lastUpdatedTime = data.lastUpdated ? new Date(data.lastUpdated).toLocaleString('vi-VN') : 'Đang chờ dữ liệu...';
-                document.getElementById('last-updated').textContent = `Cập nhật lần cuối: ${lastUpdatedTime}`;
-
-            } catch (error) {
-                console.error('Lỗi khi tải thông số bot (catch block):', error); 
-                displayOfflineStats(); // Hiển thị trạng thái offline khi có lỗi
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+            // Lưu trạng thái dark mode vào localStorage để nhớ lần sau
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
             }
         }
 
-        // Hàm hiển thị trạng thái offline và thông báo lỗi khi không thể tải dữ liệu
-        function displayOfflineStats() {
-            document.getElementById('stats-display').innerHTML = `
-                <div class="stat-item">
-                    <i class="fas fa-signal icon"></i>
-                    <strong>Trạng thái:</strong> <span class="status-offline status-indicator"></span> <span>Offline</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-network-wired icon"></i>
-                    <strong>Độ trễ API:</strong> <span>Không có dữ liệu</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-clock icon"></i>
-                    <strong>Uptime:</strong> <span>Không có dữ liệu</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-server icon"></i>
-                    <strong>Số Máy chủ:</strong> <span>Không có dữ liệu</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-users icon"></i>
-                    <strong>Số Người dùng:</strong> <span>Không có dữ liệu</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-hashtag icon"></i>
-                    <strong>Số Kênh:</strong> <span>Không có dữ liệu</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-memory icon"></i>
-                    <strong>RAM (Tổng):</strong> <span>Không có dữ liệu</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-hdd icon"></i>
-                    <strong>RAM (Heap):</strong> <span>Không có dữ liệu</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-microchip icon"></i>
-                    <strong>Tải CPU (1p):</strong> <span>Không có dữ liệu</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-microchip icon"></i>
-                    <strong>Tải CPU (5p):</strong> <span>Không có dữ liệu</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-microchip icon"></i>
-                    <strong>Tải CPU (15p):</strong> <span>Không có dữ liệu</span>
-                </div>
-            `;
-            document.getElementById('last-updated').textContent = `Cập nhật lần cuối: Lỗi! ${new Date().toLocaleString('vi-VN')}`;
+        function playClick() {
+            const sound = document.getElementById('clickSound');
+            sound.currentTime = 0;
+            sound.play();
         }
 
-        // Hàm hỗ trợ định dạng thời gian uptime từ miligiây sang chuỗi dễ đọc
+        // ======================== Logic cho trạng thái bot ========================
+        async function fetchBotStats() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    displayBotOfflineStats();
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const responseData = await response.json();
+                botData = responseData.record; // Lưu toàn bộ dữ liệu vào biến global
+
+                updateCompactBotView();
+                updateDetailedBotView(botData); // Cập nhật cả modal nếu nó đang mở
+
+            } catch (error) {
+                console.error('Lỗi khi tải thông số bot:', error); 
+                displayBotOfflineStats();
+                botData = null; // Reset data nếu có lỗi
+            }
+        }
+
+        function updateCompactBotView() {
+            if (!botData) {
+                displayBotOfflineStats();
+                return;
+            }
+
+            let statusText = 'Offline';
+            let statusClass = 'bot-status-offline';
+
+            if (botData.status === 'online') {
+                statusText = 'Online';
+                statusClass = 'bot-status-online';
+            } else if (botData.status === 'loading') { 
+                statusText = 'Đang tải...';
+                statusClass = 'bot-status-loading';
+            }
+
+            document.getElementById('bot-status-compact').innerHTML = `
+                <div class="bot-status-item">
+                    <i class="fas fa-signal"></i> <strong>Trạng thái:</strong> <span class="${statusClass} bot-status-indicator"></span> <span>${statusText}</span>
+                </div>
+                <div class="bot-status-item">
+                    <i class="fas fa-clock"></i> <strong>Uptime:</strong> <span>${formatUptime(botData.uptime)}</span>
+                </div>
+            `;
+
+            const lastUpdatedTime = botData.lastUpdated ? new Date(botData.lastUpdated).toLocaleString('vi-VN') : 'Đang chờ...';
+            document.getElementById('bot-last-updated').textContent = `Cập nhật: ${lastUpdatedTime}`;
+        }
+
+
+        function displayBotOfflineStats() {
+            document.getElementById('bot-status-compact').innerHTML = `
+                <div class="bot-status-item">
+                    <i class="fas fa-signal"></i> <strong>Trạng thái:</strong> <span class="bot-status-offline bot-status-indicator"></span> <span>Offline</span>
+                </div>
+                <div class="bot-status-item">
+                    <i class="fas fa-clock"></i> <strong>Uptime:</strong> <span>Không có dữ liệu</span>
+                </div>
+            `;
+            document.getElementById('bot-last-updated').textContent = `Cập nhật: Lỗi! ${new Date().toLocaleString('vi-VN')}`;
+        }
+
         function formatUptime(ms) {
             if (ms === undefined || ms === null || isNaN(ms)) return 'Không có dữ liệu';
             const days = Math.floor(ms / (1000 * 60 * 60 * 24));
@@ -311,12 +598,104 @@
 
             return parts.join(', ');
         }
+        // ===================== Kết thúc Logic cho trạng thái bot =====================
 
-        // Tải thông số khi trang được tải lần đầu
-        fetchBotStats();
+        // ===================== Logic cho Modal hiển thị chi tiết =====================
+        function openBotDetailsModal() {
+            const modal = document.getElementById('bot-details-modal-overlay');
+            modal.classList.add('active');
+            updateDetailedBotView(botData); // Cập nhật nội dung modal khi mở
+        }
 
-        // Thiết lập để cập nhật thông số mỗi 5 giây
-        setInterval(fetchBotStats, 5000);
+        function closeBotDetailsModal(event) {
+            // Đóng modal nếu click vào overlay hoặc nút đóng, nhưng không đóng nếu click vào modal-content
+            if (event && event.target.id !== 'bot-details-modal-overlay' && event.target.className !== 'modal-close-btn') {
+                return;
+            }
+            const modal = document.getElementById('bot-details-modal-overlay');
+            modal.classList.remove('active');
+        }
+
+        function updateDetailedBotView(data) {
+            const detailsContent = document.getElementById('bot-details-content');
+            if (!data) {
+                detailsContent.innerHTML = `<p>Không có dữ liệu chi tiết. Bot có thể đang offline hoặc chưa cập nhật.</p>`;
+                return;
+            }
+
+            let statusText = 'Offline';
+            let statusClass = 'bot-status-offline';
+            if (data.status === 'online') {
+                statusText = 'Online';
+                statusClass = 'bot-status-online';
+            } else if (data.status === 'loading') {
+                statusText = 'Đang tải...';
+                statusClass = 'bot-status-loading';
+            }
+
+            detailsContent.innerHTML = `
+                <div class="modal-stat-item">
+                    <i class="fas fa-signal"></i> 
+                    <strong>Trạng thái:</strong> 
+                    <span class="${statusClass} bot-status-indicator"></span> <span>${statusText}</span>
+                </div>
+                <div class="modal-stat-item">
+                    <i class="fas fa-network-wired"></i> 
+                    <strong>Độ trễ API:</strong> <span>${data.apiLatency ? `${data.apiLatency} ms` : 'N/A'}</span>
+                </div>
+                <div class="modal-stat-item">
+                    <i class="fas fa-clock"></i> 
+                    <strong>Uptime:</strong> <span>${formatUptime(data.uptime)}</span>
+                </div>
+                <div class="modal-stat-item">
+                    <i class="fas fa-server"></i> 
+                    <strong>Số Máy chủ:</strong> <span>${data.guildCount || 'N/A'}</span>
+                </div>
+                <div class="modal-stat-item">
+                    <i class="fas fa-users"></i> 
+                    <strong>Số Người dùng:</strong> <span>${data.userCount || 'N/A'}</span>
+                </div>
+                <div class="modal-stat-item">
+                    <i class="fas fa-hashtag"></i> 
+                    <strong>Số Kênh:</strong> <span>${data.channelCount || 'N/A'}</span>
+                </div>
+                <div class="modal-stat-item">
+                    <i class="fas fa-memory"></i> 
+                    <strong>RAM (Tổng):</strong> <span>${(data.memoryUsage && data.memoryUsage.rss) ? `${data.memoryUsage.rss.toFixed(2)} MB` : 'N/A'}</span>
+                </div>
+                <div class="modal-stat-item">
+                    <i class="fas fa-hdd"></i> 
+                    <strong>RAM (Heap):</strong> <span>${(data.memoryUsage && data.memoryUsage.heapUsed) ? `${data.memoryUsage.heapUsed.toFixed(2)} MB` : 'N/A'}</span>
+                </div>
+                <div class="modal-stat-item">
+                    <i class="fas fa-microchip"></i> 
+                    <strong>Tải CPU (1p):</strong> <span>${(data.cpuLoad && data.cpuLoad.oneMin) ? `${data.cpuLoad.oneMin.toFixed(2)}%` : 'N/A'}</span>
+                </div>
+                <div class="modal-stat-item">
+                    <i class="fas fa-microchip"></i> 
+                    <strong>Tải CPU (5p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fiveMin) ? `${data.cpuLoad.fiveMin.toFixed(2)}%` : 'N/A'}</span>
+                </div>
+                <div class="modal-stat-item">
+                    <i class="fas fa-microchip"></i> 
+                    <strong>Tải CPU (15p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fifteenMin) ? `${data.cpuLoad.fifteenMin.toFixed(2)}%` : 'N/A'}</span>
+                </div>
+            `;
+        }
+        // =================== Kết thúc Logic cho Modal hiển thị chi tiết ===================
+
+
+        // Kiểm tra trạng thái dark mode đã lưu
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Khởi tạo các hàm khi trang tải
+        updateClock();
+        fetchBotStats(); // Lần đầu tiên tải trạng thái bot
+
+        // Thiết lập cập nhật định kỳ
+        setInterval(updateClock, 1000); // Cập nhật đồng hồ mỗi giây
+        setInterval(fetchBotStats, 3000); // Cập nhật trạng thái bot mỗi 3 giây
     </script>
 </body>
 </html>
