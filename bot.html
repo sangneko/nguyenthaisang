@@ -107,8 +107,9 @@
                     displayOfflineStats();
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const data = await response.json();
-                console.log('Dữ liệu nhận được:', data); // Debug: In toàn bộ dữ liệu nhận được
+               const responseData = await response.json();
+            const data = responseData.record; // Lấy dữ liệu thực sự từ trong 'record' object
+            console.log('Dữ liệu đã xử lý:', data); // Thêm dòng này để kiểm tra
 
                 let statusText = 'Offline';
                 let statusClass = 'status-offline';
