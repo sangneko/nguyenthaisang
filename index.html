@@ -1,228 +1,441 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Trang chính</title>
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/857/857681.png" type="image/png" />
-  <style>
-    :root {
-      --bg-light: linear-gradient(135deg, #74ebd5, #acb6e5);
-      --bg-dark: linear-gradient(135deg, #1e1e1e, #111);
-      --text-light: #fff;
-      --text-dark: #111;
-      --glass-bg: rgba(255, 255, 255, 0.2);
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trang chính của NGUYEN THAI SANG</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/857/857681.png" type="image/png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg-light: linear-gradient(135deg, #74ebd5, #acb6e5);
+            --bg-dark: linear-gradient(135deg, #1e1e1e, #111);
+            --text-light: #fff;
+            --text-dark: #111;
+            --glass-bg: rgba(255, 255, 255, 0.2);
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+            /* Các biến CSS riêng cho phần trạng thái bot */
+            --discord-blurple: #7289DA;
+            --bot-card-bg: rgba(255, 255, 255, 0.9); /* Nền nhẹ cho bot status */
+            --bot-card-bg-dark: rgba(0, 0, 0, 0.5); /* Nền tối cho bot status */
+            --online-color: #28A745;
+            --offline-color: #DC3545;
+            --loading-color: #FFC107;
+            --border-radius-small: 8px; /* Bo tròn góc nhỏ hơn */
+        }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px 80px;
-      text-align: center;
-      background: var(--bg-light);
-      background-size: 400% 400%;
-      animation: gradientBG 20s ease infinite;
-      color: var(--text-dark);
-      transition: all 0.4s ease-in-out;
-      position: relative;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body.dark-mode {
-      background: var(--bg-dark);
-      color: var(--text-light);
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px 80px;
+            text-align: center;
+            background: var(--bg-light);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+            color: var(--text-dark);
+            transition: all 0.4s ease-in-out;
+            position: relative;
+        }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+        body.dark-mode {
+            background: var(--bg-dark);
+            color: var(--text-light);
+        }
 
-    .logo {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 3px solid #fff;
-      margin-bottom: 20px;
-      transition: 0.3s;
-    }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-    .logo:hover {
-      transform: scale(1.05) rotate(3deg);
-    }
+        .logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
 
-    h1 {
-      font-size: 2.4em;
-      margin-bottom: 10px;
-      animation: fadeIn 1.5s ease;
-    }
+        .logo:hover {
+            transform: scale(1.05) rotate(3deg);
+        }
 
-    .greeting {
-      font-size: 1.2em;
-      margin-bottom: 30px;
-      animation: fadeIn 2s ease;
-    }
+        h1 {
+            font-size: 2.4em;
+            margin-bottom: 10px;
+            animation: fadeIn 1.5s ease;
+        }
 
-    .link-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      width: 100%;
-      max-width: 400px;
-      padding: 10px;
-    }
+        .greeting {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            animation: fadeIn 2s ease;
+        }
 
-    .button-link {
-      text-decoration: none;
-      padding: 14px 20px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #222;
-      font-weight: bold;
-      font-size: 16px;
-      transition: 0.3s ease;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    }
+        .link-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+        }
 
-    .button-link:hover {
-      background: #222;
-      color: white;
-      transform: translateY(-2px) scale(1.02);
-    }
+        .button-link {
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #222;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
 
-    footer {
-      position: absolute;
-      bottom: 15px;
-      font-size: 14px;
-      color: #eee;
-    }
+        .button-link:hover {
+            background: #222;
+            color: white;
+            transform: translateY(-2px) scale(1.02);
+        }
 
-    .clock {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: var(--glass-bg);
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-size: 15px;
-      backdrop-filter: blur(8px);
-      color: #fff;
-    }
+        footer {
+            position: absolute;
+            bottom: 15px;
+            font-size: 14px;
+            color: #eee;
+        }
 
-    .toggle-mode {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-weight: 600;
-      border: none;
-      background: rgba(255, 255, 255, 0.8);
-      color: #111;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
+        .clock {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            backdrop-filter: blur(8px);
+            color: #fff;
+        }
 
-    .toggle-mode:hover {
-      background: #111;
-      color: #fff;
-    }
+        .toggle-mode {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            background: rgba(255, 255, 255, 0.8);
+            color: #111;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
 
-    body.dark-mode .button-link {
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-    }
+        .toggle-mode:hover {
+            background: #111;
+            color: #fff;
+        }
 
-    body.dark-mode .button-link:hover {
-      background: #fff;
-      color: #000;
-    }
+        body.dark-mode .button-link {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
 
-    body.dark-mode .toggle-mode {
-      background: rgba(255, 255, 255, 0.15);
-      color: #fff;
-    }
+        body.dark-mode .button-link:hover {
+            background: #fff;
+            color: #000;
+        }
 
-    body.dark-mode .clock {
-      background: rgba(255, 255, 255, 0.15);
-    }
+        body.dark-mode .toggle-mode {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        body.dark-mode .clock {
+            background: rgba(255, 255, 255, 0.15);
+        }
 
-    @media (max-width: 500px) {
-      h1 { font-size: 1.8em; }
-      .button-link { font-size: 15px; padding: 12px; }
-    }
-  </style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Styles cho phần trạng thái bot */
+        .bot-status-container {
+            position: absolute;
+            bottom: 15px; /* Đặt ở dưới */
+            right: 15px; /* Đặt ở góc phải */
+            width: 180px; /* Chiều rộng nhỏ gọn */
+            background: var(--bot-card-bg);
+            border-radius: var(--border-radius-small);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            padding: 12px;
+            text-align: left;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px); /* Hiệu ứng mờ nền */
+            z-index: 100; /* Đảm bảo nó nằm trên các phần tử khác */
+            color: var(--text-dark); /* Màu chữ mặc định cho light mode */
+            border: 1px solid rgba(255,255,255,0.5); /* Viền nhẹ */
+        }
+
+        body.dark-mode .bot-status-container {
+            background: var(--bot-card-bg-dark);
+            color: var(--text-light); /* Màu chữ cho dark mode */
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .bot-status-container:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .bot-status-container h3 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            color: var(--discord-blurple);
+        }
+
+        .bot-status-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .bot-status-item i {
+            font-size: 1em;
+            margin-right: 8px;
+            color: var(--discord-blurple);
+        }
+
+        .bot-status-item strong {
+            font-weight: 600;
+            margin-right: 5px;
+            color: inherit; /* Kế thừa màu chữ từ container */
+        }
+
+        .bot-status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+            box-shadow: 0 0 3px rgba(0,0,0,0.2);
+        }
+        .bot-status-online { background-color: var(--online-color); }
+        .bot-status-offline { background-color: var(--offline-color); }
+        .bot-status-loading { background-color: var(--loading-color); }
+
+        .bot-last-updated {
+            font-size: 0.7em;
+            color: var(--light-text-color);
+            margin-top: 10px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-top: 5px;
+        }
+
+        body.dark-mode .bot-last-updated {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Đảm bảo footer không bị che bởi bot status trên mobile */
+        @media (max-width: 768px) {
+            .bot-status-container {
+                position: static; /* Không dùng absolute trên mobile */
+                margin-top: 20px; /* Tạo khoảng cách với các button */
+                width: 90%; /* Chiếm phần lớn chiều rộng */
+                max-width: 300px; /* Giới hạn để không quá to */
+                margin-left: auto;
+                margin-right: auto;
+                align-self: center; /* Căn giữa trong flex column */
+            }
+            body {
+                padding-bottom: 20px; /* Giảm padding bottom để bot status không quá xa */
+            }
+            footer {
+                position: static; /* Không dùng absolute trên mobile */
+                margin-top: 20px;
+                color: var(--light-text-color); /* Đảm bảo dễ đọc */
+            }
+        }
+        
+    </style>
 </head>
 <body>
-  <button class="toggle-mode" onclick="toggleMode()">🌗 Đổi nền</button>
-  <div class="clock" id="clock">--:--:--</div>
+    <button class="toggle-mode" onclick="toggleMode()">🌗 Đổi nền</button>
+    <div class="clock" id="clock">--:--:--</div>
 
-  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo" class="logo">
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo" class="logo">
 
-  <h1>Chào mừng bạn!</h1>
-  <div class="greeting" id="greeting">Chào bạn!</div>
+    <h1>Chào mừng bạn!</h1>
+    <div class="greeting" id="greeting">Chào bạn!</div>
 
-  <div class="link-container">
-    <a class="button-link" href="thoitietdoam.html" onclick="playClick()">🌦️ Xem Thời tiết và Độ ẩm</a>
-    <a class="button-link" href="demnguoc.html" onclick="playClick()">⏳ Đếm ngược đến 2026</a>
-    <a class="button-link" href="tdkthp.html" onclick="playClick()">📚 Tính điểm KTHP</a>
-    <a class="button-link" href="baomoi.html" onclick="playClick()">📰 Báo mới hàng ngày</a>
-    <a class="button-link" href="Lock.html" onclick="playClick()">🔒 Tính năng khóa</a>
-    <a class="button-link" href="Bua.html" onclick="playClick()">🔨 Búa</a>
-    <a class="button-link" href="nhanguiyeuthuong.html" onclick="playClick()">Nhắn gửi yêu thương</a>
-    <a class="button-link" href="wiki.html" onclick="playClick()">Wikipedia</a>
-  </div>
+    <div class="link-container">
+        <a class="button-link" href="thoitietdoam.html" onclick="playClick()">🌦️ Xem Thời tiết và Độ ẩm</a>
+        <a class="button-link" href="demnguoc.html" onclick="playClick()">⏳ Đếm ngược đến 2026</a>
+        <a class="button-link" href="tdkthp.html" onclick="playClick()">📚 Tính điểm KTHP</a>
+        <a class="button-link" href="baomoi.html" onclick="playClick()">📰 Báo mới hàng ngày</a>
+        <a class="button-link" href="Lock.html" onclick="playClick()">🔒 Tính năng khóa</a>
+        <a class="button-link" href="Bua.html" onclick="playClick()">🔨 Búa</a>
+        <a class="button-link" href="nhanguiyeuthuong.html" onclick="playClick()">Nhắn gửi yêu thương</a>
+        <a class="button-link" href="wiki.html" onclick="playClick()">Wikipedia</a>
+    </div>
 
-  <footer>
-    &copy; 2025 | Thiết kế bởi Tôi
-  </footer>
+    <div class="bot-status-container" id="bot-status-container">
+        <h3>Discord Bot</h3>
+        <div id="bot-status-display">
+            <div class="bot-status-item">
+                <i class="fas fa-signal"></i> <strong>Trạng thái:</strong> <span class="bot-status-loading bot-status-indicator"></span> <span>Đang tải...</span>
+            </div>
+            <div class="bot-status-item">
+                <i class="fas fa-clock"></i> <strong>Uptime:</strong> <span>Đang tải...</span>
+            </div>
+        </div>
+        <div class="bot-last-updated" id="bot-last-updated">Cập nhật: Đang tải...</div>
+    </div>
+    <footer>
+        &copy; 2025 | Thiết kế bởi Tôi
+    </footer>
 
-  <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
+    <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
 
-  <script>
-    function updateClock() {
-      const now = new Date();
-      const time = now.toLocaleTimeString('vi-VN');
-      const date = now.toLocaleDateString('vi-VN');
-      document.getElementById('clock').textContent = `${time} | ${date}`;
+    <script>
+        // =========================================================================
+        // *** BIN ID CỦA BẠN TỪ JSONbin.io ***
+        // Đảm bảo BIN ID này là chính xác
+        const API_URL = 'https://api.jsonbin.io/v3/b/685776368561e97a502925f3'; 
+        // =========================================================================
 
-      const hour = now.getHours();
-      let greeting = "Chào bạn!";
-      if (hour >= 5 && hour < 11) greeting = "🌅 Chúc bạn buổi sáng tốt lành!";
-      else if (hour >= 11 && hour < 14) greeting = "🍽️ Buổi trưa vui vẻ nhé!";
-      else if (hour >= 14 && hour < 18) greeting = "☕ Buổi chiều an lành!";
-      else if (hour >= 18 && hour < 22) greeting = "🌇 Chúc buổi tối thư giãn!";
-      else greeting = "🌙 Khuya rồi, nhớ ngủ sớm nhé!";
-      document.getElementById('greeting').textContent = greeting;
-    }
+        function updateClock() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('vi-VN');
+            const date = now.toLocaleDateString('vi-VN');
+            document.getElementById('clock').textContent = `${time} | ${date}`;
 
-    function toggleMode() {
-      document.body.classList.toggle('dark-mode');
-    }
+            const hour = now.getHours();
+            let greeting = "Chào bạn!";
+            if (hour >= 5 && hour < 11) greeting = "🌅 Chúc bạn buổi sáng tốt lành!";
+            else if (hour >= 11 && hour < 14) greeting = "🍽️ Buổi trưa vui vẻ nhé!";
+            else if (hour >= 14 && hour < 18) greeting = "☕ Buổi chiều an lành!";
+            else if (hour >= 18 && hour < 22) greeting = "🌇 Chúc buổi tối thư giãn!";
+            else greeting = "🌙 Khuya rồi, nhớ ngủ sớm nhé!";
+            document.getElementById('greeting').textContent = greeting;
+        }
 
-    function playClick() {
-      const sound = document.getElementById('clickSound');
-      sound.currentTime = 0;
-      sound.play();
-    }
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+            // Lưu trạng thái dark mode vào localStorage để nhớ lần sau
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
 
-    setInterval(updateClock, 1000);
-    updateClock();
-  </script>
+        function playClick() {
+            const sound = document.getElementById('clickSound');
+            sound.currentTime = 0;
+            sound.play();
+        }
+
+        // ======================== Logic cho trạng thái bot ========================
+        async function fetchBotStats() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    displayBotOfflineStats();
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const responseData = await response.json();
+                const data = responseData.record; 
+
+                let statusText = 'Offline';
+                let statusClass = 'bot-status-offline';
+
+                if (data.status === 'online') {
+                    statusText = 'Online';
+                    statusClass = 'bot-status-online';
+                } else if (data.status === 'loading') { 
+                    statusText = 'Đang tải...';
+                    statusClass = 'bot-status-loading';
+                }
+
+                document.getElementById('bot-status-display').innerHTML = `
+                    <div class="bot-status-item">
+                        <i class="fas fa-signal"></i> <strong>Trạng thái:</strong> <span class="${statusClass} bot-status-indicator"></span> <span>${statusText}</span>
+                    </div>
+                    <div class="bot-status-item">
+                        <i class="fas fa-clock"></i> <strong>Uptime:</strong> <span>${formatUptime(data.uptime)}</span>
+                    </div>
+                `;
+
+                const lastUpdatedTime = data.lastUpdated ? new Date(data.lastUpdated).toLocaleString('vi-VN') : 'Đang chờ...';
+                document.getElementById('bot-last-updated').textContent = `Cập nhật: ${lastUpdatedTime}`;
+
+            } catch (error) {
+                console.error('Lỗi khi tải thông số bot:', error); 
+                displayBotOfflineStats();
+            }
+        }
+
+        function displayBotOfflineStats() {
+            document.getElementById('bot-status-display').innerHTML = `
+                <div class="bot-status-item">
+                    <i class="fas fa-signal"></i> <strong>Trạng thái:</strong> <span class="bot-status-offline bot-status-indicator"></span> <span>Offline</span>
+                </div>
+                <div class="bot-status-item">
+                    <i class="fas fa-clock"></i> <strong>Uptime:</strong> <span>Không có dữ liệu</span>
+                </div>
+            `;
+            document.getElementById('bot-last-updated').textContent = `Cập nhật: Lỗi! ${new Date().toLocaleString('vi-VN')}`;
+        }
+
+        function formatUptime(ms) {
+            if (ms === undefined || ms === null || isNaN(ms)) return 'Không có dữ liệu';
+            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            ms %= (1000 * 60 * 60 * 24);
+            const hours = Math.floor(ms / (1000 * 60 * 60));
+            ms %= (1000 * 60 * 60);
+            const minutes = Math.floor(ms / (1000 * 60));
+            ms %= (1000 * 60);
+            const seconds = Math.floor(ms / 1000);
+
+            let parts = [];
+            if (days > 0) parts.push(`${days} ngày`);
+            if (hours > 0) parts.push(`${hours} giờ`);
+            if (minutes > 0) parts.push(`${minutes} phút`);
+            if (seconds > 0 || parts.length === 0) parts.push(`${seconds} giây`); 
+
+            return parts.join(', ');
+        }
+        // ===================== Kết thúc Logic cho trạng thái bot =====================
+
+
+        // Kiểm tra trạng thái dark mode đã lưu
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Khởi tạo các hàm khi trang tải
+        updateClock();
+        fetchBotStats(); // Lần đầu tiên tải trạng thái bot
+
+        // Thiết lập cập nhật định kỳ
+        setInterval(updateClock, 1000); // Cập nhật đồng hồ mỗi giây
+        setInterval(fetchBotStats, 3000); // Cập nhật trạng thái bot mỗi 3 giây
+    </script>
 </body>
 </html>
