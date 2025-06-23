@@ -1,1 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Búa</title>
+  <style>
+    body {
+      text-align: center;
+      padding-top: 100px;
+      font-size: 100px;
+    }
+  </style>
+</head>
+<body oncontextmenu="return false">
+  🔨
 
+  <script>
+    // Chặn F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+J
+    document.onkeydown = function(e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i") ||
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "j") ||
+        (e.ctrlKey && e.key.toLowerCase() === "u")
+      ) {
+        alert("Không được đâu bạn ơi 👀");
+        return false;
+      }
+    };
+
+    // Chặn chuột phải
+    document.addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+    });
+  </script>
+</body>
+</html>
