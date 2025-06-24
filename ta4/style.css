@@ -1,192 +1,172 @@
-/* General Body Styling */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f7f6; /* Soft light background */
+    background-color: #f0f2f5; /* Nền xám nhạt */
     color: #333;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Xếp header và main-content theo cột */
     min-height: 100vh;
 }
 
-/* Header Styling */
+/* Header */
 .quiz-header {
-    background-color: #ffffff;
-    padding: 15px 25px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+    padding: 15px 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid #e0e0e0;
-    position: sticky;
+    position: sticky; /* Giữ header ở trên cùng */
     top: 0;
     z-index: 1000;
 }
 
-.header-content {
+.header-left .user-name {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333;
+}
+
+.header-right {
     display: flex;
-    justify-content: flex-end; /* Align items to the right */
     align-items: center;
-    max-width: 1200px; /* Limit content width */
-    margin: 0 auto;
-    gap: 20px;
 }
 
 .timer {
-    background-color: #eaf6ff;
-    border: 1px solid #cceeff;
-    border-radius: 25px; /* More rounded corners */
-    padding: 8px 15px;
+    background-color: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 8px 12px;
     display: flex;
     align-items: center;
     gap: 8px;
     font-weight: 600;
-    color: #0056b3;
-    font-size: 1.1em;
+    color: #555;
+    margin-right: 20px;
 }
 
 .timer i {
-    color: #007bff;
+    color: #007bff; /* Màu xanh biểu tượng đồng hồ */
 }
 
 .submit-button {
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 25px; /* More rounded corners */
-    padding: 10px 22px;
+    border-radius: 5px;
+    padding: 10px 20px;
     font-size: 1em;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+    transition: background-color 0.3s ease;
 }
 
 .submit-button:hover {
     background-color: #0056b3;
-    transform: translateY(-1px);
 }
 
-.submit-button:active {
-    transform: translateY(0);
-    box-shadow: none;
-}
-
-/* Main Container Layout */
-.main-container {
+/* Main Content Layout */
+.main-content {
     display: flex;
-    flex-grow: 1;
+    flex-grow: 1; /* Cho phép phần này chiếm hết không gian còn lại */
     padding: 20px;
-    gap: 20px; /* Space between quiz area and sidebar */
-    max-width: 1200px;
-    margin: 20px auto;
+    gap: 20px; /* Khoảng cách giữa phần câu hỏi và sidebar */
 }
 
-.quiz-area {
-    flex: 3; /* Takes more space */
-    background-color: #ffffff;
+.questions-container {
+    flex: 3; /* Chiếm 3 phần không gian */
+    background-color: #fff;
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.navigation-sidebar {
-    flex: 1; /* Takes less space */
-    background-color: #ffffff;
+.sidebar {
+    flex: 1; /* Chiếm 1 phần không gian */
+    background-color: #fff;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    min-width: 220px;
-    max-height: calc(100vh - 140px); /* Adjust based on header and margin */
-    overflow-y: auto;
-    position: sticky;
-    top: 90px; /* Align with quiz-area top, considering header height */
-    align-self: flex-start;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    min-width: 250px; /* Đảm bảo sidebar không quá nhỏ */
+    max-height: calc(100vh - 100px); /* Đặt chiều cao tối đa cho sidebar, trừ đi khoảng header và padding */
+    overflow-y: auto; /* Cuộn nếu nội dung sidebar quá dài */
 }
 
-.navigation-sidebar h3 {
+.sidebar-header h3 {
     text-align: center;
     color: #007bff;
     margin-top: 0;
     margin-bottom: 20px;
     font-size: 1.3em;
+    border-bottom: 1px solid #eee;
     padding-bottom: 15px;
-    border-bottom: 1px solid #f0f0f0;
 }
 
-.question-nav-grid {
+.question-navigation {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); /* Flexible columns */
+    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); /* 5 cột, mỗi cột min 45px */
     gap: 10px;
 }
 
 .question-nav-item {
-    background-color: #f0f8ff; /* Light blue */
-    border: 1px solid #cce0ff;
+    background-color: #f0f8ff; /* Màu nền nhạt */
+    border: 1px solid #cce0ff; /* Viền nhạt */
     color: #007bff;
     padding: 10px 0;
     text-align: center;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
     font-weight: 500;
-    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
 }
 
 .question-nav-item:hover {
     background-color: #e0f0ff;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.15);
+    transform: translateY(-1px);
 }
 
 .question-nav-item.answered {
-    background-color: #28a745; /* Green when answered */
+    background-color: #28a745; /* Màu xanh lá cây đậm khi đã trả lời */
     color: white;
     border-color: #28a745;
 }
 
-.question-nav-item.answered:hover {
-    background-color: #218838;
-    box-shadow: 0 2px 5px rgba(40, 167, 69, 0.2);
-}
-
 .question-nav-item.current {
-    background-color: #ffc107; /* Orange/Yellow for current */
+    background-color: #ffc107; /* Màu vàng khi đang ở câu này */
     color: #333;
     border-color: #ffc107;
-    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.4); /* Highlight with a subtle glow */
 }
 
-.question-nav-item.current:hover {
-    background-color: #e0a800;
-    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.6);
-}
-
-/* Individual Question Styling */
+/* Question Styling */
 .question {
-    background-color: #ffffff;
-    border: 1px solid #e9ecef;
+    background-color: #fff; /* Nền trắng */
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 25px;
     margin-bottom: 25px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.question p.question-text {
-    font-weight: 600;
+.question p {
+    font-weight: bold;
     margin-top: 0;
     margin-bottom: 20px;
-    color: #222;
+    color: #333;
     font-size: 1.15em;
     line-height: 1.5;
 }
 
 .options label {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 10px;
+    display: flex; /* Dùng flexbox để căn chỉnh input và text */
+    align-items: flex-start; /* Căn trên cùng */
+    margin-bottom: 12px;
     cursor: pointer;
     padding: 12px 15px;
     border-radius: 6px;
     transition: background-color 0.2s ease, border-color 0.2s ease;
     font-size: 1em;
-    border: 1px solid #f0f0f0;
+    border: 1px solid #f0f0f0; /* Viền nhẹ cho các lựa chọn */
     background-color: #fdfdfd;
 }
 
@@ -197,13 +177,13 @@ body {
 
 .options input[type="radio"] {
     margin-right: 12px;
-    margin-top: 4px; /* Adjust alignment */
-    transform: scale(1.2);
+    margin-top: 3px; /* Căn chỉnh với text */
+    transform: scale(1.2); /* Phóng to radio button */
     vertical-align: middle;
-    accent-color: #007bff;
+    accent-color: #007bff; /* Màu mặc định cho radio button */
 }
 
-/* Optional: Highlight selected option text */
+/* Selected option styling (Optional: only if you want to visually highlight selected) */
 .options input[type="radio"]:checked + span {
     font-weight: bold;
     color: #007bff;
@@ -216,12 +196,11 @@ body {
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 25px;
+    border-radius: 5px;
     font-size: 1.1em;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin-top: 30px;
-    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
 }
 
 .submit-button-bottom:hover {
@@ -231,18 +210,17 @@ body {
 
 .submit-button-bottom:active {
     transform: translateY(0);
-    box-shadow: none;
 }
 
-/* Results Section Styling */
+/* Results Styling */
 #results {
     background-color: #eaf6ff;
     border: 1px solid #cceeff;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 30px;
     margin-top: 30px;
     text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 #results h2 {
@@ -262,15 +240,15 @@ body {
 }
 
 #correctCount {
-    color: #28a745; /* Green */
+    color: #28a745; /* Green for correct answers */
 }
 
 #totalQuestions {
-    color: #6c757d; /* Gray */
+    color: #6c757d; /* Gray for total questions */
 }
 
 #score {
-    color: #dc3545; /* Red */
+    color: #dc3545; /* Red for score */
     font-size: 1.5em;
 }
 
@@ -290,12 +268,12 @@ body {
 }
 
 .feedback-item.correct {
-    background-color: #d4edda; /* Light green */
+    background-color: #d4edda; /* Light green for correct */
     border-left: 5px solid #28a745;
 }
 
 .feedback-item.incorrect {
-    background-color: #f8d7da; /* Light red */
+    background-color: #f8d7da; /* Light red for incorrect */
     border-left: 5px solid #dc3545;
 }
 
@@ -319,129 +297,53 @@ body {
     background-color: #6c757d;
     color: white;
     border: none;
-    border-radius: 25px;
+    border-radius: 5px;
     padding: 12px 20px;
     font-size: 1em;
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 20px;
-    box-shadow: 0 2px 4px rgba(108, 117, 125, 0.2);
 }
 
 .retake-button:hover {
     background-color: #5a6268;
-    transform: translateY(-1px);
-}
-
-.retake-button:active {
-    transform: translateY(0);
-    box-shadow: none;
 }
 
 .results-hidden {
     display: none;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 992px) {
-    .main-container {
-        flex-direction: column; /* Stack sections on smaller screens */
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .main-content {
+        flex-direction: column; /* Xếp dọc trên màn hình nhỏ */
         padding: 15px;
-        margin: 15px auto;
     }
 
-    .quiz-area {
+    .questions-container {
         padding: 20px;
     }
 
-    .navigation-sidebar {
-        min-width: unset;
-        width: 100%;
-        max-height: none;
-        order: -1; /* Place sidebar above questions on mobile */
+    .sidebar {
+        min-width: unset; /* Bỏ min-width trên màn hình nhỏ */
+        width: 100%; /* Chiếm toàn bộ chiều rộng */
+        max-height: none; /* Bỏ giới hạn chiều cao */
+        order: -1; /* Đẩy sidebar lên trên cùng nếu muốn */
         margin-bottom: 20px;
-        position: static; /* Remove sticky positioning */
-        top: unset;
-        align-self: auto;
     }
 
-    .header-content {
-        justify-content: space-between; /* Space out items in header */
-        flex-wrap: wrap; /* Allow wrapping if needed */
+    .quiz-header {
+        flex-direction: column;
         gap: 10px;
+        padding: 15px 20px;
     }
 
-    .quiz-header {
-        padding: 10px 15px;
-    }
-}
-
-@media (max-width: 576px) {
-    .quiz-header {
-        padding: 10px;
+    .header-left, .header-right {
+        width: 100%;
+        justify-content: space-between;
     }
 
     .timer {
-        padding: 6px 10px;
-        font-size: 0.9em;
-    }
-
-    .submit-button {
-        padding: 8px 15px;
-        font-size: 0.9em;
-    }
-
-    .main-container {
-        padding: 10px;
-        margin: 10px auto;
-    }
-
-    .quiz-area {
-        padding: 15px;
-    }
-
-    .question {
-        padding: 15px;
-        margin-bottom: 15px;
-    }
-
-    .question p.question-text {
-        font-size: 1em;
-    }
-
-    .options label {
-        padding: 10px;
-        font-size: 0.95em;
-    }
-
-    .submit-button-bottom {
-        padding: 12px 20px;
-        font-size: 1em;
-        margin-top: 20px;
-    }
-
-    #results {
-        padding: 20px;
-    }
-
-    #results h2 {
-        font-size: 1.5em;
-    }
-
-    #results p {
-        font-size: 1.1em;
-    }
-
-    .navigation-sidebar h3 {
-        font-size: 1.1em;
-    }
-
-    .question-nav-grid {
-        grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
-        gap: 8px;
-    }
-
-    .question-nav-item {
-        padding: 8px 0;
+        margin-right: 0; /* Bỏ margin-right */
     }
 }
