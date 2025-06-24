@@ -1,1044 +1,392 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-<title>Bài kiểm tra tiếng Anh</title>
-<style>
-  body { font-family: Arial, sans-serif; margin: 20px; }
-  .question { margin-bottom: 15px; }
-  .question p { font-weight: bold; }
-  .options label { display: block; margin-bottom: 5px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài kiểm tra Tiếng Anh 4 - Azota</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header {
+            background-color: #0056d2;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        #timer {
+            font-size: 1.1em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .question {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .question p {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 1rem;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 0.75rem;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+        .options label:hover {
+            background-color: #f5f5f5;
+        }
+        input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #result-container {
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            background-color: #e9f7ef;
+            border: 1px solid #b8e0c9;
+        }
+        #result-container h2 {
+            margin-top: 0;
+            color: #155724;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+            font-weight: bold;
+        }
+        .correct::before {
+            content: '✔ ';
+            font-weight: bold;
+        }
+        .incorrect::before {
+            content: '✖ ';
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            header h1 {
+                font-size: 1.5em;
+            }
+            .question p {
+                font-size: 1em;
+            }
+            button {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Bài kiểm tra tiếng Anh</h1>
-
-  <form id="quizForm">
-    <div class="question">
-      <p>1. My favorite month is always February ______ we celebrate Valentine's Day and Presidents' Day. </p>
-      <div class="options">
-        <label><input type="radio" name="q1" value="A"> which</label>
-        <label><input type="radio" name="q1" value="B"> where</label>
-        <label><input type="radio" name="q1" value="C"> why</label>
-        <label><input type="radio" name="q1" value="D"> when</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>2. She never ______ when someone leaves her a message. </p>
-      <div class="options">
-        <label><input type="radio" name="q2" value="A"> call back</label>
-        <label><input type="radio" name="q2" value="B"> will call back</label>
-        <label><input type="radio" name="q2" value="C"> has called back</label>
-        <label><input type="radio" name="q2" value="D"> calls back</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>3. Do you know any planes which travel ______ than the speed of sound? </p>
-      <div class="options">
-        <label><input type="radio" name="q3" value="A"> fastest</label>
-        <label><input type="radio" name="q3" value="B"> fastlier</label>
-        <label><input type="radio" name="q3" value="C"> fastly</label>
-        <label><input type="radio" name="q3" value="D"> faster</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>4. The old man and his two dogs ______ were seriously burnt in the fire last week have gradually recovered. </p>
-      <div class="options">
-        <label><input type="radio" name="q4" value="A"> who</label>
-        <label><input type="radio" name="q4" value="B"> that</label>
-        <label><input type="radio" name="q4" value="C"> which</label>
-        <label><input type="radio" name="q4" value="D"> whom</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>5. If it ______ last night the path wouldn't be wet and slippery now. </p>
-      <div class="options">
-        <label><input type="radio" name="q5" value="A"> didn't rain</label>
-        <label><input type="radio" name="q5" value="B"> wasn't raining</label>
-        <label><input type="radio" name="q5" value="C"> hadn't been raining</label>
-        <label><input type="radio" name="q5" value="D"> hadn't rained</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>6. I ______ Noriko in town 2 days ago.  She ______ a pink dress and an orange hat! </p>
-      <div class="options">
-        <label><input type="radio" name="q6" value="A"> saw / was wearing</label>
-        <label><input type="radio" name="q6" value="B"> see / wears</label>
-        <label><input type="radio" name="q6" value="C"> saw / wore</label>
-        <label><input type="radio" name="q6" value="D"> see / is wearing</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>7. The reason ____ I have continued to work for that company is the job security. </p>
-      <div class="options">
-        <label><input type="radio" name="q7" value="A"> at which</label>
-        <label><input type="radio" name="q7" value="B"> which</label>
-        <label><input type="radio" name="q7" value="C"> why</label>
-        <label><input type="radio" name="q7" value="D"> for that</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>8. If a live sponge ______ into pieces, each piece ______ into a new sponge like the original one. </p>
-      <div class="options">
-        <label><input type="radio" name="q8" value="A"> break / turn</label>
-        <label><input type="radio" name="q8" value="B"> broke / would turned</label>
-        <label><input type="radio" name="q8" value="C"> is broken / will turn</label>
-        <label><input type="radio" name="q8" value="D"> will break / turn</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>9. My job is ______ boring every now and then.  I'd like to do something ______ interesting. </p>
-      <div class="options">
-        <label><input type="radio" name="q9" value="A"> much/many</label>
-        <label><input type="radio" name="q9" value="B"> a bit/more</label>
-        <label><input type="radio" name="q9" value="C"> little/much</label>
-        <label><input type="radio" name="q9" value="D"> somewhat/more</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>10. I didn't know ______ about computers till I started this job. </p>
-      <div class="options">
-        <label><input type="radio" name="q10" value="A"> anybody</label>
-        <label><input type="radio" name="q10" value="B"> anything</label>
-        <label><input type="radio" name="q10" value="C"> nothing</label>
-        <label><input type="radio" name="q10" value="D"> something</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>11. The family ______ burnt in the fire was immediately given a suite in a hotel. </p>
-      <div class="options">
-        <label><input type="radio" name="q11" value="A"> which house</label>
-        <label><input type="radio" name="q11" value="B"> the house of whom</label>
-        <label><input type="radio" name="q11" value="C"> that house</label>
-        <label><input type="radio" name="q11" value="D"> whose house</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>12. Frank Zappa, ______ one of the most creative artists in rock 'n roll, came from California. </p>
-      <div class="options">
-        <label><input type="radio" name="q12" value="A"> was</label>
-        <label><input type="radio" name="q12" value="B"> who was</label>
-        <label><input type="radio" name="q12" value="C"> whom was</label>
-        <label><input type="radio" name="q12" value="D"> that was</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>13. When you go by train, make sure you ______ an express, not a train that stops at all the stations. </p>
-      <div class="options">
-        <label><input type="radio" name="q13" value="A"> got</label>
-        <label><input type="radio" name="q13" value="B"> get</label>
-        <label><input type="radio" name="q13" value="C"> would get</label>
-        <label><input type="radio" name="q13" value="D"> should get</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>14. New York City, ______ millions of immigrants live, is sometimes called a Melting Pot. </p>
-      <div class="options">
-        <label><input type="radio" name="q14" value="A"> New York City, which</label>
-        <label><input type="radio" name="q14" value="B"> New York City that</label>
-        <label><input type="radio" name="q14" value="C"> New York City, where</label>
-        <label><input type="radio" name="q14" value="D"> New York City</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>15. Michelle screamed when she saw the spider ______ dangling from the one clean bathroom towel. </p>
-      <div class="options">
-        <label><input type="radio" name="q15" value="A"> whom</label>
-        <label><input type="radio" name="q15" value="B"> where</label>
-        <label><input type="radio" name="q15" value="C"> that</label>
-        <label><input type="radio" name="q15" value="D"> whose</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>16. I knew Keith was angry about the report because Jenney ______ me the day before. </p>
-      <div class="options">
-        <label><input type="radio" name="q16" value="A"> was warning</label>
-        <label><input type="radio" name="q16" value="B"> warned</label>
-        <label><input type="radio" name="q16" value="C"> has warned</label>
-        <label><input type="radio" name="q16" value="D"> had warned</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>17. My grandfather ______ a very exciting life.  When he was young, he ______ on the farm in the country, when there ______ a lot of cattles and meadows. </p>
-      <div class="options">
-        <label><input type="radio" name="q17" value="A"> has / has lived / have been</label>
-        <label><input type="radio" name="q17" value="B"> had / lived / have were</label>
-        <label><input type="radio" name="q17" value="C"> was having / had lived / had been</label>
-        <label><input type="radio" name="q17" value="D"> has had / is living / are</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>18. If Dora ______ to work before 7 tomorrow, she ______ you a ride. </p>
-      <div class="options">
-        <label><input type="radio" name="q18" value="A"> will go / gives</label>
-        <label><input type="radio" name="q18" value="B"> goes / will give</label>
-        <label><input type="radio" name="q18" value="C"> go / give</label>
-        <label><input type="radio" name="q18" value="D"> is going / will give</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>19. If I ruled the world, ______ all of the wars. </p>
-      <div class="options">
-        <label><input type="radio" name="q19" value="A"> I'd stop</label>
-        <label><input type="radio" name="q19" value="B"> I'll stop</label>
-        <label><input type="radio" name="q19" value="C"> I would have stopped</label>
-        <label><input type="radio" name="q19" value="D"> I stopped</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>20. I ______ to visit you yesterday, but you ______ at home. </p>
-      <div class="options">
-        <label><input type="radio" name="q20" value="A"> have come / are not</label>
-        <label><input type="radio" name="q20" value="B"> had come / were not</label>
-        <label><input type="radio" name="q20" value="C"> came / were not</label>
-        <label><input type="radio" name="q20" value="D"> was coming / have not been</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>21. The house ______ I grew up has just renovated. </p>
-      <div class="options">
-        <label><input type="radio" name="q21" value="A"> where</label>
-        <label><input type="radio" name="q21" value="B"> in that</label>
-        <label><input type="radio" name="q21" value="C"> which</label>
-        <label><input type="radio" name="q21" value="D"> that</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>22. ______ most children like ______ sweets. </p>
-      <div class="options">
-        <label><input type="radio" name="q22" value="A"> The / the</label>
-        <label><input type="radio" name="q22" value="B"> A / the</label>
-        <label><input type="radio" name="q22" value="C"> W / W</label>
-        <label><input type="radio" name="q22" value="D"> The / W</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>23. ______ failed will have to retake the exam next week. </p>
-      <div class="options">
-        <label><input type="radio" name="q23" value="A"> Those</label>
-        <label><input type="radio" name="q23" value="B"> Those who</label>
-        <label><input type="radio" name="q23" value="C"> Who</label>
-        <label><input type="radio" name="q23" value="D"> Those which</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>24. My bike is quite slow and I want to get a ______ one. </p>
-      <div class="options">
-        <label><input type="radio" name="q24" value="A"> rapider</label>
-        <label><input type="radio" name="q24" value="B"> faster</label>
-        <label><input type="radio" name="q24" value="C"> faster than</label>
-        <label><input type="radio" name="q24" value="D"> fastening</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>25. The woman ____ hair is long and curly is the new secretary, Mrs. Chan. </p>
-      <div class="options">
-        <label><input type="radio" name="q25" value="A"> who</label>
-        <label><input type="radio" name="q25" value="B"> whose</label>
-        <label><input type="radio" name="q25" value="C"> that</label>
-        <label><input type="radio" name="q25" value="D"> which</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>26. I assumed you ______ paying for the repairs until last year. </p>
-      <div class="options">
-        <label><input type="radio" name="q26" value="A"> had</label>
-        <label><input type="radio" name="q26" value="B"> have been</label>
-        <label><input type="radio" name="q26" value="C"> had been</label>
-        <label><input type="radio" name="q26" value="D"> have never been</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>27. Brian said goodnight to his roommate ______ continued to play video games until his eyes were blurry with fatigue. </p>
-      <div class="options">
-        <label><input type="radio" name="q27" value="A"> Justin, whom</label>
-        <label><input type="radio" name="q27" value="B"> Justin who</label>
-        <label><input type="radio" name="q27" value="C"> Justin, who</label>
-        <label><input type="radio" name="q27" value="D"> Justin, that</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>28. My grandmother gave me ______ piano on my birthday, but what ______ pity, I cannot play ______ piano. </p>
-      <div class="options">
-        <label><input type="radio" name="q28" value="A"> W / W / the</label>
-        <label><input type="radio" name="q28" value="B"> the / the / a</label>
-        <label><input type="radio" name="q28" value="C"> a / a / the</label>
-        <label><input type="radio" name="q28" value="D"> the / W / a</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>29. If the trajectory of a satellite ______ slightly off at launch, it ______ worse as the flight progresses. </p>
-      <div class="options">
-        <label><input type="radio" name="q29" value="A"> is / will get</label>
-        <label><input type="radio" name="q29" value="B"> are / get</label>
-        <label><input type="radio" name="q29" value="C"> was / got</label>
-        <label><input type="radio" name="q29" value="D"> were / would get</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>30. This is the house ______ I lived when I first came to the US. </p>
-      <div class="options">
-        <label><input type="radio" name="q30" value="A"> in that</label>
-        <label><input type="radio" name="q30" value="B"> in where</label>
-        <label><input type="radio" name="q30" value="C"> where</label>
-        <label><input type="radio" name="q30" value="D"> which in</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>31. I'm sure they ______ married and live happily ever afterwards. </p>
-      <div class="options">
-        <label><input type="radio" name="q31" value="A"> will get</label>
-        <label><input type="radio" name="q31" value="B"> have got</label>
-        <label><input type="radio" name="q31" value="C"> are going</label>
-        <label><input type="radio" name="q31" value="D"> got</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>32. I need new exercise equipment because I want to get ______. </p>
-      <div class="options">
-        <label><input type="radio" name="q32" value="A"> fitty</label>
-        <label><input type="radio" name="q32" value="B"> more fit</label>
-        <label><input type="radio" name="q32" value="C"> fitter</label>
-        <label><input type="radio" name="q32" value="D"> fitter than</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>33. If you took the medication, you ______ too much. </p>
-      <div class="options">
-        <label><input type="radio" name="q33" value="A"> will cough</label>
-        <label><input type="radio" name="q33" value="B"> wouldn't cough</label>
-        <label><input type="radio" name="q33" value="C"> will not cough</label>
-        <label><input type="radio" name="q33" value="D"> would cough</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>34. ______ research has been done into the cause of cancer. </p>
-      <div class="options">
-        <label><input type="radio" name="q34" value="A"> A couple of</label>
-        <label><input type="radio" name="q34" value="B"> A small number of</label>
-        <label><input type="radio" name="q34" value="C"> Plenty of</label>
-        <label><input type="radio" name="q34" value="D"> A great number of</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>35. "Did you go to Hawaii for vacation?"  "I ______ to go, but I got sick at the last minute". </p>
-      <div class="options">
-        <label><input type="radio" name="q35" value="A"> was planned</label>
-        <label><input type="radio" name="q35" value="B"> had planning</label>
-        <label><input type="radio" name="q35" value="C"> had been planning</label>
-        <label><input type="radio" name="q35" value="D"> have planned</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>36. I can go out with you right now because I don't have ______ homework. </p>
-      <div class="options">
-        <label><input type="radio" name="q36" value="A"> much</label>
-        <label><input type="radio" name="q36" value="B"> many</label>
-        <label><input type="radio" name="q36" value="C"> few</label>
-        <label><input type="radio" name="q36" value="D"> some</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>37. I knew Keith was angry about the report because Jenney ______ me the day before. </p>
-      <div class="options">
-        <label><input type="radio" name="q37" value="A"> was warning</label>
-        <label><input type="radio" name="q37" value="B"> warned</label>
-        <label><input type="radio" name="q37" value="C"> has warned</label>
-        <label><input type="radio" name="q37" value="D"> had warned</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>38. My boss ______ constantly ______ me in my last job.  I hated it. </p>
-      <div class="options">
-        <label><input type="radio" name="q38" value="A"> was / phoned</label>
-        <label><input type="radio" name="q38" value="B"> was / called</label>
-        <label><input type="radio" name="q38" value="C"> is / phoning</label>
-        <label><input type="radio" name="q38" value="D"> was / phoning</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>39. She is always ______ her pencil on the desk and it's getting on my nerves! </p>
-      <div class="options">
-        <label><input type="radio" name="q39" value="A"> dropped</label>
-        <label><input type="radio" name="q39" value="B"> dropping</label>
-        <label><input type="radio" name="q39" value="C"> tapped</label>
-        <label><input type="radio" name="q39" value="D"> tapping</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>40. Every time we ______ to that restaurant, my stomach gets upset. </p>
-      <div class="options">
-        <label><input type="radio" name="q40" value="A"> will go</label>
-        <label><input type="radio" name="q40" value="B"> went</label>
-        <label><input type="radio" name="q40" value="C"> go</label>
-        <label><input type="radio" name="q40" value="D"> have gone</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>41. He's not very well-known here, but he's ______ in his own country. </p>
-      <div class="options">
-        <label><input type="radio" name="q41" value="A"> anyone</label>
-        <label><input type="radio" name="q41" value="B"> nothing</label>
-        <label><input type="radio" name="q41" value="C"> anything</label>
-        <label><input type="radio" name="q41" value="D"> somebody</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>42. I think you should be ______ and say exactly what you think. </p>
-      <div class="options">
-        <label><input type="radio" name="q42" value="A"> honester</label>
-        <label><input type="radio" name="q42" value="B"> more honest</label>
-        <label><input type="radio" name="q42" value="C"> most honest</label>
-        <label><input type="radio" name="q42" value="D"> more honester</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>43. To calm his angry girlfriend, John offered an apology ____ Jane did not accept. </p>
-      <div class="options">
-        <label><input type="radio" name="q43" value="A"> which</label>
-        <label><input type="radio" name="q43" value="B"> who</label>
-        <label><input type="radio" name="q43" value="C"> whom</label>
-        <label><input type="radio" name="q43" value="D"> when</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>44. We weren't hungry. We ______ just ______ lunch. </p>
-      <div class="options">
-        <label><input type="radio" name="q44" value="A"> have / had</label>
-        <label><input type="radio" name="q44" value="B"> have / eaten</label>
-        <label><input type="radio" name="q44" value="C"> had / had</label>
-        <label><input type="radio" name="q44" value="D"> had / been having</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>45. When I arrived home, my father wasn't there. He ______ out. </p>
-      <div class="options">
-        <label><input type="radio" name="q45" value="A"> has gone</label>
-        <label><input type="radio" name="q45" value="B"> went</label>
-        <label><input type="radio" name="q45" value="C"> goes</label>
-        <label><input type="radio" name="q45" value="D"> had gone</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>46. She decided not to go, for ______ reasons. </p>
-      <div class="options">
-        <label><input type="radio" name="q46" value="A"> a number of</label>
-        <label><input type="radio" name="q46" value="B"> much</label>
-        <label><input type="radio" name="q46" value="C"> a large amount of</label>
-        <label><input type="radio" name="q46" value="D"> little</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>47. The largest lake in the United States is ______ Lake Superior, one of ______ Great Lakes, located on the United States - Canada border. </p>
-      <div class="options">
-        <label><input type="radio" name="q47" value="A"> a7 / a / W</label>
-        <label><input type="radio" name="q47" value="B"> a / a</label>
-        <label><input type="radio" name="q47" value="C"> W / the</label>
-        <label><input type="radio" name="q47" value="D"> the / W</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>48. If the temperatures ______ to below 0, this lake ______. </p>
-      <div class="options">
-        <label><input type="radio" name="q48" value="A"> will drop / freezes</label>
-        <label><input type="radio" name="q48" value="B"> drop / froze</label>
-        <label><input type="radio" name="q48" value="C"> dropped / freezes</label>
-        <label><input type="radio" name="q48" value="D"> drop / freezes</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>49. ______ Mount Everest is in ______ Himalayas.  It is ______ tallest mount in the world. </p>
-      <div class="options">
-        <label><input type="radio" name="q49" value="A"> W / an / the</label>
-        <label><input type="radio" name="q49" value="B"> A / an / a</label>
-        <label><input type="radio" name="q49" value="C"> the / W / W</label>
-        <label><input type="radio" name="q49" value="D"> W / the / the</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>50. New York is a place ____ people of many different cultures live and work together. </p>
-      <div class="options">
-        <label><input type="radio" name="q50" value="A"> where</label>
-        <label><input type="radio" name="q50" value="B"> that</label>
-        <label><input type="radio" name="q50" value="C"> which</label>
-        <label><input type="radio" name="q50" value="D"> in that</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>51. As soon as we ______ the news, we rushed to the hospital. </p>
-      <div class="options">
-        <label><input type="radio" name="q51" value="A"> hear</label>
-        <label><input type="radio" name="q51" value="B"> had heard</label>
-        <label><input type="radio" name="q51" value="C"> were hearing</label>
-        <label><input type="radio" name="q51" value="D"> have heard</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>52. Marcel and Abdre ______ friends of mine for more than ten years. </p>
-      <div class="options">
-        <label><input type="radio" name="q52" value="A"> were</label>
-        <label><input type="radio" name="q52" value="B"> had been</label>
-        <label><input type="radio" name="q52" value="C"> have been</label>
-        <label><input type="radio" name="q52" value="D"> are</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>53. ______ small two-winged insects, can spread fatal diseases like malaria and dengue fever. </p>
-      <div class="options">
-        <label><input type="radio" name="q53" value="A"> Mosquitoes are</label>
-        <label><input type="radio" name="q53" value="B"> Mosquitoes, which are</label>
-        <label><input type="radio" name="q53" value="C"> Mosquitoes, that are</label>
-        <label><input type="radio" name="q53" value="D"> They are mosquitoes4</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>54. ______ used to be the tallest building in the world, is still a popular tourist attraction. </p>
-      <div class="options">
-        <label><input type="radio" name="q54" value="A"> The Empire State Building</label>
-        <label><input type="radio" name="q54" value="B"> It is The Empire State Building, which</label>
-        <label><input type="radio" name="q54" value="C"> The Empire State Building, that</label>
-        <label><input type="radio" name="q54" value="D"> The Empire State Building, which</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>55. I was born in ______ warm family.  My parents are both ______ teachers of English.  So, I am good at ______ English. </p>
-      <div class="options">
-        <label><input type="radio" name="q55" value="A"> a / W / W</label>
-        <label><input type="radio" name="q55" value="B"> the / the / an</label>
-        <label><input type="radio" name="q55" value="C"> a / the / the</label>
-        <label><input type="radio" name="q55" value="D"> the / W / an</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>56. No one ______ your story when you tell them. </p>
-      <div class="options">
-        <label><input type="radio" name="q56" value="A"> is going to believe</label>
-        <label><input type="radio" name="q56" value="B"> will believe</label>
-        <label><input type="radio" name="q56" value="C"> believe</label>
-        <label><input type="radio" name="q56" value="D"> has believe</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>57. When the boss ______ into the office, his secretary was typing, and the accountant was talking on the phone. </p>
-      <div class="options">
-        <label><input type="radio" name="q57" value="A"> was walking</label>
-        <label><input type="radio" name="q57" value="B"> had walked</label>
-        <label><input type="radio" name="q57" value="C"> walked</label>
-        <label><input type="radio" name="q57" value="D"> had been walking</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>58. He is the man ______ last week. </p>
-      <div class="options">
-        <label><input type="radio" name="q58" value="A"> I met</label>
-        <label><input type="radio" name="q58" value="B"> which I met</label>
-        <label><input type="radio" name="q58" value="C"> whose I met</label>
-        <label><input type="radio" name="q58" value="D"> where I met</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>59. I did not like the book ______. </p>
-      <div class="options">
-        <label><input type="radio" name="q59" value="A"> whom John gave me</label>
-        <label><input type="radio" name="q59" value="B"> when John gave me</label>
-        <label><input type="radio" name="q59" value="C"> John gave me</label>
-        <label><input type="radio" name="q59" value="D"> that John gave me it</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>60. ______ in New York lead very busy lives. </p>
-      <div class="options">
-        <label><input type="radio" name="q60" value="A"> Those who live</label>
-        <label><input type="radio" name="q60" value="B"> Who live</label>
-        <label><input type="radio" name="q60" value="C"> Those live</label>
-        <label><input type="radio" name="q60" value="D"> Those which live</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>61. My friend is ______ fireman.  Let's ask him for ______ help. </p>
-      <div class="options">
-        <label><input type="radio" name="q61" value="A"> a / W</label>
-        <label><input type="radio" name="q61" value="B"> the / the</label>
-        <label><input type="radio" name="q61" value="C"> an / the</label>
-        <label><input type="radio" name="q61" value="D"> W / the</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>62. ______ coffee is his favorite drink.  He often has ______ coffee before he has ______ breakfast. </p>
-      <div class="options">
-        <label><input type="radio" name="q62" value="A"> W / a / W</label>
-        <label><input type="radio" name="q62" value="B"> The / W / the</label>
-        <label><input type="radio" name="q62" value="C"> The / a / the</label>
-        <label><input type="radio" name="q62" value="D"> W / the / a</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>63. He is the man ______ I wanted to speak to and ______ name I'd forgotten. </p>
-      <div class="options">
-        <label><input type="radio" name="q63" value="A"> whose / whom</label>
-        <label><input type="radio" name="q63" value="B"> that / which</label>
-        <label><input type="radio" name="q63" value="C"> who / that</label>
-        <label><input type="radio" name="q63" value="D"> whom / whose</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>64. I ______ more art if I ______ working part time to pay off my student loans. </p>
-      <div class="options">
-        <label><input type="radio" name="q64" value="A"> can produce / am</label>
-        <label><input type="radio" name="q64" value="B"> couldn't produce / was</label>
-        <label><input type="radio" name="q64" value="C"> couldn't produce / wasn't</label>
-        <label><input type="radio" name="q64" value="D"> could produce / wasn't</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>65. I know you want to move everything quickly, but this box ______ heavier and heavier. </p>
-      <div class="options">
-        <label><input type="radio" name="q65" value="A"> gets</label>
-        <label><input type="radio" name="q65" value="B"> will get</label>
-        <label><input type="radio" name="q65" value="C"> might get</label>
-        <label><input type="radio" name="q65" value="D"> is getting</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>66. If they had informed us of their arrival in advance, we ______ rooms for them. </p>
-      <div class="options">
-        <label><input type="radio" name="q66" value="A"> would prepare</label>
-        <label><input type="radio" name="q66" value="B"> would have prepared</label>
-        <label><input type="radio" name="q66" value="C"> have prepared</label>
-        <label><input type="radio" name="q66" value="D"> had prepared</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>67. She ______ to the aerobics classes if her friend ______ her up in her car. </p>
-      <div class="options">
-        <label><input type="radio" name="q67" value="A"> could go to / didn't pick</label>
-        <label><input type="radio" name="q67" value="B"> couldn't go to / didn't pick</label>
-        <label><input type="radio" name="q67" value="C"> couldn't go to / picked</label>
-        <label><input type="radio" name="q67" value="D"> could go to / pick</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>68. If I hadn't been so nervous, I ______ the exam. </p>
-      <div class="options">
-        <label><input type="radio" name="q68" value="A"> would pass</label>
-        <label><input type="radio" name="q68" value="B"> will have passed</label>
-        <label><input type="radio" name="q68" value="C"> would have passed</label>
-        <label><input type="radio" name="q68" value="D"> had passed</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>69. We shouldn't eat ______ chocolate. </p>
-      <div class="options">
-        <label><input type="radio" name="q69" value="A"> A lot of</label>
-        <label><input type="radio" name="q69" value="B"> a great number of</label>
-        <label><input type="radio" name="q69" value="C"> a large number of</label>
-        <label><input type="radio" name="q69" value="D"> a large quantity of</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>70. Jim, ______ old friend of mine, used to work in ______ downtown Los Angeles.  He had a good job in one of ______ biggest law firms in the city. </p>
-      <div class="options">
-        <label><input type="radio" name="q70" value="A"> an / a / W</label>
-        <label><input type="radio" name="q70" value="B"> a / the / W</label>
-        <label><input type="radio" name="q70" value="C"> the / W / a</label>
-        <label><input type="radio" name="q70" value="D"> an / W / the</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>71. Since we moved house, I've had to get up ______ for school than before. </p>
-      <div class="options">
-        <label><input type="radio" name="q71" value="A"> early</label>
-        <label><input type="radio" name="q71" value="B"> earliest</label>
-        <label><input type="radio" name="q71" value="C"> more early</label>
-        <label><input type="radio" name="q71" value="D"> earlier</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>72. If Americans ______ fewer foods with sugar and salt, their general health ______ better. </p>
-      <div class="options">
-        <label><input type="radio" name="q72" value="A"> eat / would be</label>
-        <label><input type="radio" name="q72" value="B"> ate / will be</label>
-        <label><input type="radio" name="q72" value="C"> ate / would be</label>
-        <label><input type="radio" name="q72" value="D"> will eat / is</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>73. ______ is a quality all human beings have. </p>
-      <div class="options">
-        <label><input type="radio" name="q73" value="A"> Creativity may take many forms</label>
-        <label><input type="radio" name="q73" value="B"> Creativity, may take many forms,</label>
-        <label><input type="radio" name="q73" value="C"> Creativity which may take many forms,</label>
-        <label><input type="radio" name="q73" value="D"> Creativity, which may take many forms</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>74. I happened to see Mary on ______ way ______ home. </p>
-      <div class="options">
-        <label><input type="radio" name="q74" value="A"> W / the</label>
-        <label><input type="radio" name="q74" value="B"> the / an</label>
-        <label><input type="radio" name="q74" value="C"> a / the</label>
-        <label><input type="radio" name="q74" value="D"> the / W</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>75. ______ River Thames flows through London, ______ capital of England. </p>
-      <div class="options">
-        <label><input type="radio" name="q75" value="A"> The / the</label>
-        <label><input type="radio" name="q75" value="B"> A / a</label>
-        <label><input type="radio" name="q75" value="C"> W / W</label>
-        <label><input type="radio" name="q75" value="D"> The / a</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>76. He hardly ever washes the dishes and he rarely, if ever, does ______ cleaning. </p>
-      <div class="options">
-        <label><input type="radio" name="q76" value="A"> some</label>
-        <label><input type="radio" name="q76" value="B"> any</label>
-        <label><input type="radio" name="q76" value="C"> none</label>
-        <label><input type="radio" name="q76" value="D"> no</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>77. She likes reading ______ books, collecting ______ stamps and going to ______ cinema. </p>
-      <div class="options">
-        <label><input type="radio" name="q77" value="A"> the / W / W</label>
-        <label><input type="radio" name="q77" value="B"> W / W / the</label>
-        <label><input type="radio" name="q77" value="C"> W / the / W</label>
-        <label><input type="radio" name="q77" value="D"> W / the / a</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>78. We don't need ______ eggs.  Just half a dozen. </p>
-      <div class="options">
-        <label><input type="radio" name="q78" value="A"> a great deal of</label>
-        <label><input type="radio" name="q78" value="B"> a large amount of</label>
-        <label><input type="radio" name="q78" value="C"> many</label>
-        <label><input type="radio" name="q78" value="D"> much</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>79. They do not have ______ pets as they are too busy to take care of animals. </p>
-      <div class="options">
-        <label><input type="radio" name="q79" value="A"> some</label>
-        <label><input type="radio" name="q79" value="B"> any</label>
-        <label><input type="radio" name="q79" value="C"> a</label>
-        <label><input type="radio" name="q79" value="D"> every</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>80. Do you know our city?  No, this is the first time I ______ here. </p>
-      <div class="options">
-        <label><input type="radio" name="q80" value="A"> was</label>
-        <label><input type="radio" name="q80" value="B"> came</label>
-        <label><input type="radio" name="q80" value="C"> am coming</label>
-        <label><input type="radio" name="q80" value="D"> have been</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>81. ______ to Australia?  - Yes, I went there when I was a little boy. </p>
-      <div class="options">
-        <label><input type="radio" name="q81" value="A"> did you ever go</label>
-        <label><input type="radio" name="q81" value="B"> do you ever go</label>
-        <label><input type="radio" name="q81" value="C"> have you ever been</label>
-        <label><input type="radio" name="q81" value="D"> have you ever gone</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>82. The more difficult the test is, ______ he tries. </p>
-      <div class="options">
-        <label><input type="radio" name="q82" value="A"> the harder</label>
-        <label><input type="radio" name="q82" value="B"> the hardest</label>
-        <label><input type="radio" name="q82" value="C"> the most hard</label>
-        <label><input type="radio" name="q82" value="D"> the more hard</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>83. Japan imports ______ oil from other countries.  Its exports include cars and electronics. </p>
-      <div class="options">
-        <label><input type="radio" name="q83" value="A"> a lot of</label>
-        <label><input type="radio" name="q83" value="B"> a large number of</label>
-        <label><input type="radio" name="q83" value="C"> several of</label>
-        <label><input type="radio" name="q83" value="D"> a number of</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>84. Women ____ work are happier than those ____ don't work. </p>
-      <div class="options">
-        <label><input type="radio" name="q84" value="A"> that / whom</label>
-        <label><input type="radio" name="q84" value="B"> who / who</label>
-        <label><input type="radio" name="q84" value="C"> whom / that</label>
-        <label><input type="radio" name="q84" value="D"> whose / which</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>85. Last night Section TV came out with a shock on air.  The TV star, who ______ with Dan Walker, was suddenly replaced by Sally Nugent for the last half of the show. </p>
-      <div class="options">
-        <label><input type="radio" name="q85" value="A"> presents</label>
-        <label><input type="radio" name="q85" value="B"> were presented</label>
-        <label><input type="radio" name="q85" value="C"> have presented</label>
-        <label><input type="radio" name="q85" value="D"> was presenting</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>86. While Adam ______ his flock of sheep, he spent much of his time reading. </p>
-      <div class="options">
-        <label><input type="radio" name="q86" value="A"> watched</label>
-        <label><input type="radio" name="q86" value="B"> was watching</label>
-        <label><input type="radio" name="q86" value="C"> was looking</label>
-        <label><input type="radio" name="q86" value="D"> was seeing</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>87. It's too noisy here.  Shall we go somewhere ______? </p>
-      <div class="options">
-        <label><input type="radio" name="q87" value="A"> a lot quiet</label>
-        <label><input type="radio" name="q87" value="B"> more quiet</label>
-        <label><input type="radio" name="q87" value="C"> quieter</label>
-        <label><input type="radio" name="q87" value="D"> B & C are correct</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>88. Don't give the chocolate to Helen.  She ______ it. </p>
-      <div class="options">
-        <label><input type="radio" name="q88" value="A"> hates</label>
-        <label><input type="radio" name="q88" value="B"> is hating</label>
-        <label><input type="radio" name="q88" value="C"> has hated</label>
-        <label><input type="radio" name="q88" value="D"> hated</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>89. We don't work together any more so I see him ______ than I used to. </p>
-      <div class="options">
-        <label><input type="radio" name="q89" value="A"> frequently</label>
-        <label><input type="radio" name="q89" value="B"> more frequently</label>
-        <label><input type="radio" name="q89" value="C"> less frequently</label>
-        <label><input type="radio" name="q89" value="D"> much frequently</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>90. In ______ Britain ______ cars run on ______ left. </p>
-      <div class="options">
-        <label><input type="radio" name="q90" value="A"> the / the / the</label>
-        <label><input type="radio" name="q90" value="B"> W / W / a</label>
-        <label><input type="radio" name="q90" value="C"> W / W / the</label>
-        <label><input type="radio" name="q90" value="D"> W / the / the</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>91. She is ______ MC.  She can help us to entertain ______ guests in our wedding. </p>
-      <div class="options">
-        <label><input type="radio" name="q91" value="A"> an / the</label>
-        <label><input type="radio" name="q91" value="B"> a / W</label>
-        <label><input type="radio" name="q91" value="C"> the / W</label>
-        <label><input type="radio" name="q91" value="D"> a / the</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>92. I do not go to ______ theater very often.  I prefer ______ films to ______ plays. </p>
-      <div class="options">
-        <label><input type="radio" name="q92" value="A"> a / the / the</label>
-        <label><input type="radio" name="q92" value="B"> W / W / W</label>
-        <label><input type="radio" name="q92" value="C"> the / the / the</label>
-        <label><input type="radio" name="q92" value="D"> the / W / W</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>93. They left Hyde Park at ______ midday and went shopping at the commercial center in ______ afternoon. </p>
-      <div class="options">
-        <label><input type="radio" name="q93" value="A"> the / the</label>
-        <label><input type="radio" name="q93" value="B"> a / an</label>
-        <label><input type="radio" name="q93" value="C"> the / an</label>
-        <label><input type="radio" name="q93" value="D"> W / the</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>94. ______ River Nile is ______ longest river of all. </p>
-      <div class="options">
-        <label><input type="radio" name="q94" value="A"> W / W</label>
-        <label><input type="radio" name="q94" value="B"> A / the</label>
-        <label><input type="radio" name="q94" value="C"> The / the</label>
-        <label><input type="radio" name="q94" value="D"> W / a</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>95. Many people voluntarily offer care for ______ elderly and ______ disabled. </p>
-      <div class="options">
-        <label><input type="radio" name="q95" value="A"> the / the</label>
-        <label><input type="radio" name="q95" value="B"> an / a</label>
-        <label><input type="radio" name="q95" value="C"> an / a</label>
-        <label><input type="radio" name="q95" value="D"> W / W</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>96. ______ Taylors decided that they would employ ______ architect to do ______ work. </p>
-      <div class="options">
-        <label><input type="radio" name="q96" value="A"> The / a / the</label>
-        <label><input type="radio" name="q96" value="B"> A / W / A</label>
-        <label><input type="radio" name="q96" value="C"> W / the / a</label>
-        <label><input type="radio" name="q96" value="D"> The / an / the</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>97. ______ sun is a ball of fire in the sky that the Earth goes round.  It gives us ______ heat and ______ light. </p>
-      <div class="options">
-        <label><input type="radio" name="q97" value="A"> The / an / a</label>
-        <label><input type="radio" name="q97" value="B"> The / W / W</label>
-        <label><input type="radio" name="q97" value="C"> A / the / the</label>
-        <label><input type="radio" name="q97" value="D"> W / a / a</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>98. On ______ night of 14 April 1912, during its voyage, ______ Titanic hit ______ iceberg, and sank two hours and forty minutes later. </p>
-      <div class="options">
-        <label><input type="radio" name="q98" value="A"> W / the / the</label>
-        <label><input type="radio" name="q98" value="B"> the / the / an</label>
-        <label><input type="radio" name="q98" value="C"> a / W / the</label>
-        <label><input type="radio" name="q98" value="D"> a / a / the</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>99. Ian is described as ______ honest and hard-working boy.  He is also ______ most social and helpful in our class. </p>
-      <div class="options">
-        <label><input type="radio" name="q99" value="A"> an / W</label>
-        <label><input type="radio" name="q99" value="B"> an / the</label>
-        <label><input type="radio" name="q99" value="C"> the / a</label>
-        <label><input type="radio" name="q99" value="D"> a / a</label>
-      </div>
-    </div>
-
-    <div class="question">
-      <p>100. That car can run at ______ speed of 18W miles ______ hour. </p>
-      <div class="options">
-        <label><input type="radio" name="q100" value="A"> the / an</label>
-        <label><input type="radio" name="q100" value="B"> a / the</label>
-        <label><input type="radio" name="q100" value="C"> a / a</label>
-        <label><input type="radio" name="q100" value="D"> the / an</label>
-      </div>
-    </div>
-
-    <button type="submit">Submit</button>
-  </form>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.getElementById('quizForm');
-      const questions = Array.from(form.querySelectorAll('.question'));
-
-      // Shuffle questions
-      for (let i = questions.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        form.insertBefore(questions[j], questions[i]);
-      }
-
-      // Shuffle options within each question
-      questions.forEach(question => {
-        const optionsDiv = question.querySelector('.options');
-        const labels = Array.from(optionsDiv.querySelectorAll('label'));
-        for (let i = labels.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          optionsDiv.insertBefore(labels[j], labels[i]);
+    <div class="container">
+        <header>
+            <h1>Bài kiểm tra Tiếng Anh</h1>
+            <div id="timer">Thời gian làm bài: <span id="time">60:00</span></div>
+        </header>
+
+        <main id="test-container">
+            </main>
+
+        <footer>
+            <button id="submit-btn">Nộp bài</button>
+            <div id="result-container" style="display: none;">
+                <h2>Kết quả bài làm</h2>
+                <p><strong>Số câu đúng:</strong> <span id="score"></span>/100</p>
+                <p><strong>Điểm:</strong> <span id="grade"></span></p>
+                <button id="review-btn">Xem lại đáp án</button>
+                 <button id="restart-btn" style="background-color: #007bff; margin-top: 10px;">Làm lại bài</button>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "1. The reason ____ I have continued to work for that company is the job security. ", options: ["A. at which ", "B. which ", "C. why ", "D. for that "], answer: "C" },
+            { question: "2. To calm his angry girlfriend, John offered an apology ____ Jane did not accept. ", options: ["A. which ", "B. who ", "C. whom ", "D. when "], answer: "A" },
+            { question: "3. ____ failed will have to retake the exam next week. ", options: ["A. Those ", "B. Those who ", "C. Who ", "D. Those which "], answer: "B" },
+            { question: "4. The woman ____ hair is long and curly is the new secretary, Mrs. Chan. ", options: ["A. who ", "B. whose ", "C. that ", "D. which "], answer: "B" },
+            { question: "5. ____ is a quality all human beings have. ", options: ["A. Creativity may take many forms ", "B. Creativity, may take many forms, ", "C. Creativity which may take many forms, ", "D. Creativity, which may take many forms "], answer: "D" },
+            { question: "6. New York is a place ____ people of many different cultures live and work together. ", options: ["A. where ", "B. that ", "C. which ", "D. in that "], answer: "A" },
+            { question: "7. Women ____ work are happier than those ____ don't work. ", options: ["A. that / whom ", "B. who / who ", "C. whom / that ", "D. whose / which "], answer: "B" },
+            { question: "8. ____ used to be the tallest building in the world, is still a popular tourist attraction. ", options: ["A. The Empire State Building ", "B. It is The Empire State Building, which ", "C. The Empire State Building, that ", "D. The Empire State Building, which "], answer: "D" },
+            { question: "9. The family ______ burnt in the fire was immediately given a suite in a hotel. ", options: ["A. which house ", "B. the house of whom ", "C. that house ", "D. whose house "], answer: "D" },
+            { question: "10. This is the house ______ I lived when I first came to the US. ", options: ["A. in that ", "B. in where ", "C. where ", "D. which in "], answer: "C" },
+            { question: "11. New York City, ______ millions of immigrants live, is sometimes called a Melting Pot. ", options: ["A. New York City, which ", "B. New York City that ", "C. New York City, where ", "D. New York City "], answer: "C" },
+            { question: "12. ______ small two-winged insects, can spread fatal diseases like malaria and dengue fever. ", options: ["A. Mosquitoes are ", "B. Mosquitoes, which are ", "C. Mosquitoes, that are ", "D. They are mosquitoes4 "], answer: "B" },
+            { question: "13. He is the man ______ last week. ", options: ["A. I met ", "B. which I met ", "C. whose I met ", "D. where I met "], answer: "A" },
+            { question: "14. He is the man ______ I wanted to speak to and ______ name I'd forgotten. ", options: ["A. whose / whom ", "B. that / which ", "C. who / that ", "D. whom / whose "], answer: "D" },
+            { question: "15. I did not like the book ______. ", options: ["A. whom John gave me ", "B. when John gave me ", "C. John gave me ", "D. that John gave me it "], answer: "C" },
+            { question: "16. ______ in New York lead very busy lives. ", options: ["A. Those who live ", "B. Who live ", "C. Those live ", "D. Those which live "], answer: "A" },
+            { question: "17. The house ______ I grew up has just renovated. ", options: ["A. where ", "B. in that ", "C. which ", "D. that "], answer: "A" },
+            { question: "18. My favorite month is always February ______ we celebrate Valentine's Day and Presidents' Day. ", options: ["A. which ", "B. where ", "C. why ", "D. when "], answer: "D" },
+            { question: "19. Frank Zappa, ______ one of the most creative artists in rock 'n roll, came from California. ", options: ["A. was ", "B. who was ", "C. whom was ", "D. that was "], answer: "B" },
+            { question: "20. Michelle screamed when she saw the spider ______ dangling from the one clean bathroom towel. ", options: ["A. whom ", "B. where ", "C. that ", "D. whose "], answer: "C" },
+            { question: "21. Brian said goodnight to his roommate ______ continued to play video games until his eyes were blurry with fatigue. ", options: ["A. Justin, whom ", "B. Justin who ", "C. Justin, who ", "D. Justin, that "], answer: "C" },
+            { question: "22. The old man and his two dogs ______ were seriously burnt in the fire last week have gradually recovered. ", options: ["A. who ", "B. that ", "C. which ", "D. whom "], answer: "B" },
+            { question: "23. If the trajectory of a satellite ______ slightly off at launch, it ______ worse as the flight progresses. ", options: ["A. is / will get ", "B. are / get ", "C. was / got ", "D. were / would get "], answer: "A" },
+            { question: "24. If a live sponge ______ into pieces, each piece ______ into a new sponge like the original one. ", options: ["A. break / turn ", "B. broke / would turned ", "C. is broken / will turn ", "D. will break / turn "], answer: "C" },
+            { question: "25. If the temperatures ______ to below 0, this lake ______. ", options: ["A. will drop / freezes ", "B. drop / froze ", "C. dropped / freezes ", "D. drop / freezes "], answer: "D" },
+            { question: "26. If Dora ______ to work before 7 tomorrow, she ______ you a ride. ", options: ["A. will go / gives ", "B. goes / will give ", "C. go / give ", "D. is going / will give "], answer: "B" },
+            { question: "27. If you took the medication, you ______ too much. ", options: ["A. will cough ", "B. wouldn't cough ", "C. will not cough ", "D. would cough "], answer: "B" },
+            { question: "28. If I ruled the world, ______ all of the wars. ", options: ["A. I'd stop ", "B. I'll stop ", "C. I would have stopped ", "D. I stopped "], answer: "A" },
+            { question: "29. If Americans ______ fewer foods with sugar and salt, their general health ______ better. ", options: ["A. eat / would be ", "B. ate / will be ", "C. ate / would be ", "D. will eat / is "], answer: "C" },
+            { question: "30. She ______ to the aerobics classes if her friend ______ her up in her car. ", options: ["A. could go to / didn't pick ", "B. couldn't go to / didn't pick ", "C. couldn't go to / picked ", "D. could go to / pick "], answer: "B" },
+            { question: "31. I ______ more art if I ______ working part time to pay off my student loans. ", options: ["A. can produce / am ", "B. couldn't produce / was ", "C. couldn't produce / wasn't ", "D. could produce / wasn't "], answer: "D" },
+            { question: "32. If they had informed us of their arrival in advance, we ______ rooms for them. ", options: ["A. would prepare ", "B. would have prepared ", "C. have prepared ", "D. had prepared "], answer: "B" },
+            { question: "33. If I hadn't been so nervous, I ______ the exam. ", options: ["A. would pass ", "B. will have passed ", "C. would have passed ", "D. had passed "], answer: "C" },
+            { question: "34. ______ more carefully, he would not have had the accident yesterday. ", options: ["A. If Peter drove ", "B. Had Peter driven ", "C. Only if Peter could drive ", "D. Unless Peter had driven11 "], answer: "B" },
+            { question: "35. If it ______ last night the path wouldn't be wet and slippery now. ", options: ["A. didn't rain ", "B. wasn't raining ", "C. hadn't been raining ", "D. hadn't rained "], answer: "C" },
+            { question: "36. I need new exercise equipment because I want to get ______. ", options: ["A. fitty ", "B. more fit ", "C. fitter ", "D. fitter than "], answer: "B" },
+            { question: "37. We don't work together any more so I see him ______ than I used to. ", options: ["A. frequently ", "B. more frequently ", "C. less frequently ", "D. much frequently "], answer: "C" },
+            { question: "38. My boss ______ constantly ______ me in my last job. ", options: ["A. was / phoned ", "B. was / called ", "C. is / phoning ", "D. was / phoning "], answer: "D" },
+            { question: "39. My job is ______ boring every now and then. ", options: ["A. much/many ", "B. a bit/more ", "C. little/much ", "D. somewhat/more "], answer: "B" },
+            { question: "40. Japan imports ______ oil from other countries. ", options: ["A. a lot of ", "B. a large number of ", "C. several of ", "D. a number of "], answer: "A" },
+            { question: "41. It's too noisy here. ", options: ["A. a lot quiet ", "B. more quiet ", "C. quieter ", "D. B & C are correct "], answer: "D" },
+            { question: "42. The more difficult the test is, ______ he tries. ", options: ["A. the harder ", "B. the hardest ", "C. the most hard ", "D. the more hard "], answer: "A" },
+            { question: "43. I think you should be ______ and say exactly what you think. ", options: ["A. honester ", "B. more honest ", "C. most honest ", "D. more honester "], answer: "B" },
+            { question: "44. Do you know any planes which travel ______ than the speed of sound? ", options: ["A. fastest ", "B. fastlier ", "C. fastly ", "D. faster "], answer: "D" },
+            { question: "45. My bike is quite slow and I want to get a ______ one. ", options: ["A. rapider ", "B. faster ", "C. faster than ", "D. fastening "], answer: "B" },
+            { question: "46. Since we moved house, I've had to get up ______ for school than before. ", options: ["A. early ", "B. earliest ", "C. more early ", "D. earlier "], answer: "D" },
+            { question: "47. I was born in ______ warm family. ", options: ["A. a / W / W ", "B. the / the / an ", "C. a / the / the ", "D. the / W / an "], answer: "A" },
+            { question: "48. Jim, ______ old friend of mine, used to work in ______ downtown Los Angeles. ", options: ["A. an / a / W ", "B. a / the / W ", "C. the / W / a ", "D. an / W / the "], answer: "D" },
+            { question: "49. ______ Mount Everest is in ______ Himalayas. ", options: ["A. W / an / the ", "B. A / an / a ", "C. the / W / W ", "D. W / the / the "], answer: "D" },
+            { question: "50. I happened to see Mary on ______ way ______ home. ", options: ["A. W / the ", "B. the / an ", "C. a / the ", "D. the / W "], answer: "D" },
+            { question: "51. In ______ Britain ______ cars run on ______ left. ", options: ["A. the / the / the ", "B. W / W / a ", "C. W / W / the ", "D. W / the / the "], answer: "C" },
+            { question: "52. She is ______ MC. ", options: ["A. an / the ", "B. a / W ", "C. the / W ", "D. a / the "], answer: "A" },
+            { question: "53. I do not go to ______ theater very often. ", options: ["A. a / the / the ", "B. W / W / W ", "C. the / the / the ", "D. the / W / W "], answer: "D" },
+            { question: "54. ______ coffee is his favorite drink. ", options: ["A. W / a / W ", "B. The / W / the ", "C. The / a / the ", "D. W / the / a "], answer: "A" },
+            { question: "55. My friend is ______ fireman. ", options: ["A. a / W ", "B. the / the ", "C. an / the ", "D. W / the "], answer: "A" },
+            { question: "56. They left Hyde Park at ______ midday and went shopping at the commercial center in ______ afternoon. ", options: ["A. the / the ", "B. a / an ", "C. the / an ", "D. W / the "], answer: "D" },
+            { question: "57. ______ most children like ______ sweets. ", options: ["A. The / the ", "B. A / the ", "C. W / W ", "D. The / W "], answer: "C" },
+            { question: "58. ______ River Nile is ______ longest river of all. ", options: ["A. W / W ", "B. A / the ", "C. The / the ", "D. W / a "], answer: "C" },
+            { question: "59. Many people voluntarily offer care for ______ elderly and ______ disabled. ", options: ["A. the / the ", "B. an / a ", "C. an / a ", "D. W / W "], answer: "A" },
+            { question: "60. ______ River Thames flows through London, ______ capital of England. ", options: ["A. The / the ", "B. A / a ", "C. W / W ", "D. The / a "], answer: "A" },
+            { question: "61. ______ Taylors decided that they would employ ______ architect to do ______ work. ", options: ["A. The / a / the ", "B. A / W / A ", "C. W / the / a ", "D. The / an / the "], answer: "D" },
+            { question: "62. ______ sun is a ball of fire in the sky that the Earth goes round. ", options: ["A. The / an / a ", "B. The / W / W ", "C. A / the / the ", "D. W / a / a "], answer: "B" },
+            { question: "63. She likes reading ______ books, collecting ______ stamps and going to ______ cinema. ", options: ["A. the / W / W ", "B. W / W / the ", "C. W / the / W ", "D. W / the / a "], answer: "B" },
+            { question: "64. On ______ night of 14 April 1912, during its voyage, ______ Titanic hit ______ iceberg, and sank two hours and forty minutes later. ", options: ["A. W / the / the ", "B. the / the / an ", "C. a / W / the ", "D. a / a / the "], answer: "B" },
+            { question: "65. The largest lake in the United States is ______ Lake Superior, one of ______ Great Lakes, located on the United States - Canada border. ", options: ["A. a7 / a / W ", "B. a / a ", "C. W / the ", "D. the / W "], answer: "C" },
+            { question: "66. Ian is described as ______ honest and hard-working boy. ", options: ["A. an / W ", "B. an / the ", "C. the / a ", "D. a / a "], answer: "B" },
+            { question: "67. That car can run at ______ speed of 18W miles ______ hour. ", options: ["A. the / an ", "B. a / the ", "C. a / a ", "D. the / an "], answer: "A" },
+            { question: "68. My grandmother gave me ______ piano on my birthday, but what ______ pity, I cannot play ______ piano. ", options: ["A. W / W / the ", "B. the / the / a ", "C. a / a / the ", "D. the / W / a "], answer: "C" },
+            { question: "69. We don't need ______ eggs. ", options: ["A. a great deal of ", "B. a large amount of ", "C. many ", "D. much "], answer: "C" },
+            { question: "70. ______ research has been done into the cause of cancer. ", options: ["A. A couple of ", "B. A small number of ", "C. Plenty of ", "D. A great number of "], answer: "C" },
+            { question: "71. She decided not to go, for ______ reasons. ", options: ["A. a number of ", "B. much ", "C. a large amount of ", "D. little "], answer: "A" },
+            { question: "72. We shouldn't eat ______ chocolate. ", options: ["A. A lot of ", "B. a great number of ", "C. a large number of ", "D. a large quantity of "], answer: "A" },
+            { question: "73. I can go out with you right now because I don't have ______ homework. ", options: ["A. much ", "B. many ", "C. few ", "D. some "], answer: "A" },
+            { question: "74. When the boss ______ into the office, his secretary was typing, and the accountant was talking on the phone. ", options: ["A. was walking ", "B. had walked ", "C. walked ", "D. had been walking "], answer: "C" },
+            { question: "75. My grandfather ______ a very exciting life. ", options: ["A. has / has lived / have been ", "B. had / lived / have were ", "C. was having / had lived / had been ", "D. has had / is living / are "], answer: "D" },
+            { question: "76. I ______ to visit you yesterday, but you ______ at home. ", options: ["A. have come / are not ", "B. had come / were not ", "C. came / were not ", "D. was coming / have not been "], answer: "C" },
+            { question: "77. He's not very well-known here, but he's ______ in his own country. ", options: ["A. anyone ", "B. nothing ", "C. anything ", "D. somebody "], answer: "D" },
+            { question: "78. He hardly ever washes the dishes and he rarely, if ever, does ______ cleaning. ", options: ["A. some ", "B. any ", "C. none ", "D. no "], answer: "B" },
+            { question: "79. I didn't know ______ about computers till I started this job. ", options: ["A. anybody ", "B. anything ", "C. nothing ", "D. something "], answer: "B" },
+            { question: "80. They do not have ______ pets as they are too busy to take care of animals. ", options: ["A. some ", "B. any ", "C. a ", "D. every "], answer: "B" },
+            { question: "81. When you go by train, make sure you ______ an express, not a train that stops at all the stations. ", options: ["A. got ", "B. get ", "C. would get ", "D. should get "], answer: "B" },
+            { question: "82. She never ______ when someone leaves her a message. ", options: ["A. call back ", "B. will call back ", "C. has called back ", "D. calls back "], answer: "D" },
+            { question: "83. Don't give the chocolate to Helen. ", options: ["A. hates ", "B. is hating ", "C. has hated ", "D. hated "], answer: "A" },
+            { question: "84. Every time we ______ to that restaurant, my stomach gets upset. ", options: ["A. will go ", "B. went ", "C. go ", "D. have gone "], answer: "C" },
+            { question: "85. I'm sure they ______ married and live happily ever afterwards. ", options: ["A. will get ", "B. have got ", "C. are going ", "D. got "], answer: "A" },
+            { question: "86. As soon as we ______ the news, we rushed to the hospital. ", options: ["A. hear ", "B. had heard ", "C. were hearing ", "D. have heard "], answer: "B" },
+            { question: "87. We weren't hungry. We ______ just ______ lunch. ", options: ["A. have / had ", "B. have / eaten ", "C. had / had ", "D. had / been having "], answer: "C" },
+            { question: "88. I knew Keith was angry about the report because Jenney ______ me the day before. ", options: ["A. was warning ", "B. warned ", "C. has warned ", "D. had warned "], answer: "D" },
+            { question: "89. No one ______ your story when you tell them. ", options: ["A. is going to believe ", "B. will believe ", "C. believe ", "D. has believe "], answer: "A" },
+            { question: "90. I ______ Noriko in town 2 days ago. ", options: ["A. saw / was wearing ", "B. see / wears ", "C. saw / wore ", "D. see / is wearing "], answer: "A" },
+            { question: "91. Last night Section TV came out with a shock on air. ", options: ["A. presents ", "B. were presented ", "C. have presented ", "D. was presenting "], answer: "D" },
+            { question: "92. While Adam ______ his flock of sheep, he spent much of his time reading. ", options: ["A. watched ", "B. was watching ", "C. was looking ", "D. was seeing "], answer: "B" },
+            { question: "93. When I arrived home, my father wasn't there. He ______ out. ", options: ["A. has gone ", "B. went ", "C. goes ", "D. had gone "], answer: "D" },
+            { question: "94. I assumed you ______ paying for the repairs until last year. ", options: ["A. had ", "B. have been ", "C. had been ", "D. have never been "], answer: "C" },
+            { question: "95. 'Did you go to Hawaii for vacation?' ", options: ["A. was planned ", "B. had planning ", "C. had been planning ", "D. have planned11 "], answer: "C" },
+            { question: "96. I know you want to move everything quickly, but this box ______ heavier and heavier. ", options: ["A. gets ", "B. will get ", "C. might get ", "D. is getting "], answer: "D" },
+            { question: "97. She is always ______ her pencil on the desk and it's getting on my nerves! ", options: ["A. dropped ", "B. dropping ", "C. tapped ", "D. tapping "], answer: "D" },
+            { question: "98. Do you know our city? ", options: ["A. was ", "B. came ", "C. am coming ", "D. have been "], answer: "D" },
+            { question: "99. ______ to Australia? ", options: ["A. did you ever go ", "B. do you ever go ", "C. have you ever been ", "D. have you ever gone "], answer: "C" },
+            { question: "100. Marcel and Abdre ______ friends of mine for more than ten years. ", options: ["A. were ", "B. had been ", "C. have been ", "D. are "], answer: "C" }
+        ];
+
+        const testContainer = document.getElementById('test-container');
+        const submitBtn = document.getElementById('submit-btn');
+        const resultContainer = document.getElementById('result-container');
+        const scoreSpan = document.getElementById('score');
+        const gradeSpan = document.getElementById('grade');
+        const reviewBtn = document.getElementById('review-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        let timerInterval;
+
+        function startTimer(duration, display) {
+            let timer = duration, minutes, seconds;
+            timerInterval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    alert("Đã hết thời gian làm bài!");
+                    submitTest();
+                }
+            }, 1000);
         }
-      });
-    });
-  </script>
+        
+        function cleanHTML(str) {
+            const temp = document.createElement('div');
+            temp.innerHTML = str;
+            return temp.textContent || temp.innerText || "";
+        }
+
+        function loadTest() {
+            testContainer.innerHTML = '';
+            resultContainer.style.display = 'none';
+            submitBtn.style.display = 'block';
+            testContainer.style.display = 'block';
+            
+            questions.forEach((q, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.classList.add('question');
+
+                const questionText = document.createElement('p');
+                questionText.innerHTML = cleanHTML(q.question);
+                questionElement.appendChild(questionText);
+
+                const optionsElement = document.createElement('div');
+                optionsElement.classList.add('options');
+
+                q.options.forEach(option => {
+                    const label = document.createElement('label');
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `question${index}`;
+                    const optionLetter = cleanHTML(option).substring(0, 1);
+                    input.value = optionLetter;
+                    label.appendChild(input);
+                    label.append(` ${cleanHTML(option)}`);
+                    optionsElement.appendChild(label);
+                });
+
+                questionElement.appendChild(optionsElement);
+                testContainer.appendChild(questionElement);
+            });
+
+            const sixtyMinutes = 60 * 60;
+            const display = document.querySelector('#time');
+            startTimer(sixtyMinutes, display);
+        }
+
+        function submitTest() {
+            clearInterval(timerInterval);
+            let score = 0;
+            
+            questions.forEach((q, index) => {
+                const questionDiv = testContainer.children[index];
+                const optionsLabels = questionDiv.querySelectorAll('label');
+                const userAnswerInput = document.querySelector(`input[name="question${index}"]:checked`);
+                
+                optionsLabels.forEach(label => {
+                    const input = label.querySelector('input');
+                    if (input.value === q.answer) {
+                        label.classList.add('correct');
+                    }
+                    if (userAnswerInput && userAnswerInput === input && input.value !== q.answer) {
+                        label.classList.add('incorrect');
+                    }
+                });
+
+                if (userAnswerInput && userAnswerInput.value === q.answer) {
+                    score++;
+                }
+            });
+
+            const grade = (score / questions.length) * 10;
+            scoreSpan.textContent = score;
+            gradeSpan.textContent = grade.toFixed(2);
+            
+            submitBtn.style.display = 'none';
+            resultContainer.style.display = 'block';
+            testContainer.style.display = 'none';
+
+            const allInputs = document.querySelectorAll('input[type="radio"]');
+            allInputs.forEach(input => input.disabled = true);
+        }
+        
+        submitBtn.addEventListener('click', () => {
+             if (confirm('Bạn có chắc chắn muốn nộp bài không?')) {
+                submitTest();
+            }
+        });
+
+        reviewBtn.addEventListener('click', () => {
+            resultContainer.style.display = 'none';
+            testContainer.style.display = 'block';
+            window.scrollTo(0, 0);
+        });
+
+        restartBtn.addEventListener('click', () => {
+            if (confirm('Bạn có muốn làm lại bài kiểm tra? Toàn bộ kết quả sẽ bị xóa.')) {
+                window.location.reload();
+            }
+        });
+        
+        window.onload = loadTest;
+    </script>
 
 </body>
 </html>
