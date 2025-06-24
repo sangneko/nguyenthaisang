@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài kiểm tra Tiếng Anh 4 - Azota</title>
+    <title>Bài kiểm tra Tiếng Anh (Đảo câu hỏi)</title>
     <style>
         /* --- CSS CƠ BẢN --- */
         body {
@@ -17,22 +17,18 @@
             max-width: 800px;
             margin: 0 auto;
             background: #fff;
-            /* Xóa box-shadow ở đây để áp dụng cho từng phần tử con */
         }
         main {
             padding: 20px;
-            /* Thêm padding-bottom để nội dung câu hỏi cuối không bị footer che mất */
             padding-bottom: 100px; 
         }
 
-        /* --- CSS ĐÃ SỬA ĐỔI ĐỂ GHIM HEADER VÀ FOOTER --- */
+        /* --- CSS ĐỂ GHIM HEADER VÀ FOOTER --- */
         header {
             background-color: #0056d2;
             color: white;
             padding: 15px 20px;
             text-align: center;
-            
-            /* Ghim header ở trên cùng */
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -42,14 +38,11 @@
         footer {
             background-color: #ffffff;
             padding: 15px 20px;
-            
-            /* Ghim footer ở dưới cùng */
             position: sticky;
             bottom: 0;
             z-index: 1000;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1); /* Thêm shadow để footer nổi bật */
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         }
-        /* --- KẾT THÚC PHẦN CSS SỬA ĐỔI --- */
 
         header h1 {
             margin: 0;
@@ -100,15 +93,15 @@
             border-radius: 5px;
             transition: background-color 0.3s;
             font-weight: bold;
-            width: 100%; /* Cho nút bấm chiếm toàn bộ chiều rộng footer */
-            max-width: 300px; /* Giới hạn chiều rộng tối đa của nút */
+            width: 100%;
+            max-width: 300px;
         }
         button:hover {
             background-color: #218838;
         }
         #result-container {
             padding: 20px;
-            margin-top: 0; /* Bỏ margin-top vì footer đã tách biệt */
+            margin-top: 0;
             border-radius: 8px;
             background-color: #e9f7ef;
             border: 1px solid #b8e0c9;
@@ -176,107 +169,108 @@
     </div>
 
     <script>
+        // Dữ liệu câu hỏi đã được cấu trúc lại: không còn tiền tố số và chữ cái, câu trả lời là dạng văn bản.
         const questions = [
-            { question: "1. The reason ____ I have continued to work for that company is the job security.", options: ["A. at which", "B. which", "C. why", "D. for that"], answer: "C" },
-            { question: "2. To calm his angry girlfriend, John offered an apology ____ Jane did not accept.", options: ["A. which", "B. who", "C. whom", "D. when"], answer: "A" },
-            { question: "3. ____ failed will have to retake the exam next week.", options: ["A. Those", "B. Those who", "C. Who", "D. Those which"], answer: "B" },
-            { question: "4. The woman ____ hair is long and curly is the new secretary, Mrs. Chan.", options: ["A. who", "B. whose", "C. that", "D. which"], answer: "B" },
-            { question: "5. ____ is a quality all human beings have.", options: ["A. Creativity may take many forms", "B. Creativity, may take many forms,", "C. Creativity which may take many forms,", "D. Creativity, which may take many forms"], answer: "D" },
-            { question: "6. New York is a place ____ people of many different cultures live and work together.", options: ["A. where", "B. that", "C. which", "D. in that"], answer: "A" },
-            { question: "7. Women ____ work are happier than those ____ don't work.", options: ["A. that / whom", "B. who / who", "C. whom / that", "D. whose / which"], answer: "B" },
-            { question: "8. ____ used to be the tallest building in the world, is still a popular tourist attraction.", options: ["A. The Empire State Building", "B. It is The Empire State Building, which", "C. The Empire State Building, that", "D. The Empire State Building, which"], answer: "D" },
-            { question: "9. The family ______ burnt in the fire was immediately given a suite in a hotel.", options: ["A. which house", "B. the house of whom", "C. that house", "D. whose house"], answer: "D" },
-            { question: "10. This is the house ______ I lived when I first came to the US.", options: ["A. in that", "B. in where", "C. where", "D. which in"], answer: "C" },
-            { question: "11. New York City, ______ millions of immigrants live, is sometimes called a Melting Pot.", options: ["A. New York City, which", "B. New York City that", "C. New York City, where", "D. New York City"], answer: "C" },
-            { question: "12. ______ small two-winged insects, can spread fatal diseases like malaria and dengue fever.", options: ["A. Mosquitoes are", "B. Mosquitoes, which are", "C. Mosquitoes, that are", "D. They are mosquitoes4"], answer: "B" },
-            { question: "13. He is the man ______ last week.", options: ["A. I met", "B. which I met", "C. whose I met", "D. where I met"], answer: "A" },
-            { question: "14. He is the man ______ I wanted to speak to and ______ name I'd forgotten.", options: ["A. whose / whom", "B. that / which", "C. who / that", "D. whom / whose"], answer: "D" },
-            { question: "15. I did not like the book ______.", options: ["A. whom John gave me", "B. when John gave me", "C. John gave me", "D. that John gave me it"], answer: "C" },
-            { question: "16. ______ in New York lead very busy lives.", options: ["A. Those who live", "B. Who live", "C. Those live", "D. Those which live"], answer: "A" },
-            { question: "17. The house ______ I grew up has just renovated.", options: ["A. where", "B. in that", "C. which", "D. that"], answer: "A" },
-            { question: "18. My favorite month is always February ______ we celebrate Valentine's Day and Presidents' Day.", options: ["A. which", "B. where", "C. why", "D. when"], answer: "D" },
-            { question: "19. Frank Zappa, ______ one of the most creative artists in rock 'n roll, came from California.", options: ["A. was", "B. who was", "C. whom was", "D. that was"], answer: "B" },
-            { question: "20. Michelle screamed when she saw the spider ______ dangling from the one clean bathroom towel.", options: ["A. whom", "B. where", "C. that", "D. whose"], answer: "C" },
-            { question: "21. Brian said goodnight to his roommate ______ continued to play video games until his eyes were blurry with fatigue.", options: ["A. Justin, whom", "B. Justin who", "C. Justin, who", "D. Justin, that"], answer: "C" },
-            { question: "22. The old man and his two dogs ______ were seriously burnt in the fire last week have gradually recovered.", options: ["A. who", "B. that", "C. which", "D. whom"], answer: "B" },
-            { question: "23. If the trajectory of a satellite ______ slightly off at launch, it ______ worse as the flight progresses.", options: ["A. is / will get", "B. are / get", "C. was / got", "D. were / would get"], answer: "A" },
-            { question: "24. If a live sponge ______ into pieces, each piece ______ into a new sponge like the original one.", options: ["A. break / turn", "B. broke / would turned", "C. is broken / will turn", "D. will break / turn"], answer: "C" },
-            { question: "25. If the temperatures ______ to below 0, this lake ______.", options: ["A. will drop / freezes", "B. drop / froze", "C. dropped / freezes", "D. drop / freezes"], answer: "D" },
-            { question: "26. If Dora ______ to work before 7 tomorrow, she ______ you a ride.", options: ["A. will go / gives", "B. goes / will give", "C. go / give", "D. is going / will give"], answer: "B" },
-            { question: "27. If you took the medication, you ______ too much.", options: ["A. will cough", "B. wouldn't cough", "C. will not cough", "D. would cough"], answer: "B" },
-            { question: "28. If I ruled the world, ______ all of the wars.", options: ["A. I'd stop", "B. I'll stop", "C. I would have stopped", "D. I stopped"], answer: "A" },
-            { question: "29. If Americans ______ fewer foods with sugar and salt, their general health ______ better.", options: ["A. eat / would be", "B. ate / will be", "C. ate / would be", "D. will eat / is"], answer: "C" },
-            { question: "30. She ______ to the aerobics classes if her friend ______ her up in her car.", options: ["A. could go to / didn't pick", "B. couldn't go to / didn't pick", "C. couldn't go to / picked", "D. could go to / pick"], answer: "B" },
-            { question: "31. I ______ more art if I ______ working part time to pay off my student loans.", options: ["A. can produce / am", "B. couldn't produce / was", "C. couldn't produce / wasn't", "D. could produce / wasn't"], answer: "D" },
-            { question: "32. If they had informed us of their arrival in advance, we ______ rooms for them.", options: ["A. would prepare", "B. would have prepared", "C. have prepared", "D. had prepared"], answer: "B" },
-            { question: "33. If I hadn't been so nervous, I ______ the exam.", options: ["A. would pass", "B. will have passed", "C. would have passed", "D. had passed"], answer: "C" },
-            { question: "34. ______ more carefully, he would not have had the accident yesterday.", options: ["A. If Peter drove", "B. Had Peter driven", "C. Only if Peter could drive", "D. Unless Peter had driven11"], answer: "B" },
-            { question: "35. If it ______ last night the path wouldn't be wet and slippery now.", options: ["A. didn't rain", "B. wasn't raining", "C. hadn't been raining", "D. hadn't rained"], answer: "C" },
-            { question: "36. I need new exercise equipment because I want to get ______.", options: ["A. fitty", "B. more fit", "C. fitter", "D. fitter than"], answer: "B" },
-            { question: "37. We don't work together any more so I see him ______ than I used to.", options: ["A. frequently", "B. more frequently", "C. less frequently", "D. much frequently"], answer: "C" },
-            { question: "38. My boss ______ constantly ______ me in my last job.", options: ["A. was / phoned", "B. was / called", "C. is / phoning", "D. was / phoning"], answer: "D" },
-            { question: "39. My job is ______ boring every now and then.", options: ["A. much/many", "B. a bit/more", "C. little/much", "D. somewhat/more"], answer: "B" },
-            { question: "40. Japan imports ______ oil from other countries.", options: ["A. a lot of", "B. a large number of", "C. several of", "D. a number of"], answer: "A" },
-            { question: "41. It's too noisy here.", options: ["A. a lot quiet", "B. more quiet", "C. quieter", "D. B & C are correct"], answer: "D" },
-            { question: "42. The more difficult the test is, ______ he tries.", options: ["A. the harder", "B. the hardest", "C. the most hard", "D. the more hard"], answer: "A" },
-            { question: "43. I think you should be ______ and say exactly what you think.", options: ["A. honester", "B. more honest", "C. most honest", "D. more honester"], answer: "B" },
-            { question: "44. Do you know any planes which travel ______ than the speed of sound?", options: ["A. fastest", "B. fastlier", "C. fastly", "D. faster"], answer: "D" },
-            { question: "45. My bike is quite slow and I want to get a ______ one.", options: ["A. rapider", "B. faster", "C. faster than", "D. fastening"], answer: "B" },
-            { question: "46. Since we moved house, I've had to get up ______ for school than before.", options: ["A. early", "B. earliest", "C. more early", "D. earlier"], answer: "D" },
-            { question: "47. I was born in ______ warm family.", options: ["A. a / W / W", "B. the / the / an", "C. a / the / the", "D. the / W / an"], answer: "A" },
-            { question: "48. Jim, ______ old friend of mine, used to work in ______ downtown Los Angeles.", options: ["A. an / a / W", "B. a / the / W", "C. the / W / a", "D. an / W / the"], answer: "D" },
-            { question: "49. ______ Mount Everest is in ______ Himalayas.", options: ["A. W / an / the", "B. A / an / a", "C. the / W / W", "D. W / the / the"], answer: "D" },
-            { question: "50. I happened to see Mary on ______ way ______ home.", options: ["A. W / the", "B. the / an", "C. a / the", "D. the / W"], answer: "D" },
-            { question: "51. In ______ Britain ______ cars run on ______ left.", options: ["A. the / the / the", "B. W / W / a", "C. W / W / the", "D. W / the / the"], answer: "C" },
-            { question: "52. She is ______ MC.", options: ["A. an / the", "B. a / W", "C. the / W", "D. a / the"], answer: "A" },
-            { question: "53. I do not go to ______ theater very often.", options: ["A. a / the / the", "B. W / W / W", "C. the / the / the", "D. the / W / W"], answer: "D" },
-            { question: "54. ______ coffee is his favorite drink.", options: ["A. W / a / W", "B. The / W / the", "C. The / a / the", "D. W / the / a"], answer: "A" },
-            { question: "55. My friend is ______ fireman.", options: ["A. a / W", "B. the / the", "C. an / the", "D. W / the"], answer: "A" },
-            { question: "56. They left Hyde Park at ______ midday and went shopping at the commercial center in ______ afternoon.", options: ["A. the / the", "B. a / an", "C. the / an", "D. W / the"], answer: "D" },
-            { question: "57. ______ most children like ______ sweets.", options: ["A. The / the", "B. A / the", "C. W / W", "D. The / W"], answer: "C" },
-            { question: "58. ______ River Nile is ______ longest river of all.", options: ["A. W / W", "B. A / the", "C. The / the", "D. W / a"], answer: "C" },
-            { question: "59. Many people voluntarily offer care for ______ elderly and ______ disabled.", options: ["A. the / the", "B. an / a", "C. an / a", "D. W / W"], answer: "A" },
-            { question: "60. ______ River Thames flows through London, ______ capital of England.", options: ["A. The / the", "B. A / a", "C. W / W", "D. The / a"], answer: "A" },
-            { question: "61. ______ Taylors decided that they would employ ______ architect to do ______ work.", options: ["A. The / a / the", "B. A / W / A", "C. W / the / a", "D. The / an / the"], answer: "D" },
-            { question: "62. ______ sun is a ball of fire in the sky that the Earth goes round.", options: ["A. The / an / a", "B. The / W / W", "C. A / the / the", "D. W / a / a"], answer: "B" },
-            { question: "63. She likes reading ______ books, collecting ______ stamps and going to ______ cinema.", options: ["A. the / W / W", "B. W / W / the", "C. W / the / W", "D. W / the / a"], answer: "B" },
-            { question: "64. On ______ night of 14 April 1912, during its voyage, ______ Titanic hit ______ iceberg, and sank two hours and forty minutes later.", options: ["A. W / the / the", "B. the / the / an", "C. a / W / the", "D. a / a / the"], answer: "B" },
-            { question: "65. The largest lake in the United States is ______ Lake Superior, one of ______ Great Lakes, located on the United States - Canada border.", options: ["A. a7 / a / W", "B. a / a", "C. W / the", "D. the / W"], answer: "C" },
-            { question: "66. Ian is described as ______ honest and hard-working boy.", options: ["A. an / W", "B. an / the", "C. the / a", "D. a / a"], answer: "B" },
-            { question: "67. That car can run at ______ speed of 18W miles ______ hour.", options: ["A. the / an", "B. a / the", "C. a / a", "D. the / an"], answer: "A" },
-            { question: "68. My grandmother gave me ______ piano on my birthday, but what ______ pity, I cannot play ______ piano.", options: ["A. W / W / the", "B. the / the / a", "C. a / a / the", "D. the / W / a"], answer: "C" },
-            { question: "69. We don't need ______ eggs.", options: ["A. a great deal of", "B. a large amount of", "C. many", "D. much"], answer: "C" },
-            { question: "70. ______ research has been done into the cause of cancer.", options: ["A. A couple of", "B. A small number of", "C. Plenty of", "D. A great number of"], answer: "C" },
-            { question: "71. She decided not to go, for ______ reasons.", options: ["A. a number of", "B. much", "C. a large amount of", "D. little"], answer: "A" },
-            { question: "72. We shouldn't eat ______ chocolate.", options: ["A. A lot of", "B. a great number of", "C. a large number of", "D. a large quantity of"], answer: "A" },
-            { question: "73. I can go out with you right now because I don't have ______ homework.", options: ["A. much", "B. many", "C. few", "D. some"], answer: "A" },
-            { question: "74. When the boss ______ into the office, his secretary was typing, and the accountant was talking on the phone.", options: ["A. was walking", "B. had walked", "C. walked", "D. had been walking"], answer: "C" },
-            { question: "75. My grandfather ______ a very exciting life.", options: ["A. has / has lived / have been", "B. had / lived / have were", "C. was having / had lived / had been", "D. has had / is living / are"], answer: "D" },
-            { question: "76. I ______ to visit you yesterday, but you ______ at home.", options: ["A. have come / are not", "B. had come / were not", "C. came / were not", "D. was coming / have not been"], answer: "C" },
-            { question: "77. He's not very well-known here, but he's ______ in his own country.", options: ["A. anyone", "B. nothing", "C. anything", "D. somebody"], answer: "D" },
-            { question: "78. He hardly ever washes the dishes and he rarely, if ever, does ______ cleaning.", options: ["A. some", "B. any", "C. none", "D. no"], answer: "B" },
-            { question: "79. I didn't know ______ about computers till I started this job.", options: ["A. anybody", "B. anything", "C. nothing", "D. something"], answer: "B" },
-            { question: "80. They do not have ______ pets as they are too busy to take care of animals.", options: ["A. some", "B. any", "C. a", "D. every"], answer: "B" },
-            { question: "81. When you go by train, make sure you ______ an express, not a train that stops at all the stations.", options: ["A. got", "B. get", "C. would get", "D. should get"], answer: "B" },
-            { question: "82. She never ______ when someone leaves her a message.", options: ["A. call back", "B. will call back", "C. has called back", "D. calls back"], answer: "D" },
-            { question: "83. Don't give the chocolate to Helen.", options: ["A. hates", "B. is hating", "C. has hated", "D. hated"], answer: "A" },
-            { question: "84. Every time we ______ to that restaurant, my stomach gets upset.", options: ["A. will go", "B. went", "C. go", "D. have gone"], answer: "C" },
-            { question: "85. I'm sure they ______ married and live happily ever afterwards.", options: ["A. will get", "B. have got", "C. are going", "D. got"], answer: "A" },
-            { question: "86. As soon as we ______ the news, we rushed to the hospital.", options: ["A. hear", "B. had heard", "C. were hearing", "D. have heard"], answer: "B" },
-            { question: "87. We weren't hungry. We ______ just ______ lunch.", options: ["A. have / had", "B. have / eaten", "C. had / had", "D. had / been having"], answer: "C" },
-            { question: "88. I knew Keith was angry about the report because Jenney ______ me the day before.", options: ["A. was warning", "B. warned", "C. has warned", "D. had warned"], answer: "D" },
-            { question: "89. No one ______ your story when you tell them.", options: ["A. is going to believe", "B. will believe", "C. believe", "D. has believe"], answer: "A" },
-            { question: "90. I ______ Noriko in town 2 days ago.", options: ["A. saw / was wearing", "B. see / wears", "C. saw / wore", "D. see / is wearing"], answer: "A" },
-            { question: "91. Last night Section TV came out with a shock on air.", options: ["A. presents", "B. were presented", "C. have presented", "D. was presenting"], answer: "D" },
-            { question: "92. While Adam ______ his flock of sheep, he spent much of his time reading.", options: ["A. watched", "B. was watching", "C. was looking", "D. was seeing"], answer: "B" },
-            { question: "93. When I arrived home, my father wasn't there. He ______ out.", options: ["A. has gone", "B. went", "C. goes", "D. had gone"], answer: "D" },
-            { question: "94. I assumed you ______ paying for the repairs until last year.", options: ["A. had", "B. have been", "C. had been", "D. have never been"], answer: "C" },
-            { question: "95. 'Did you go to Hawaii for vacation?'", options: ["A. was planned", "B. had planning", "C. had been planning", "D. have planned11"], answer: "C" },
-            { question: "96. I know you want to move everything quickly, but this box ______ heavier and heavier.", options: ["A. gets", "B. will get", "C. might get", "D. is getting"], answer: "D" },
-            { question: "97. She is always ______ her pencil on the desk and it's getting on my nerves!", options: ["A. dropped", "B. dropping", "C. tapped", "D. tapping"], answer: "D" },
-            { question: "98. Do you know our city?", options: ["A. was", "B. came", "C. am coming", "D. have been"], answer: "D" },
-            { question: "99. ______ to Australia?", options: ["A. did you ever go", "B. do you ever go", "C. have you ever been", "D. have you ever gone"], answer: "C" },
-            { question: "100. Marcel and Abdre ______ friends of mine for more than ten years.", options: ["A. were", "B. had been", "C. have been", "D. are"], answer: "C" }
+            { question: "The reason ____ I have continued to work for that company is the job security.", options: ["at which", "which", "why", "for that"], answer: "why" },
+            { question: "To calm his angry girlfriend, John offered an apology ____ Jane did not accept.", options: ["which", "who", "whom", "when"], answer: "which" },
+            { question: "____ failed will have to retake the exam next week.", options: ["Those", "Those who", "Who", "Those which"], answer: "Those who" },
+            { question: "The woman ____ hair is long and curly is the new secretary, Mrs. Chan.", options: ["who", "whose", "that", "which"], answer: "whose" },
+            { question: "____ is a quality all human beings have.", options: ["Creativity may take many forms", "Creativity, may take many forms,", "Creativity which may take many forms,", "Creativity, which may take many forms"], answer: "Creativity, which may take many forms" },
+            { question: "New York is a place ____ people of many different cultures live and work together.", options: ["where", "that", "which", "in that"], answer: "where" },
+            { question: "Women ____ work are happier than those ____ don't work.", options: ["that / whom", "who / who", "whom / that", "whose / which"], answer: "who / who" },
+            { question: "____ used to be the tallest building in the world, is still a popular tourist attraction.", options: ["The Empire State Building", "It is The Empire State Building, which", "The Empire State Building, that", "The Empire State Building, which"], answer: "The Empire State Building, which" },
+            { question: "The family ______ burnt in the fire was immediately given a suite in a hotel.", options: ["which house", "the house of whom", "that house", "whose house"], answer: "whose house" },
+            { question: "This is the house ______ I lived when I first came to the US.", options: ["in that", "in where", "where", "which in"], answer: "where" },
+            { question: "New York City, ______ millions of immigrants live, is sometimes called a Melting Pot.", options: ["New York City, which", "New York City that", "New York City, where", "New York City"], answer: "New York City, where" },
+            { question: "______ small two-winged insects, can spread fatal diseases like malaria and dengue fever.", options: ["Mosquitoes are", "Mosquitoes, which are", "Mosquitoes, that are", "They are mosquitoes4"], answer: "Mosquitoes, which are" },
+            { question: "He is the man ______ last week.", options: ["I met", "which I met", "whose I met", "where I met"], answer: "I met" },
+            { question: "He is the man ______ I wanted to speak to and ______ name I'd forgotten.", options: ["whose / whom", "that / which", "who / that", "whom / whose"], answer: "whom / whose" },
+            { question: "I did not like the book ______.", options: ["whom John gave me", "when John gave me", "John gave me", "that John gave me it"], answer: "John gave me" },
+            { question: "______ in New York lead very busy lives.", options: ["Those who live", "Who live", "Those live", "Those which live"], answer: "Those who live" },
+            { question: "The house ______ I grew up has just renovated.", options: ["where", "in that", "which", "that"], answer: "where" },
+            { question: "My favorite month is always February ______ we celebrate Valentine's Day and Presidents' Day.", options: ["which", "where", "why", "when"], answer: "when" },
+            { question: "Frank Zappa, ______ one of the most creative artists in rock 'n roll, came from California.", options: ["was", "who was", "whom was", "that was"], answer: "who was" },
+            { question: "Michelle screamed when she saw the spider ______ dangling from the one clean bathroom towel.", options: ["whom", "where", "that", "whose"], answer: "that" },
+            { question: "Brian said goodnight to his roommate ______ continued to play video games until his eyes were blurry with fatigue.", options: ["Justin, whom", "Justin who", "Justin, who", "Justin, that"], answer: "Justin, who" },
+            { question: "The old man and his two dogs ______ were seriously burnt in the fire last week have gradually recovered.", options: ["who", "that", "which", "whom"], answer: "that" },
+            { question: "If the trajectory of a satellite ______ slightly off at launch, it ______ worse as the flight progresses.", options: ["is / will get", "are / get", "was / got", "were / would get"], answer: "is / will get" },
+            { question: "If a live sponge ______ into pieces, each piece ______ into a new sponge like the original one.", options: ["break / turn", "broke / would turned", "is broken / will turn", "will break / turn"], answer: "is broken / will turn" },
+            { question: "If the temperatures ______ to below 0, this lake ______.", options: ["will drop / freezes", "drop / froze", "dropped / freezes", "drop / freezes"], answer: "drop / freezes" },
+            { question: "If Dora ______ to work before 7 tomorrow, she ______ you a ride.", options: ["will go / gives", "goes / will give", "go / give", "is going / will give"], answer: "goes / will give" },
+            { question: "If you took the medication, you ______ too much.", options: ["will cough", "wouldn't cough", "will not cough", "would cough"], answer: "wouldn't cough" },
+            { question: "If I ruled the world, ______ all of the wars.", options: ["I'd stop", "I'll stop", "I would have stopped", "I stopped"], answer: "I'd stop" },
+            { question: "If Americans ______ fewer foods with sugar and salt, their general health ______ better.", options: ["eat / would be", "ate / will be", "ate / would be", "will eat / is"], answer: "ate / would be" },
+            { question: "She ______ to the aerobics classes if her friend ______ her up in her car.", options: ["could go to / didn't pick", "couldn't go to / didn't pick", "couldn't go to / picked", "could go to / pick"], answer: "couldn't go to / didn't pick" },
+            { question: "I ______ more art if I ______ working part time to pay off my student loans.", options: ["can produce / am", "couldn't produce / was", "couldn't produce / wasn't", "could produce / wasn't"], answer: "could produce / wasn't" },
+            { question: "If they had informed us of their arrival in advance, we ______ rooms for them.", options: ["would prepare", "would have prepared", "have prepared", "had prepared"], answer: "would have prepared" },
+            { question: "If I hadn't been so nervous, I ______ the exam.", options: ["would pass", "will have passed", "would have passed", "had passed"], answer: "would have passed" },
+            { question: "______ more carefully, he would not have had the accident yesterday.", options: ["If Peter drove", "Had Peter driven", "Only if Peter could drive", "Unless Peter had driven11"], answer: "Had Peter driven" },
+            { question: "If it ______ last night the path wouldn't be wet and slippery now.", options: ["didn't rain", "wasn't raining", "hadn't been raining", "hadn't rained"], answer: "hadn't been raining" },
+            { question: "I need new exercise equipment because I want to get ______.", options: ["fitty", "more fit", "fitter", "fitter than"], answer: "more fit" },
+            { question: "We don't work together any more so I see him ______ than I used to.", options: ["frequently", "more frequently", "less frequently", "much frequently"], answer: "less frequently" },
+            { question: "My boss ______ constantly ______ me in my last job.", options: ["was / phoned", "was / called", "is / phoning", "was / phoning"], answer: "was / phoning" },
+            { question: "My job is ______ boring every now and then.", options: ["much/many", "a bit/more", "little/much", "somewhat/more"], answer: "a bit/more" },
+            { question: "Japan imports ______ oil from other countries.", options: ["a lot of", "a large number of", "several of", "a number of"], answer: "a lot of" },
+            { question: "It's too noisy here.", options: ["a lot quiet", "more quiet", "quieter", "B & C are correct"], answer: "B & C are correct" },
+            { question: "The more difficult the test is, ______ he tries.", options: ["the harder", "the hardest", "the most hard", "the more hard"], answer: "the harder" },
+            { question: "I think you should be ______ and say exactly what you think.", options: ["honester", "more honest", "most honest", "more honester"], answer: "more honest" },
+            { question: "Do you know any planes which travel ______ than the speed of sound?", options: ["fastest", "fastlier", "fastly", "faster"], answer: "faster" },
+            { question: "My bike is quite slow and I want to get a ______ one.", options: ["rapider", "faster", "faster than", "fastening"], answer: "faster" },
+            { question: "Since we moved house, I've had to get up ______ for school than before.", options: ["early", "earliest", "more early", "earlier"], answer: "earlier" },
+            { question: "I was born in ______ warm family.", options: ["a / W / W", "the / the / an", "a / the / the", "the / W / an"], answer: "a / W / W" },
+            { question: "Jim, ______ old friend of mine, used to work in ______ downtown Los Angeles.", options: ["an / a / W", "a / the / W", "the / W / a", "an / W / the"], answer: "an / W / the" },
+            { question: "______ Mount Everest is in ______ Himalayas.", options: ["W / an / the", "A / an / a", "the / W / W", "W / the / the"], answer: "W / the / the" },
+            { question: "I happened to see Mary on ______ way ______ home.", options: ["W / the", "the / an", "a / the", "the / W"], answer: "the / W" },
+            { question: "In ______ Britain ______ cars run on ______ left.", options: ["the / the / the", "W / W / a", "W / W / the", "W / the / the"], answer: "W / W / the" },
+            { question: "She is ______ MC.", options: ["an / the", "a / W", "the / W", "a / the"], answer: "an / the" },
+            { question: "I do not go to ______ theater very often.", options: ["a / the / the", "W / W / W", "the / the / the", "the / W / W"], answer: "the / W / W" },
+            { question: "______ coffee is his favorite drink.", options: ["W / a / W", "The / W / the", "The / a / the", "W / the / a"], answer: "W / a / W" },
+            { question: "My friend is ______ fireman.", options: ["a / W", "the / the", "an / the", "W / the"], answer: "a / W" },
+            { question: "They left Hyde Park at ______ midday and went shopping at the commercial center in ______ afternoon.", options: ["the / the", "a / an", "the / an", "W / the"], answer: "W / the" },
+            { question: "______ most children like ______ sweets.", options: ["The / the", "A / the", "W / W", "The / W"], answer: "W / W" },
+            { question: "______ River Nile is ______ longest river of all.", options: ["W / W", "A / the", "The / the", "W / a"], answer: "The / the" },
+            { question: "Many people voluntarily offer care for ______ elderly and ______ disabled.", options: ["the / the", "an / a", "an / a", "W / W"], answer: "the / the" },
+            { question: "______ River Thames flows through London, ______ capital of England.", options: ["The / the", "A / a", "W / W", "The / a"], answer: "The / a" },
+            { question: "______ Taylors decided that they would employ ______ architect to do ______ work.", options: ["The / a / the", "A / W / A", "W / the / a", "The / an / the"], answer: "The / an / the" },
+            { question: "______ sun is a ball of fire in the sky that the Earth goes round.", options: ["The / an / a", "The / W / W", "A / the / the", "W / a / a"], answer: "The / W / W" },
+            { question: "She likes reading ______ books, collecting ______ stamps and going to ______ cinema.", options: ["the / W / W", "W / W / the", "W / the / W", "W / the / a"], answer: "W / W / the" },
+            { question: "On ______ night of 14 April 1912, during its voyage, ______ Titanic hit ______ iceberg, and sank two hours and forty minutes later.", options: ["W / the / the", "the / the / an", "a / W / the", "a / a / the"], answer: "the / the / an" },
+            { question: "The largest lake in the United States is ______ Lake Superior, one of ______ Great Lakes, located on the United States - Canada border.", options: ["a7 / a / W", "a / a", "W / the", "the / W"], answer: "W / the" },
+            { question: "Ian is described as ______ honest and hard-working boy.", options: ["an / W", "an / the", "the / a", "a / a"], answer: "an / the" },
+            { question: "That car can run at ______ speed of 18W miles ______ hour.", options: ["the / an", "a / the", "a / a", "the / an"], answer: "a / an" },
+            { question: "My grandmother gave me ______ piano on my birthday, but what ______ pity, I cannot play ______ piano.", options: ["W / W / the", "the / the / a", "a / a / the", "the / W / a"], answer: "a / a / the" },
+            { question: "We don't need ______ eggs.", options: ["a great deal of", "a large amount of", "many", "much"], answer: "many" },
+            { question: "______ research has been done into the cause of cancer.", options: ["A couple of", "A small number of", "Plenty of", "A great number of"], answer: "Plenty of" },
+            { question: "She decided not to go, for ______ reasons.", options: ["a number of", "much", "a large amount of", "little"], answer: "a number of" },
+            { question: "We shouldn't eat ______ chocolate.", options: ["A lot of", "a great number of", "a large number of", "a large quantity of"], answer: "A lot of" },
+            { question: "I can go out with you right now because I don't have ______ homework.", options: ["much", "many", "few", "some"], answer: "much" },
+            { question: "When the boss ______ into the office, his secretary was typing, and the accountant was talking on the phone.", options: ["was walking", "had walked", "walked", "had been walking"], answer: "walked" },
+            { question: "My grandfather ______ a very exciting life.", options: ["has / has lived / have been", "had / lived / have were", "was having / had lived / had been", "has had / is living / are"], answer: "has had / is living / are" },
+            { question: "I ______ to visit you yesterday, but you ______ at home.", options: ["have come / are not", "had come / were not", "came / were not", "was coming / have not been"], answer: "came / were not" },
+            { question: "He's not very well-known here, but he's ______ in his own country.", options: ["anyone", "nothing", "anything", "somebody"], answer: "somebody" },
+            { question: "He hardly ever washes the dishes and he rarely, if ever, does ______ cleaning.", options: ["some", "any", "none", "no"], answer: "any" },
+            { question: "I didn't know ______ about computers till I started this job.", options: ["anybody", "anything", "nothing", "something"], answer: "anything" },
+            { question: "They do not have ______ pets as they are too busy to take care of animals.", options: ["some", "any", "a", "every"], answer: "any" },
+            { question: "When you go by train, make sure you ______ an express, not a train that stops at all the stations.", options: ["got", "get", "would get", "should get"], answer: "get" },
+            { question: "She never ______ when someone leaves her a message.", options: ["call back", "will call back", "has called back", "calls back"], answer: "calls back" },
+            { question: "Don't give the chocolate to Helen.", options: ["hates", "is hating", "has hated", "hated"], answer: "hates" },
+            { question: "Every time we ______ to that restaurant, my stomach gets upset.", options: ["will go", "went", "go", "have gone"], answer: "go" },
+            { question: "I'm sure they ______ married and live happily ever afterwards.", options: ["will get", "have got", "are going", "got"], answer: "will get" },
+            { question: "As soon as we ______ the news, we rushed to the hospital.", options: ["hear", "had heard", "were hearing", "have heard"], answer: "had heard" },
+            { question: "We weren't hungry. We ______ just ______ lunch.", options: ["have / had", "have / eaten", "had / had", "had / been having"], answer: "had / had" },
+            { question: "I knew Keith was angry about the report because Jenney ______ me the day before.", options: ["was warning", "warned", "has warned", "had warned"], answer: "had warned" },
+            { question: "No one ______ your story when you tell them.", options: ["is going to believe", "will believe", "believe", "has believe"], answer: "is going to believe" },
+            { question: "I ______ Noriko in town 2 days ago.", options: ["saw / was wearing", "see / wears", "saw / wore", "see / is wearing"], answer: "saw / was wearing" },
+            { question: "Last night Section TV came out with a shock on air.", options: ["presents", "were presented", "have presented", "was presenting"], answer: "was presenting" },
+            { question: "While Adam ______ his flock of sheep, he spent much of his time reading.", options: ["watched", "was watching", "was looking", "was seeing"], answer: "was watching" },
+            { question: "When I arrived home, my father wasn't there. He ______ out.", options: ["has gone", "went", "goes", "had gone"], answer: "had gone" },
+            { question: "I assumed you ______ paying for the repairs until last year.", options: ["had", "have been", "had been", "have never been"], answer: "had been" },
+            { question: "'Did you go to Hawaii for vacation?'", options: ["was planned", "had planning", "had been planning", "have planned11"], answer: "had been planning" },
+            { question: "I know you want to move everything quickly, but this box ______ heavier and heavier.", options: ["gets", "will get", "might get", "is getting"], answer: "is getting" },
+            { question: "She is always ______ her pencil on the desk and it's getting on my nerves!", options: ["dropped", "dropping", "tapped", "tapping"], answer: "tapping" },
+            { question: "Do you know our city?", options: ["was", "came", "am coming", "have been"], answer: "have been" },
+            { question: "______ to Australia?", options: ["did you ever go", "do you ever go", "have you ever been", "have you ever gone"], answer: "have you ever been" },
+            { question: "Marcel and Abdre ______ friends of mine for more than ten years.", options: ["were", "had been", "have been", "are"], answer: "have been" }
         ];
 
         const testContainer = document.getElementById('test-container');
@@ -288,8 +282,21 @@
         const restartBtn = document.getElementById('restart-btn');
         let timerInterval;
 
+        /**
+         * Hàm xáo trộn một mảng theo thuật toán Fisher-Yates.
+         * @param {Array} array Mảng cần xáo trộn.
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // ES6 swap
+            }
+        }
+
         function startTimer(duration, display) {
             let timer = duration, minutes, seconds;
+            // Xóa bộ đếm thời gian cũ nếu có
+            clearInterval(timerInterval);
             timerInterval = setInterval(function () {
                 minutes = parseInt(timer / 60, 10);
                 seconds = parseInt(timer % 60, 10);
@@ -319,26 +326,36 @@
             submitBtn.style.display = 'block';
             testContainer.style.display = 'block';
             
+            // --- THAY ĐỔI QUAN TRỌNG: Đảo câu hỏi và đáp án ---
+            shuffleArray(questions); // Xáo trộn mảng câu hỏi
+            
+            const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+
             questions.forEach((q, index) => {
                 const questionElement = document.createElement('div');
                 questionElement.classList.add('question');
 
+                // Thêm số thứ tự câu hỏi một cách tự động
                 const questionText = document.createElement('p');
-                questionText.innerHTML = cleanHTML(q.question);
+                questionText.innerHTML = `<b>Câu ${index + 1}:</b> ${cleanHTML(q.question)}`;
                 questionElement.appendChild(questionText);
 
                 const optionsElement = document.createElement('div');
                 optionsElement.classList.add('options');
+                
+                // Xáo trộn mảng các lựa chọn
+                shuffleArray(q.options);
 
-                q.options.forEach(option => {
+                q.options.forEach((option, optionIndex) => {
                     const label = document.createElement('label');
                     const input = document.createElement('input');
                     input.type = 'radio';
                     input.name = `question${index}`;
-                    const optionLetter = cleanHTML(option).substring(0, 1);
-                    input.value = optionLetter;
+                    // Giá trị của lựa chọn giờ là chính văn bản của nó
+                    input.value = option;
                     label.appendChild(input);
-                    label.append(` ${cleanHTML(option)}`);
+                    // Thêm chữ cái A, B, C, D tự động
+                    label.append(` ${optionLetters[optionIndex]}. ${cleanHTML(option)}`);
                     optionsElement.appendChild(label);
                 });
 
@@ -362,6 +379,7 @@
                 
                 optionsLabels.forEach(label => {
                     const input = label.querySelector('input');
+                    // So sánh giá trị (văn bản) để xác định câu đúng
                     if (input.value === q.answer) {
                         label.classList.add('correct');
                     }
@@ -401,7 +419,8 @@
 
         restartBtn.addEventListener('click', () => {
             if (confirm('Bạn có muốn làm lại bài kiểm tra? Toàn bộ kết quả sẽ bị xóa.')) {
-                window.location.reload();
+                loadTest(); // Gọi lại loadTest để làm mới và đảo câu hỏi
+                window.scrollTo(0, 0);
             }
         });
         
