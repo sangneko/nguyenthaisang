@@ -3,42 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài kiểm tra trắc nghiệm</title>
+    <title>Bài kiểm tra tiếng Anh</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header class="quiz-header">
-        <div class="header-content">
-            <div class="timer">
-                <i class="far fa-clock"></i> <span id="timeRemaining">00:00</span>
-            </div>
-            <button class="submit-button" id="submitQuizTop">Nộp bài</button>
-        </div>
-    </header>
-
-    <div class="main-container">
-        <div class="quiz-area">
-            <form id="quizForm">
-                </form>
-            <button class="submit-button-bottom" id="submitQuizBottom">Nộp bài</button>
-
-            <div id="results" class="results-hidden">
-                <h2>Kết quả của bạn</h2>
-                <p>Số câu đúng: <span id="correctCount"></span> / <span id="totalQuestions"></span></p>
-                <p>Điểm: <span id="score"></span></p>
-                <div id="feedback"></div>
-                <button type="button" id="retakeQuiz" class="retake-button">Làm lại</button>
-            </div>
-        </div>
-
-        <div class="navigation-sidebar">
-            <h3>Danh sách câu hỏi</h3>
-            <div class="question-nav-grid" id="questionNavigation">
-                </div>
+    <div class="container">
+        <h1>Bài kiểm tra tiếng Anh</h1>
+        <form id="quizForm">
+            </form>
+        <button type="button" id="submitQuiz">Nộp bài</button>
+        <div id="results" class="results-hidden">
+            <h2>Kết quả của bạn</h2>
+            <p>Số câu đúng: <span id="correctCount"></span> / <span id="totalQuestions"></span></p>
+            <p>Điểm: <span id="score"></span></p>
+            <div id="feedback"></div>
+            <button type="button" id="retakeQuiz">Làm lại</button>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
