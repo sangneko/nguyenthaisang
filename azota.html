@@ -2,35 +2,52 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Danh sách đề ôn tập</title>
+  <title>📚 Danh sách đề ôn tập</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to bottom right, #f5f7fa, #c3cfe2);
+      margin: 0;
       padding: 30px;
-      background: #f5f5f5;
     }
     h1 {
-      color: #333;
+      text-align: center;
+      color: #2c3e50;
+      font-size: 32px;
+      margin-bottom: 20px;
     }
-    ul {
-      list-style: none;
-      padding-left: 0;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
     }
-    li {
-      margin: 10px 0;
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      transition: transform 0.2s;
     }
-    a {
-      text-decoration: none;
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .title {
+      font-size: 18px;
       color: #0066cc;
       font-weight: bold;
+      text-decoration: none;
     }
-    a:hover {
-      color: #ff6600;
+    .title:hover {
+      color: #e67e22;
+    }
+    .info {
+      font-size: 14px;
+      margin-top: 8px;
+      color: #555;
     }
     .footer {
       margin-top: 50px;
-      padding-top: 20px;
-      border-top: 1px solid #ccc;
+      text-align: center;
       font-size: 14px;
       color: #555;
     }
@@ -38,34 +55,84 @@
       font-style: italic;
       color: #007744;
       margin-bottom: 10px;
+      font-size: 16px;
+      animation: blink 3s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
   </style>
 </head>
 <body>
-  <h1>📚 Danh sách đề ôn tập</h1>
-  <ul>
-    <li><a href="https://azota.vn/de-thi/yledqv" target="_blank">Triết</a></li>
-    <li><a href="https://azota.vn/de-thi/asdpod" target="_blank">Ôn tập Tiếng Anh 4</a></li>
-    <li><a href="https://azota.vn/de-thi/bwtbh2" target="_blank">CSDL ÔN TẬP</a></li>
-    <li><a href="https://azota.vn/de-thi/rdcduc" target="_blank">[Đề Thi Thử] Lập Trình Hướng Đối Tượng</a></li>
-    <li><a href="https://azota.vn/de-thi/p69eh6" target="_blank">Exception, Ngoại Lệ, Interface</a></li>
-    <li><a href="https://azota.vn/de-thi/cyca8o" target="_blank">Kế thừa - Đa hình - Luyện tập</a></li>
-    <li><a href="https://azota.vn/de-thi/0q6maa" target="_blank">Tổng quan về OOP & Java</a></li>
-    <li><a href="https://azota.vn/de-thi/dtuegi" target="_blank">Chủ nghĩa xã hội khoa học</a></li>
-    <li><a href="https://azota.vn/de-thi/5miayl" target="_blank">Lịch sử Đảng CSVN</a></li>
-    <li><a href="https://azota.vn/de-thi/xbsp9q" target="_blank">Kinh Tế Chính Trị - Ôn tập</a></li>
-    <li><a href="https://azota.vn/de-thi/drrzwt" target="_blank">Tư Tưởng Hồ Chí Minh</a></li>
-    <li><a href="https://azota.vn/de-thi/fiaukw" target="_blank">Đọc Hiểu Anh Ngữ 3</a></li>
-    <li><a href="https://azota.vn/de-thi/shwgk5" target="_blank">Ngữ Pháp Anh Ngữ 3</a></li>
-    <li><a href="https://azota.vn/de-thi/ijhrj7" target="_blank">Hệ Điều Hành - Final</a></li>
-    <li><a href="https://azota.vn/de-thi/pdukrn" target="_blank">Hệ Điều Hành - Nhập môn</a></li>
-    <li><a href="https://azota.vn/de-thi/u1bu9q" target="_blank">QP3</a></li>
-    <li><a href="https://azota.vn/de-thi/nfhexz" target="_blank">Quốc Phòng An Ninh 2 - Đáp án</a></li>
-  </ul>
+
+  <h1>📚 Danh sách đề ôn tập cuối kỳ</h1>
+
+  <div class="grid">
+    <div class="card">
+      <a class="title" href="https://azota.vn/de-thi/yledqv" target="_blank">Triết học Mác-Lênin</a>
+      <div class="info">Số câu hỏi: 30</div>
+    </div>
+    <div class="card">
+      <a class="title" href="https://azota.vn/de-thi/asdpod" target="_blank">Ôn tập Tiếng Anh 4</a>
+      <div class="info">Số câu hỏi: 40</div>
+    </div>
+    <div class="card">
+      <a class="title" href="https://azota.vn/de-thi/bwtbh2" target="_blank">Cơ sở dữ liệu</a>
+      <div class="info">Số câu hỏi: 35</div>
+    </div>
+    <div class="card">
+      <a class="title" href="https://azota.vn/de-thi/rdcduc" target="_blank">Lập trình hướng đối tượng</a>
+      <div class="info">Số câu hỏi: 50</div>
+    </div>
+    <div class="card">
+      <a class="title" href="https://azota.vn/de-thi/dtuegi" target="_blank">Chủ nghĩa xã hội khoa học</a>
+      <div class="info">Số câu hỏi: 30</div>
+    </div>
+    <div class="card">
+      <a class="title" href="https://azota.vn/de-thi/5miayl" target="_blank">Lịch sử Đảng CSVN</a>
+      <div class="info">Số câu hỏi: 60</div>
+    </div>
+    <div class="card">
+      <a class="title" href="https://azota.vn/de-thi/drrzwt" target="_blank">Tư tưởng Hồ Chí Minh</a>
+      <div class="info">Số câu hỏi: 40</div>
+    </div>
+    <div class="card">
+      <a class="title" href="https://azota.vn/de-thi/ijhrj7" target="_blank">Hệ điều hành - Final</a>
+      <div class="info">Số câu hỏi: 50</div>
+    </div>
+    <div class="card">
+      <a class="title" href="https://azota.vn/de-thi/u1bu9q" target="_blank">QP3</a>
+      <div class="info">Số câu hỏi: 25</div>
+    </div>
+    <div class="card">
+      <a class="title" href="https://azota.vn/de-thi/nfhexz" target="_blank">Quốc phòng An ninh 2</a>
+      <div class="info">Số câu hỏi: 20</div>
+    </div>
+    <!-- Thêm các đề khác tương tự -->
+  </div>
 
   <div class="footer">
-    <p class="chuc">💡 Chúc bạn học tốt và thi thật tốt nhé! Thành công luôn chờ đón bạn ở phía trước!</p>
+    <p class="chuc" id="dongvien">💡 Chúc bạn ôn tập hiệu quả và đạt điểm thật cao nhé!</p>
     <p>👨‍💻 Trang web được thực hiện bởi <strong>Nguyễn Thái Sang</strong> ✨</p>
   </div>
+
+  <script>
+    // Thêm thông điệp động viên ngẫu nhiên
+    const dongVien = [
+      "🌟 Mỗi câu hỏi là một bước tiến đến thành công!",
+      "📘 Học chăm – Thi tốt – Tương lai rạng ngời!",
+      "🔥 Đừng bỏ cuộc, bạn sắp làm được rồi!",
+      "💪 Bạn giỏi hơn bạn nghĩ rất nhiều!",
+      "🚀 Cố gắng hôm nay, vinh quang ngày mai!",
+      "🌈 Học không bao giờ là thừa – bạn đang làm điều tuyệt vời!",
+      "🧠 Tư duy tích cực – kết quả tích cực!",
+      "⏰ Từng phút ôn tập hôm nay sẽ là vũ khí ngày mai!",
+      "🎯 Mục tiêu rõ ràng – Hành động mạnh mẽ!",
+      "✨ Sự kiên trì tạo nên kỳ tích!"
+    ];
+    document.getElementById("dongvien").textContent = dongVien[Math.floor(Math.random() * dongVien.length)];
+  </script>
+
 </body>
 </html>
