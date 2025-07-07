@@ -2,73 +2,129 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>📚 Danh sách đề ôn tập</title>
   <style>
+    :root {
+      --main-color: #0066cc;
+      --hover-color: #e67e22;
+      --bg-gradient: linear-gradient(to bottom right, #f5f7fa, #c3cfe2);
+    }
+
     body {
       font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(to bottom right, #f5f7fa, #c3cfe2);
+      background: var(--bg-gradient);
       margin: 0;
-      padding: 30px;
+      padding: 20px;
     }
+
     h1 {
       text-align: center;
       color: #2c3e50;
-      font-size: 32px;
-      margin-bottom: 20px;
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
+
+    #searchBox {
+      display: block;
+      margin: 0 auto 2rem;
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
     }
+
     .card {
       background: white;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      padding: 20px;
-      transition: transform 0.2s;
+      padding: 1rem;
+      transition: transform 0.2s ease;
     }
+
     .card:hover {
       transform: translateY(-5px);
     }
+
     .title {
-      font-size: 18px;
-      color: #0066cc;
+      font-size: 1.1rem;
+      color: var(--main-color);
       font-weight: bold;
       text-decoration: none;
+      display: inline-block;
     }
+
     .title:hover {
-      color: #e67e22;
+      color: var(--hover-color);
     }
+
     .info {
-      font-size: 14px;
-      margin-top: 8px;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
       color: #555;
     }
+
     .footer {
-      margin-top: 50px;
+      margin-top: 3rem;
       text-align: center;
-      font-size: 14px;
+      font-size: 0.9rem;
       color: #555;
+      padding: 1rem 0;
     }
+
     .chuc {
       font-style: italic;
       color: #007744;
       margin-bottom: 10px;
-      font-size: 16px;
+      font-size: 1rem;
       animation: blink 3s infinite;
     }
+
     @keyframes blink {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
+    }
+
+    .section-title {
+      margin-top: 2.5rem;
+      font-size: 1.2rem;
+      color: #2c3e50;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      .title {
+        font-size: 1rem;
+      }
+      .info {
+        font-size: 0.85rem;
+      }
+      #searchBox {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
 
   <h1>📚 Danh sách đề ôn tập cuối kỳ</h1>
+  <input type="text" id="searchBox" placeholder="🔍 Tìm kiếm tên đề ôn tập...">
 
-  <div class="grid">
+  <div class="grid" id="deList">
+    <!-- Các đề thi chính thức -->
     <div class="card">
       <a class="title" href="https://azota.vn/de-thi/yledqv" target="_blank">Triết học Mác-Lênin</a>
       <div class="info">Số câu hỏi: 30</div>
@@ -77,39 +133,20 @@
       <a class="title" href="https://azota.vn/de-thi/asdpod" target="_blank">Ôn tập Tiếng Anh 4</a>
       <div class="info">Số câu hỏi: 40</div>
     </div>
+    <!-- Thêm các đề khác như trên -->
+  </div>
+
+  <!-- Coming soon -->
+  <div class="section-title">🔧 Coming soon</div>
+  <div class="grid">
     <div class="card">
-      <a class="title" href="https://azota.vn/de-thi/bwtbh2" target="_blank">Cơ sở dữ liệu</a>
-      <div class="info">Số câu hỏi: 35</div>
+      <div class="title">Kỹ thuật lập trình</div>
+      <div class="info">Đang cập nhật...</div>
     </div>
     <div class="card">
-      <a class="title" href="https://azota.vn/de-thi/rdcduc" target="_blank">Lập trình hướng đối tượng</a>
-      <div class="info">Số câu hỏi: 50</div>
+      <div class="title">Mạng máy tính</div>
+      <div class="info">Đang cập nhật...</div>
     </div>
-    <div class="card">
-      <a class="title" href="https://azota.vn/de-thi/dtuegi" target="_blank">Chủ nghĩa xã hội khoa học</a>
-      <div class="info">Số câu hỏi: 30</div>
-    </div>
-    <div class="card">
-      <a class="title" href="https://azota.vn/de-thi/5miayl" target="_blank">Lịch sử Đảng CSVN</a>
-      <div class="info">Số câu hỏi: 60</div>
-    </div>
-    <div class="card">
-      <a class="title" href="https://azota.vn/de-thi/drrzwt" target="_blank">Tư tưởng Hồ Chí Minh</a>
-      <div class="info">Số câu hỏi: 40</div>
-    </div>
-    <div class="card">
-      <a class="title" href="https://azota.vn/de-thi/ijhrj7" target="_blank">Hệ điều hành - Final</a>
-      <div class="info">Số câu hỏi: 50</div>
-    </div>
-    <div class="card">
-      <a class="title" href="https://azota.vn/de-thi/u1bu9q" target="_blank">QP3</a>
-      <div class="info">Số câu hỏi: 25</div>
-    </div>
-    <div class="card">
-      <a class="title" href="https://azota.vn/de-thi/nfhexz" target="_blank">Quốc phòng An ninh 2</a>
-      <div class="info">Số câu hỏi: 20</div>
-    </div>
-    <!-- Thêm các đề khác tương tự -->
   </div>
 
   <div class="footer">
@@ -118,20 +155,29 @@
   </div>
 
   <script>
-    // Thêm thông điệp động viên ngẫu nhiên
+    // Random thông điệp
     const dongVien = [
       "🌟 Mỗi câu hỏi là một bước tiến đến thành công!",
       "📘 Học chăm – Thi tốt – Tương lai rạng ngời!",
       "🔥 Đừng bỏ cuộc, bạn sắp làm được rồi!",
       "💪 Bạn giỏi hơn bạn nghĩ rất nhiều!",
       "🚀 Cố gắng hôm nay, vinh quang ngày mai!",
-      "🌈 Học không bao giờ là thừa – bạn đang làm điều tuyệt vời!",
       "🧠 Tư duy tích cực – kết quả tích cực!",
       "⏰ Từng phút ôn tập hôm nay sẽ là vũ khí ngày mai!",
-      "🎯 Mục tiêu rõ ràng – Hành động mạnh mẽ!",
-      "✨ Sự kiên trì tạo nên kỳ tích!"
+      "🎯 Mục tiêu rõ ràng – Hành động mạnh mẽ!"
     ];
-    document.getElementById("dongvien").textContent = dongVien[Math.floor(Math.random() * dongVien.length)];
+    document.getElementById("dongvien").textContent =
+      dongVien[Math.floor(Math.random() * dongVien.length)];
+
+    // Tìm kiếm
+    document.getElementById("searchBox").addEventListener("input", function () {
+      const keyword = this.value.toLowerCase();
+      const cards = document.querySelectorAll("#deList .card");
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(keyword) ? "block" : "none";
+      });
+    });
   </script>
 
 </body>
