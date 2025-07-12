@@ -2,200 +2,128 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>💘 Kỷ niệm 300 ngày 💘</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>300 ngày bên nhau 💖</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(to bottom right, #fff0f5, #ffe4e1);
+      background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
       font-family: 'Segoe UI', sans-serif;
       text-align: center;
-      color: #333;
-      overflow: hidden;
+      color: #fff;
+      overflow-x: hidden;
     }
-
     .heart {
-      font-size: 120px;
-      color: red;
-      animation: pulse 1.5s infinite;
-      margin-top: 60px;
-      position: relative;
+      font-size: 80px;
+      animation: pulse 1s infinite;
+      margin-top: 40px;
     }
-
     @keyframes pulse {
-      0%, 100% { transform: scale(1); }
+      0% { transform: scale(1); }
       50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
     }
-
-    .dayText {
-      font-size: 24px;
+    .date {
+      font-size: 22px;
       margin-top: 10px;
-      color: #555;
+      animation: fadeIn 2s;
     }
-
-    .counter {
-      font-size: 50px;
+    .count {
+      font-size: 60px;
       font-weight: bold;
-      margin-top: 20px;
-      color: #ff3366;
-      transition: transform 0.2s;
+      margin: 20px 0;
+      animation: fadeInUp 2s ease-in-out;
     }
-
-    #messageBox {
-      margin-top: 50px;
-      min-height: 80px;
-      font-size: 24px;
-      opacity: 0;
-      animation: fadeInUp 1s forwards;
-    }
-
-    #imageBox img {
-      max-width: 300px;
-      border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      margin-top: 20px;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-
-    .footer {
-      margin-top: 60px;
-      font-style: italic;
-      color: #777;
-    }
-
     @keyframes fadeInUp {
-      from {
-        transform: translateY(30px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .message {
+      font-size: 20px;
+      max-width: 90%;
+      margin: 0 auto;
+      animation: typing 4s steps(50, end), blink .5s step-end infinite alternate;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid white;
+    }
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    @keyframes blink {
+      50% { border-color: transparent }
     }
 
-    /* Pháo hoa */
-    .firework {
-      position: fixed;
-      width: 6px;
-      height: 6px;
-      background: yellow;
-      border-radius: 50%;
-      animation: explode 1s ease-out forwards;
-      pointer-events: none;
-      z-index: 9999;
+    .album {
+      margin-top: 40px;
     }
-
-    @keyframes explode {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(10); opacity: 0; }
+    iframe {
+      width: 95vw;
+      height: 400px;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    @media (max-width: 600px) {
+      .heart { font-size: 60px; }
+      .count { font-size: 40px; }
+      .message { font-size: 18px; }
     }
   </style>
 </head>
 <body>
+  <div class="heart">💖</div>
+  <div class="date">Ngày tỏ tình: 16/09/2024</div>
+  <div class="count" id="dayCount">0 ngày</div>
+  <div class="message" id="message"></div>
 
-  <div class="heart">❤️</div>
-  <div class="dayText">Bắt đầu từ ngày 16/09/2024</div>
-  <div class="counter" id="counter">0</div>
-
-  <div id="messageBox"></div>
-  <div id="imageBox">
-    <img id="messageImage" src="" alt="Kỷ niệm">
+  <div class="album">
+    <h3 style="margin-bottom: 10px;">🌸 Album kỷ niệm 🌸</h3>
+    <!-- Thay đường dẫn sau bằng link nhúng từ Google Photos -->
+    <iframe src="https://photos.google.com/share/AF1QipOUpEcd-mOLwrXfLdvbusIC1aBPX_7isu-FSHrx-tQkLWHyBVBUUwAe2lLFaczFWA?key=d3M2UURpQmVJeVU5YVlnOUFzRDlVNnFSMDA1SDVR" allowfullscreen></iframe>
+    <iframe src="https://photos.google.com/share/AF1QipMvGcBqR-fbU-76tjs4q9FOdsY9yJBdsJDBLxbYJOGgRzGwcQlWVRp586ionIWW0A?key=bFVVaXU4TjVROGhUTVdGeEhZWUZPbWp5NmxwSGtn" allowfullscreen></iframe>
   </div>
 
-  <div class="footer">Mãi bên nhau – [Tên bạn] 💞 [Tên người ấy]</div>
-
   <script>
+    // Đếm số ngày từ 16/9/2024 đến 13/7/2025
     const startDate = new Date("2024-09-16");
     const endDate = new Date("2025-07-13");
-    const totalDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
-    let currentDay = 0;
-    const counterEl = document.getElementById("counter");
-
-    // Giai đoạn 1: đếm ngày
-    function countDays() {
-      const interval = setInterval(() => {
-        counterEl.innerText = currentDay;
-        counterEl.style.transform = 'scale(1.1)';
-        setTimeout(() => counterEl.style.transform = 'scale(1)', 100);
-        if (currentDay === totalDays) {
-          clearInterval(interval);
-          launchFireworks();
-          showMessages();
-        }
-        currentDay++;
-      }, 30);
-    }
-
-    // Giai đoạn 2: lời chúc
-    const messages = [
-      {
-        text: "Ngày ấy mình đã dũng cảm nói lời yêu 💌",
-        img: "https://i.imgur.com/7YV1F3W.jpg"
-      },
-      {
-        text: "Mỗi ngày bên nhau là một điều diệu kỳ 💑",
-        img: "https://i.imgur.com/8l0N6eK.jpg"
-      },
-      {
-        text: "Cảm ơn cậu vì đã luôn kiên nhẫn và dịu dàng với tớ 🌸",
-        img: "https://i.imgur.com/vg5W4XQ.jpg"
-      },
-      {
-        text: "Dù tương lai có thế nào, tớ vẫn luôn muốn có cậu bên cạnh 🌈",
-        img: "https://i.imgur.com/D5W4o2K.jpg"
-      },
-      {
-        text: "300 ngày – một hành trình yêu thương 🥰",
-        img: "https://i.imgur.com/B4XwIdW.jpg"
+    const diffTime = endDate - startDate;
+    const totalDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    let current = 0;
+    const countEl = document.getElementById("dayCount");
+    const interval = setInterval(() => {
+      countEl.textContent = `${current} ngày`;
+      current++;
+      if (current > totalDays) {
+        clearInterval(interval);
+        countEl.textContent = `${totalDays} ngày bên nhau 💕`;
+        showMessages();
       }
+    }, 50);
+
+    const messages = [
+      "Chúc em luôn hạnh phúc và nở nụ cười thật tươi 💐",
+      "300 ngày là minh chứng cho tình yêu bền vững của chúng ta ❤️",
+      "Mong chúng ta mãi mãi bên nhau như bây giờ và hơn thế nữa 💞",
+      "Anh yêu em nhiều lắm 💘",
     ];
 
-    let msgIndex = 0;
-
     function showMessages() {
-      const msgEl = document.getElementById("messageBox");
-      const imgEl = document.getElementById("messageImage");
-
-      function nextMessage() {
-        msgEl.style.opacity = 0;
-        imgEl.style.opacity = 0;
-
-        setTimeout(() => {
-          msgEl.innerText = messages[msgIndex].text;
-          msgEl.style.animation = "none"; // reset animation
-          void msgEl.offsetWidth; // trigger reflow
-          msgEl.style.animation = "fadeInUp 1s forwards";
-
-          imgEl.src = messages[msgIndex].img;
-          imgEl.onload = () => imgEl.style.opacity = 1;
-          msgEl.style.opacity = 1;
-          msgIndex = (msgIndex + 1) % messages.length;
-        }, 800);
-      }
-
-      nextMessage();
-      setInterval(nextMessage, 5000);
+      const msgEl = document.getElementById("message");
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < messages.length) {
+          msgEl.textContent = messages[i];
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 5000);
     }
-
-    // Hiệu ứng pháo hoa đơn giản
-    function launchFireworks() {
-      for (let i = 0; i < 15; i++) {
-        setTimeout(() => {
-          const f = document.createElement("div");
-          f.className = "firework";
-          f.style.left = Math.random() * window.innerWidth + "px";
-          f.style.top = Math.random() * window.innerHeight + "px";
-          f.style.background = ["red", "yellow", "cyan", "lime", "orange"][Math.floor(Math.random() * 5)];
-          document.body.appendChild(f);
-          setTimeout(() => document.body.removeChild(f), 1000);
-        }, i * 200);
-      }
-    }
-
-    countDays();
   </script>
 </body>
 </html>
-
