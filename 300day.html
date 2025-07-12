@@ -2,161 +2,188 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Kỷ niệm 300 ngày 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎉 Kỷ niệm 300 ngày bên nhau</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: radial-gradient(circle, #fff0f5, #ffe4e1);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background: linear-gradient(to bottom, #ffe0ec, #ffd6e0);
+      display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
     }
+
     .heart {
-      position: relative;
       width: 200px;
       height: 180px;
-      background: pink;
+      background-color: #ff8da1;
+      position: relative;
       transform: rotate(-45deg);
-      animation: pulse 1.5s infinite;
+      animation: pulse 2s infinite;
+      margin-top: 30px;
     }
+
     .heart::before,
     .heart::after {
       content: "";
-      position: absolute;
       width: 200px;
       height: 180px;
-      background: pink;
+      background-color: #ff8da1;
       border-radius: 50%;
+      position: absolute;
     }
+
     .heart::before {
       top: -100px;
       left: 0;
     }
+
     .heart::after {
       left: 100px;
       top: 0;
     }
+
     @keyframes pulse {
-      0%, 100% {
-        transform: scale(1) rotate(-45deg);
-      }
-      50% {
-        transform: scale(1.05) rotate(-45deg);
-      }
-    }
-    .names {
-      position: absolute;
-      top: 65px;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      font-size: 20px;
-      color: white;
-      font-weight: bold;
-      transform: rotate(45deg);
-    }
-    h1 {
-      margin-top: 30px;
-      font-size: 32px;
-      color: #d63384;
-      text-shadow: 1px 1px 2px #fff;
-    }
-    .counter {
-      font-size: 24px;
-      margin: 10px 0;
-      color: #ff1493;
-    }
-    .message {
-      max-width: 600px;
-      padding: 20px;
-      background: #fffafa;
-      border: 2px dashed #ffb6c1;
-      border-radius: 12px;
-      margin-top: 20px;
-      font-size: 18px;
-      line-height: 1.6;
-      text-align: center;
-      color: #c71585;
+      0% { transform: scale(1) rotate(-45deg); }
+      50% { transform: scale(1.05) rotate(-45deg); }
+      100% { transform: scale(1) rotate(-45deg); }
     }
 
-    #blackScreen {
-      display: none;
-      background: black;
+    .center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       color: white;
-      font-size: 24px;
+      font-size: 18px;
+      font-weight: bold;
       text-align: center;
-      padding-top: 20%;
-      height: 100vh;
+    }
+
+    .title {
+      font-size: 24px;
+      color: #d6336c;
+      margin: 20px 10px 0;
+      text-align: center;
+      font-weight: bold;
+      animation: fadeIn 2s ease-in;
+    }
+
+    .date {
+      color: #6c757d;
+      margin: 5px;
+      font-size: 14px;
+      animation: fadeIn 2s ease-in;
+    }
+
+    .days {
+      font-size: 40px;
+      color: #e60073;
+      font-weight: bold;
+      animation: countUp 2s ease-out;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #444;
+      text-align: center;
+      opacity: 0;
+      animation: fadeInUp 1s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes countUp {
+      0% { content: "0"; }
+    }
+
+    @media (max-width: 600px) {
+      .heart {
+        width: 150px;
+        height: 135px;
+      }
+
+      .heart::before,
+      .heart::after {
+        width: 150px;
+        height: 135px;
+      }
+
+      .center-text {
+        font-size: 14px;
+      }
+
+      .days {
+        font-size: 32px;
+      }
+
+      .title {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
 <body>
-
   <div class="heart">
-    <div class="names">Nguyễn Sang 💗 Nguyễn Linh</div>
+    <div class="center-text" id="count">0 ngày</div>
   </div>
 
-  <h1>🌸 Kỷ niệm 300 ngày bên nhau 🌸</h1>
-  <div class="counter">Ngày: <span id="dayCounter">0</span>/300</div>
+  <div class="title">🌸 Kỷ niệm 300 ngày bên nhau 🌸</div>
+  <div class="date">Bắt đầu: 16/09/2024</div>
+  <div class="date">Hôm nay: 13/07/2025</div>
 
-  <div class="message">
-    Cảm ơn em đã đồng hành cùng anh suốt 300 ngày qua. <br>
-    Dù là nắng ấm hay mưa rào, ta vẫn luôn bên nhau. <br>
-    Mong rằng từng khoảnh khắc bên em sẽ luôn là điều anh trân trọng nhất. <br>
-    Yêu em thật nhiều 💕
-  </div>
-
-  <div id="blackScreen">💔 Anh buồn lắm...</div>
+  <div class="message" id="wish">💌 Yêu em 300 ngày rồi đóoo 🥰</div>
 
   <script>
-    // === Thông tin sinh nhật, ví dụ: 01/01/2000 + 05/02/2001 = 01012000 + 05022001 = 03024001 (ví dụ)
-    const correctPassword = "11"; // bạn nhập tổng ngày sinh hai người vào đây (tự đặt số hợp lý)
+    const countEl = document.getElementById("count");
+    const wishEl = document.getElementById("wish");
 
-    // Hiển thị popup đầu tiên
-    setTimeout(() => {
-      const answer = confirm("Em có yêu anh không? 🥺");
+    // Tính số ngày
+    const start = new Date("2024-09-16");
+    const end = new Date("2025-07-13");
+    const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24));
 
-      if (answer) {
-        const pass = prompt("Vậy nhập mật khẩu là tổng số ngày sinh của 2 đứa mình nha 😘:");
-
-        if (pass === correctPassword) {
-          document.body.style.display = "flex";
-          startCounter();
-        } else {
-          alert("Sai rồi em ơi! 😢");
-          document.getElementById("blackScreen").style.display = "block";
-        }
+    // Đếm từ 0 đến 300
+    let count = 0;
+    const interval = setInterval(() => {
+      if (count < diffDays) {
+        count++;
+        countEl.textContent = count + " ngày";
       } else {
-        document.getElementById("blackScreen").style.display = "block";
+        clearInterval(interval);
+        countEl.textContent = diffDays + " ngày";
+        showMessages();
       }
-    }, 300);
+    }, 20);
 
-    function startCounter() {
-      const startDate = new Date("2024-09-16");
-      const endDate = new Date("2025-07-13");
-      const now = new Date();
+    const messages = [
+      "💖 Cảm ơn em đã ở bên anh suốt 300 ngày qua!",
+      "🌟 Mỗi ngày trôi qua đều là một kỷ niệm tuyệt vời.",
+      "🌈 Anh mong ta sẽ cùng nhau đi qua nhiều cột mốc nữa!",
+      "🥰 Mãi yêu em nhé, cô gái của anh!"
+    ];
 
-      const totalDays = 300;
-      const currentDays = Math.min(
-        Math.floor((now - startDate) / (1000 * 60 * 60 * 24)),
-        totalDays
-      );
-
-      let counter = 0;
-      const counterElement = document.getElementById("dayCounter");
-
-      const interval = setInterval(() => {
-        if (counter <= currentDays) {
-          counterElement.textContent = counter;
-          counter++;
-        } else {
-          clearInterval(interval);
+    let i = 0;
+    function showMessages() {
+      setInterval(() => {
+        if (i < messages.length) {
+          wishEl.textContent = messages[i++];
+          wishEl.style.opacity = 1;
         }
-      }, 30);
+      }, 3000);
     }
   </script>
 </body>
