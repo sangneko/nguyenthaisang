@@ -2,128 +2,214 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>300 ngày bên nhau 💖</title>
+  <title>Kỷ niệm 300 ngày 💖</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
+      background: radial-gradient(circle, #fff0f5, #ffe4e1);
       font-family: 'Segoe UI', sans-serif;
       text-align: center;
-      color: #fff;
-      overflow-x: hidden;
-    }
-    .heart {
-      font-size: 80px;
-      animation: pulse 1s infinite;
-      margin-top: 40px;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
-    }
-    .date {
-      font-size: 22px;
-      margin-top: 10px;
-      animation: fadeIn 2s;
-    }
-    .count {
-      font-size: 60px;
-      font-weight: bold;
-      margin: 20px 0;
-      animation: fadeInUp 2s ease-in-out;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .message {
-      font-size: 20px;
-      max-width: 90%;
-      margin: 0 auto;
-      animation: typing 4s steps(50, end), blink .5s step-end infinite alternate;
-      white-space: nowrap;
+      color: #333;
       overflow: hidden;
-      border-right: 2px solid white;
-    }
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
-    }
-    @keyframes blink {
-      50% { border-color: transparent }
     }
 
-    .album {
+    .heart {
+      font-size: 120px;
+      color: red;
+      animation: pulse 1.5s infinite;
+      margin-top: 60px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+    }
+
+    .dayText {
+      font-size: 24px;
+      margin-top: 10px;
+      color: #777;
+    }
+
+    .counter {
+      font-size: 50px;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #ff3366;
+      transition: transform 0.2s;
+    }
+
+    #messageBox {
+      margin-top: 30px;
+      min-height: 60px;
+      font-size: 24px;
+      animation: fadeInUp 1s forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #imageBox img {
+      width: 300px;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      margin-top: 20px;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    #album {
       margin-top: 40px;
     }
-    iframe {
-      width: 95vw;
-      height: 400px;
-      border: none;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+
+    #album img {
+      width: 280px;
+      height: 180px;
+      border-radius: 10px;
+      margin: 10px;
+      box-shadow: 0 0 10px rgba(255,105,180, 0.6);
+      animation: glow 2s infinite alternate;
     }
-    @media (max-width: 600px) {
-      .heart { font-size: 60px; }
-      .count { font-size: 40px; }
-      .message { font-size: 18px; }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 10px rgba(255,105,180, 0.4); }
+      to { box-shadow: 0 0 20px rgba(255,20,147, 0.9); }
+    }
+
+    .footer {
+      margin: 40px 0;
+      font-style: italic;
+      color: #666;
+    }
+
+    /* Pháo hoa */
+    .firework {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: yellow;
+      border-radius: 50%;
+      animation: explode 1s ease-out forwards;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(8); opacity: 0; }
     }
   </style>
 </head>
 <body>
-  <div class="heart">💖</div>
-  <div class="date">Ngày tỏ tình: 16/09/2024</div>
-  <div class="count" id="dayCount">0 ngày</div>
-  <div class="message" id="message"></div>
 
-  <div class="album">
-    <h3 style="margin-bottom: 10px;">🌸 Album kỷ niệm 🌸</h3>
-    <!-- Thay đường dẫn sau bằng link nhúng từ Google Photos -->
-    <iframe src="https://photos.google.com/share/AF1QipOUpEcd-mOLwrXfLdvbusIC1aBPX_7isu-FSHrx-tQkLWHyBVBUUwAe2lLFaczFWA?key=d3M2UURpQmVJeVU5YVlnOUFzRDlVNnFSMDA1SDVR" allowfullscreen></iframe>
-    <iframe src="https://photos.google.com/share/AF1QipMvGcBqR-fbU-76tjs4q9FOdsY9yJBdsJDBLxbYJOGgRzGwcQlWVRp586ionIWW0A?key=bFVVaXU4TjVROGhUTVdGeEhZWUZPbWp5NmxwSGtn" allowfullscreen></iframe>
+  <audio autoplay loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+    Trình duyệt không hỗ trợ nhạc nền.
+  </audio>
+
+  <div class="heart">❤️</div>
+  <div class="dayText">Từ ngày 16/09/2024 đến 13/07/2025</div>
+  <div class="counter" id="counter">0</div>
+
+  <div id="messageBox"></div>
+  <div id="imageBox">
+    <img id="messageImage" src="" alt="Kỷ niệm">
   </div>
 
+  <div id="album">
+    <h3>📸 Album yêu thương</h3>
+    <div id="albumPhotos"></div>
+  </div>
+
+  <div class="footer">Yêu mãi mãi – [Tên bạn] 💞 [Tên người ấy]</div>
+
   <script>
-    // Đếm số ngày từ 16/9/2024 đến 13/7/2025
     const startDate = new Date("2024-09-16");
     const endDate = new Date("2025-07-13");
-    const diffTime = endDate - startDate;
-    const totalDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    let current = 0;
-    const countEl = document.getElementById("dayCount");
-    const interval = setInterval(() => {
-      countEl.textContent = `${current} ngày`;
-      current++;
-      if (current > totalDays) {
-        clearInterval(interval);
-        countEl.textContent = `${totalDays} ngày bên nhau 💕`;
-        showMessages();
-      }
-    }, 50);
+    const totalDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+    let currentDay = 0;
+    const counterEl = document.getElementById("counter");
+
+    function countDays() {
+      const interval = setInterval(() => {
+        counterEl.innerText = currentDay;
+        counterEl.style.transform = 'scale(1.1)';
+        setTimeout(() => counterEl.style.transform = 'scale(1)', 100);
+        if (currentDay === totalDays) {
+          clearInterval(interval);
+          launchFireworks();
+          showMessages();
+          loadAlbum();
+        }
+        currentDay++;
+      }, 30);
+    }
 
     const messages = [
-      "Chúc em luôn hạnh phúc và nở nụ cười thật tươi 💐",
-      "300 ngày là minh chứng cho tình yêu bền vững của chúng ta ❤️",
-      "Mong chúng ta mãi mãi bên nhau như bây giờ và hơn thế nữa 💞",
-      "Anh yêu em nhiều lắm 💘",
+      { text: "Ngày ấy mình bắt đầu một chuyện tình 💘", img: "https://i.imgur.com/7YV1F3W.jpg" },
+      { text: "Những buổi tối tâm sự không biết chán 🌙", img: "https://i.imgur.com/8l0N6eK.jpg" },
+      { text: "Cái nắm tay đầu tiên còn run run 🥹", img: "https://i.imgur.com/vg5W4XQ.jpg" },
+      { text: "Cùng nhau đi thật xa, nhưng gần thật gần 🏞️", img: "https://i.imgur.com/D5W4o2K.jpg" },
+      { text: "300 ngày bên nhau rồi đó 🥰", img: "https://i.imgur.com/B4XwIdW.jpg" }
     ];
 
+    let msgIndex = 0;
     function showMessages() {
-      const msgEl = document.getElementById("message");
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i < messages.length) {
-          msgEl.textContent = messages[i];
-          i++;
-        } else {
-          clearInterval(interval);
-        }
-      }, 5000);
+      const msgEl = document.getElementById("messageBox");
+      const imgEl = document.getElementById("messageImage");
+
+      function nextMessage() {
+        msgEl.style.opacity = 0;
+        imgEl.style.opacity = 0;
+        setTimeout(() => {
+          msgEl.innerText = messages[msgIndex].text;
+          msgEl.style.animation = "fadeInUp 1s forwards";
+          imgEl.src = messages[msgIndex].img;
+          imgEl.onload = () => imgEl.style.opacity = 1;
+          msgEl.style.opacity = 1;
+          msgIndex = (msgIndex + 1) % messages.length;
+        }, 800);
+      }
+
+      nextMessage();
+      setInterval(nextMessage, 5000);
     }
+
+    function launchFireworks() {
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          const f = document.createElement("div");
+          f.className = "firework";
+          f.style.left = Math.random() * window.innerWidth + "px";
+          f.style.top = Math.random() * window.innerHeight + "px";
+          f.style.background = ["red", "yellow", "cyan", "lime", "pink"][Math.floor(Math.random() * 5)];
+          document.body.appendChild(f);
+          setTimeout(() => document.body.removeChild(f), 1000);
+        }, i * 150);
+      }
+    }
+
+    // ALBUM ảnh từ Google Drive (chèn ID đã lấy sẵn)
+    const googleDriveIds = [
+      "1L89LB5U_qWoqzFuz4XuCAlPj-2gZJMXZ",
+      "1cBLSYwErTVBo5u_2YHAcNDq49oRKo6Pi",
+      "1Rhn4GbAsRkqY7-pDWNSkPoU_rAQeHaXx"
+    ];
+
+    function loadAlbum() {
+      const container = document.getElementById("albumPhotos");
+      googleDriveIds.forEach(id => {
+        const img = document.createElement("img");
+        img.src = `https://drive.google.com/uc?id=${id}`;
+        container.appendChild(img);
+      });
+    }
+
+    countDays();
   </script>
 </body>
 </html>
