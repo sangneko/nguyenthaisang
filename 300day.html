@@ -1,215 +1,185 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Kỷ niệm 300 ngày 💖</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💖 300 ngày bên nhau 💖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      background: radial-gradient(circle, #fff0f5, #ffe4e1);
       font-family: 'Segoe UI', sans-serif;
-      text-align: center;
+      background: linear-gradient(to bottom, #fff0f5, #ffe4e1);
       color: #333;
-      overflow: hidden;
+      overflow-x: hidden;
     }
-
     .heart {
-      font-size: 120px;
-      color: red;
+      width: 150px;
+      height: 150px;
+      background: red;
+      position: relative;
+      margin: 60px auto 20px;
+      transform: rotate(-45deg);
       animation: pulse 1.5s infinite;
-      margin-top: 60px;
     }
-
+    .heart::before, .heart::after {
+      content: "";
+      width: 150px;
+      height: 150px;
+      background: red;
+      position: absolute;
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -75px;
+      left: 0;
+    }
+    .heart::after {
+      left: 75px;
+      top: 0;
+    }
     @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.25); }
+      0% { transform: scale(1) rotate(-45deg); }
+      50% { transform: scale(1.1) rotate(-45deg); }
+      100% { transform: scale(1) rotate(-45deg); }
     }
 
-    .dayText {
-      font-size: 24px;
+    h1 {
+      text-align: center;
+      font-family: 'Sacramento', cursive;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    #daysCounter {
+      text-align: center;
+      font-size: 2em;
+      color: #e91e63;
+      margin-bottom: 30px;
+    }
+
+    .message-container {
+      max-width: 600px;
+      margin: 20px auto;
+      text-align: center;
+      padding: 20px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .message-container img {
+      max-width: 100%;
+      border-radius: 10px;
       margin-top: 10px;
-      color: #777;
     }
 
-    .counter {
-      font-size: 50px;
-      font-weight: bold;
-      margin-top: 10px;
-      color: #ff3366;
-      transition: transform 0.2s;
-    }
-
-    #messageBox {
-      margin-top: 30px;
-      min-height: 60px;
-      font-size: 24px;
-      animation: fadeInUp 1s forwards;
-      opacity: 0;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    #imageBox img {
-      width: 300px;
-      height: auto;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      margin-top: 20px;
-      opacity: 0;
-      transition: opacity 1s;
+    .album {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
-    #album {
-      margin-top: 40px;
-    }
-
-    #album img {
-      width: 280px;
-      height: 180px;
+    .album img {
+      width: 100%;
       border-radius: 10px;
-      margin: 10px;
-      box-shadow: 0 0 10px rgba(255,105,180, 0.6);
-      animation: glow 2s infinite alternate;
+      cursor: pointer;
+      transition: transform 0.3s ease;
     }
 
-    @keyframes glow {
-      from { box-shadow: 0 0 10px rgba(255,105,180, 0.4); }
-      to { box-shadow: 0 0 20px rgba(255,20,147, 0.9); }
+    .album img:hover {
+      transform: scale(1.05);
     }
 
-    .footer {
-      margin: 40px 0;
-      font-style: italic;
-      color: #666;
-    }
-
-    /* Pháo hoa */
-    .firework {
-      position: fixed;
-      width: 6px;
-      height: 6px;
-      background: yellow;
-      border-radius: 50%;
-      animation: explode 1s ease-out forwards;
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    @keyframes explode {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(8); opacity: 0; }
+    @media (max-width: 480px) {
+      h1 { font-size: 2em; }
+      .heart { width: 100px; height: 100px; }
+      .heart::before, .heart::after { width: 100px; height: 100px; }
     }
   </style>
 </head>
 <body>
 
-  <audio autoplay loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
-    Trình duyệt không hỗ trợ nhạc nền.
-  </audio>
+  <div class="heart"></div>
+  <h1>16/09/2024 → 13/07/2025</h1>
+  <div id="daysCounter">Đang đếm ngày yêu nhau...</div>
 
-  <div class="heart">❤️</div>
-  <div class="dayText">Từ ngày 16/09/2024 đến 13/07/2025</div>
-  <div class="counter" id="counter">0</div>
-
-  <div id="messageBox"></div>
-  <div id="imageBox">
-    <img id="messageImage" src="" alt="Kỷ niệm">
+  <div class="message-container" id="messageBox">
+    <!-- Nội dung sẽ được hiển thị tại đây -->
   </div>
 
-  <div id="album">
-    <h3>📸 Album yêu thương</h3>
-    <div id="albumPhotos"></div>
+  <h2 style="text-align:center; margin-top:40px;">📷 Album ảnh yêu thương</h2>
+  <div class="album">
+    <img src="https://drive.google.com/uc?id=18fV_JZtgbFsQpA888FAr4oBcl3ypGAEB" alt="ảnh 1" />
+    <img src="https://i.imgur.com/vg5W4XQ.jpg" alt="ảnh 2" />
+    <img src="https://i.imgur.com/D5W4o2K.jpg" alt="ảnh 3" />
+    <img src="https://i.imgur.com/B4XwIdW.jpg" alt="ảnh 4" />
+    <img src="https://i.imgur.com/8l0N6eK.jpg" alt="ảnh 5" />
   </div>
-
-  <div class="footer">Yêu mãi mãi – [Tên bạn] 💞 [Tên người ấy]</div>
 
   <script>
+    // Hiển thị số ngày yêu nhau
     const startDate = new Date("2024-09-16");
-    const endDate = new Date("2025-07-13");
-    const totalDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
-    let currentDay = 0;
-    const counterEl = document.getElementById("counter");
+    const targetDate = new Date("2025-07-13");
 
-    function countDays() {
-      const interval = setInterval(() => {
-        counterEl.innerText = currentDay;
-        counterEl.style.transform = 'scale(1.1)';
-        setTimeout(() => counterEl.style.transform = 'scale(1)', 100);
-        if (currentDay === totalDays) {
-          clearInterval(interval);
-          launchFireworks();
-          showMessages();
-          loadAlbum();
-        }
-        currentDay++;
-      }, 30);
-    }
-
-    const messages = [
-      { text: "Ngày ấy mình bắt đầu một chuyện tình 💘"},
-      { text: "Những buổi tối tâm sự không biết chán 🌙"},
-      { text: "Cái nắm tay đầu tiên còn run run 🥹" },
-      { text: "Cùng nhau đi thật xa, nhưng gần thật gần 🏞️" },
-      { text: "300 ngày bên nhau rồi đó 🥰"}
-    ];
-
-    let msgIndex = 0;
-    function showMessages() {
-      const msgEl = document.getElementById("messageBox");
-      const imgEl = document.getElementById("messageImage");
-
-      function nextMessage() {
-        msgEl.style.opacity = 0;
-        imgEl.style.opacity = 0;
-        setTimeout(() => {
-          msgEl.innerText = messages[msgIndex].text;
-          msgEl.style.animation = "fadeInUp 1s forwards";
-          imgEl.src = messages[msgIndex].img;
-          imgEl.onload = () => imgEl.style.opacity = 1;
-          msgEl.style.opacity = 1;
-          msgIndex = (msgIndex + 1) % messages.length;
-        }, 800);
-      }
-
-      nextMessage();
-      setInterval(nextMessage, 5000);
-    }
-
-    function launchFireworks() {
-      for (let i = 0; i < 20; i++) {
-        setTimeout(() => {
-          const f = document.createElement("div");
-          f.className = "firework";
-          f.style.left = Math.random() * window.innerWidth + "px";
-          f.style.top = Math.random() * window.innerHeight + "px";
-          f.style.background = ["red", "yellow", "cyan", "lime", "pink"][Math.floor(Math.random() * 5)];
-          document.body.appendChild(f);
-          setTimeout(() => document.body.removeChild(f), 1000);
-        }, i * 150);
-      }
-    }
-
-    // ALBUM ảnh từ Google Drive (chèn ID đã lấy sẵn)
-    const googleDriveIds = [
-      "18fV_JZtgbFsQpA888FAr4oBcl3ypGAEB",
-      "1cBLSYwErTVBo5u_2YHAcNDq49oRKo6Pi",
-      "1Rhn4GbAsRkqY7-pDWNSkPoU_rAQeHaXx"
-    ];
-
-    function loadAlbum() {
-      const container = document.getElementById("albumPhotos");
-      googleDriveIds.forEach(id => {
-        const img = document.createElement("img");
-        img.src = `https://drive.google.com/uc?id=${id}`;
-        container.appendChild(img);
-      });
-    }
-
+    const countDays = () => {
+      const now = new Date();
+      const diff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+      const goal = Math.floor((targetDate - startDate) / (1000 * 60 * 60 * 24));
+      document.getElementById("daysCounter").innerHTML =
+        `❤️ Hôm nay là ngày thứ <strong>${diff}</strong> bên nhau! (${goal} ngày yêu)`;
+    };
     countDays();
+
+    // Lời chúc và ảnh kèm theo
+    const messages = [
+      {
+        text: "Ngày ấy mình bắt đầu một chuyện tình 💘",
+        img: "https://drive.google.com/uc?id=18fV_JZtgbFsQpA888FAr4oBcl3ypGAEB"
+      },
+      {
+        text: "Những buổi tối tâm sự không biết chán 🌙",
+        img: "https://i.imgur.com/8l0N6eK.jpg"
+      },
+      {
+        text: "Cái nắm tay đầu tiên còn run run 🥹",
+        img: "https://i.imgur.com/vg5W4XQ.jpg"
+      },
+      {
+        text: "Cùng nhau đi thật xa, nhưng gần thật gần 🏞️",
+        img: "https://i.imgur.com/D5W4o2K.jpg"
+      },
+      {
+        text: "300 ngày bên nhau rồi đó 🥰",
+        img: "https://i.imgur.com/B4XwIdW.jpg"
+      }
+    ];
+
+    let index = 0;
+    const messageBox = document.getElementById("messageBox");
+
+    function showNextMessage() {
+      if (index >= messages.length) return;
+      const { text, img } = messages[index];
+      messageBox.innerHTML = `
+        <p style="font-size:1.2em;">${text}</p>
+        <img src="${img}" alt="love pic">
+      `;
+      index++;
+      setTimeout(showNextMessage, 4000); // chuyển sau 4s
+    }
+
+    showNextMessage();
   </script>
+
 </body>
 </html>
