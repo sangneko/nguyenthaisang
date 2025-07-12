@@ -2,33 +2,24 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>💖 Kỷ niệm 300 ngày 💖</title>
+  <title>💘 Kỷ niệm 300 ngày 💘</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
       background: linear-gradient(to bottom right, #fff0f5, #ffe4e1);
       font-family: 'Segoe UI', sans-serif;
       text-align: center;
-      padding: 50px 20px;
-      margin: 0;
       color: #333;
+      overflow: hidden;
     }
 
     .heart {
       font-size: 120px;
       color: red;
       animation: pulse 1.5s infinite;
+      margin-top: 60px;
       position: relative;
-    }
-
-    .days {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      text-shadow: 1px 1px 4px #000;
     }
 
     @keyframes pulse {
@@ -36,97 +27,175 @@
       50% { transform: scale(1.2); }
     }
 
-    #milestoneText {
-      font-size: 1.6em;
-      margin-top: 30px;
-      min-height: 60px;
-      transition: opacity 1s;
+    .dayText {
+      font-size: 24px;
+      margin-top: 10px;
+      color: #555;
     }
 
-    #imageBox {
+    .counter {
+      font-size: 50px;
+      font-weight: bold;
       margin-top: 20px;
+      color: #ff3366;
+      transition: transform 0.2s;
+    }
+
+    #messageBox {
+      margin-top: 50px;
+      min-height: 80px;
+      font-size: 24px;
+      opacity: 0;
+      animation: fadeInUp 1s forwards;
     }
 
     #imageBox img {
       max-width: 300px;
       border-radius: 20px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      margin-top: 20px;
+      opacity: 0;
       transition: opacity 1s ease-in-out;
     }
 
     .footer {
-      margin-top: 40px;
+      margin-top: 60px;
       font-style: italic;
       color: #777;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Pháo hoa */
+    .firework {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: yellow;
+      border-radius: 50%;
+      animation: explode 1s ease-out forwards;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(10); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
-  <div class="heart">
-    ❤️
-    <div class="days">300 ngày</div>
-  </div>
+  <div class="heart">❤️</div>
+  <div class="dayText">Bắt đầu từ ngày 16/09/2024</div>
+  <div class="counter" id="counter">0</div>
 
-  <div id="milestoneText">Đang tải...</div>
-
+  <div id="messageBox"></div>
   <div id="imageBox">
-    <img id="milestoneImage" src="" alt="Kỷ niệm" style="opacity: 0;">
+    <img id="messageImage" src="" alt="Kỷ niệm">
   </div>
 
-  <div class="footer">Từ [Tên bạn] đến [Tên người ấy] – Mãi bên nhau 🥰</div>
+  <div class="footer">Mãi bên nhau – [Tên bạn] 💞 [Tên người ấy]</div>
 
   <script>
-    const milestones = [
+    const startDate = new Date("2024-09-16");
+    const endDate = new Date("2025-07-13");
+    const totalDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+    let currentDay = 0;
+    const counterEl = document.getElementById("counter");
+
+    // Giai đoạn 1: đếm ngày
+    function countDays() {
+      const interval = setInterval(() => {
+        counterEl.innerText = currentDay;
+        counterEl.style.transform = 'scale(1.1)';
+        setTimeout(() => counterEl.style.transform = 'scale(1)', 100);
+        if (currentDay === totalDays) {
+          clearInterval(interval);
+          launchFireworks();
+          showMessages();
+        }
+        currentDay++;
+      }, 30);
+    }
+
+    // Giai đoạn 2: lời chúc
+    const messages = [
       {
-        text: "Ngày tỏ tình đầu tiên ✨",
+        text: "Ngày ấy mình đã dũng cảm nói lời yêu 💌",
         img: "https://i.imgur.com/7YV1F3W.jpg"
       },
       {
-        text: "Nắm tay nhau lần đầu 💑",
+        text: "Mỗi ngày bên nhau là một điều diệu kỳ 💑",
         img: "https://i.imgur.com/8l0N6eK.jpg"
       },
       {
-        text: "Nụ hôn đầu tiên 💋",
+        text: "Cảm ơn cậu vì đã luôn kiên nhẫn và dịu dàng với tớ 🌸",
         img: "https://i.imgur.com/vg5W4XQ.jpg"
       },
       {
-        text: "Lần đầu đi du lịch cùng nhau 🏞️",
+        text: "Dù tương lai có thế nào, tớ vẫn luôn muốn có cậu bên cạnh 🌈",
         img: "https://i.imgur.com/D5W4o2K.jpg"
       },
       {
-        text: "Cùng nhau vượt qua khó khăn ❤️‍🔥",
-        img: "https://i.imgur.com/ev1gZGl.jpg"
-      },
-      {
-        text: "Và hôm nay... 300 ngày rồi đó! 🎉",
+        text: "300 ngày – một hành trình yêu thương 🥰",
         img: "https://i.imgur.com/B4XwIdW.jpg"
       }
     ];
 
-    let current = 0;
+    let msgIndex = 0;
 
-    function showMilestone() {
-      const textBox = document.getElementById("milestoneText");
-      const img = document.getElementById("milestoneImage");
+    function showMessages() {
+      const msgEl = document.getElementById("messageBox");
+      const imgEl = document.getElementById("messageImage");
 
-      textBox.style.opacity = 0;
-      img.style.opacity = 0;
+      function nextMessage() {
+        msgEl.style.opacity = 0;
+        imgEl.style.opacity = 0;
 
-      setTimeout(() => {
-        textBox.innerText = milestones[current].text;
-        img.src = milestones[current].img;
+        setTimeout(() => {
+          msgEl.innerText = messages[msgIndex].text;
+          msgEl.style.animation = "none"; // reset animation
+          void msgEl.offsetWidth; // trigger reflow
+          msgEl.style.animation = "fadeInUp 1s forwards";
 
-        textBox.style.opacity = 1;
-        img.onload = () => img.style.opacity = 1;
+          imgEl.src = messages[msgIndex].img;
+          imgEl.onload = () => imgEl.style.opacity = 1;
+          msgEl.style.opacity = 1;
+          msgIndex = (msgIndex + 1) % messages.length;
+        }, 800);
+      }
 
-        current = (current + 1) % milestones.length;
-      }, 600);
+      nextMessage();
+      setInterval(nextMessage, 5000);
     }
 
-    showMilestone();
-    setInterval(showMilestone, 5000);
-  </script>
+    // Hiệu ứng pháo hoa đơn giản
+    function launchFireworks() {
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+          const f = document.createElement("div");
+          f.className = "firework";
+          f.style.left = Math.random() * window.innerWidth + "px";
+          f.style.top = Math.random() * window.innerHeight + "px";
+          f.style.background = ["red", "yellow", "cyan", "lime", "orange"][Math.floor(Math.random() * 5)];
+          document.body.appendChild(f);
+          setTimeout(() => document.body.removeChild(f), 1000);
+        }, i * 200);
+      }
+    }
 
+    countDays();
+  </script>
 </body>
 </html>
+
