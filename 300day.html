@@ -2,121 +2,132 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>💗 300 ngày yêu nhau 💗</title>
+  <title>💖 Kỷ niệm 300 ngày bên nhau 💖</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #ffe0e9, #ffc0cb);
+      text-align: center;
+      padding: 30px;
+      color: #333;
     }
 
-    body {
-      background: linear-gradient(to bottom right, #ffdde1, #ee9ca7);
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-      text-align: center;
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #d80073;
     }
 
     .heart {
-      width: 200px;
-      height: 200px;
-      background: red;
-      position: relative;
-      transform: rotate(-45deg);
-      margin-bottom: 20px;
+      font-size: 3em;
+      color: red;
+      animation: pulse 1s infinite;
+      margin-bottom: 10px;
     }
 
-    .heart::before,
-    .heart::after {
-      content: "";
-      width: 200px;
-      height: 200px;
-      background: red;
-      border-radius: 50%;
-      position: absolute;
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
     }
 
-    .heart::before {
-      top: -100px;
-      left: 0;
+    .message {
+      font-size: 1.2em;
+      margin: 15px 0;
+      line-height: 1.6;
+      color: #444;
     }
 
-    .heart::after {
-      left: 100px;
-      top: 0;
-    }
-
-    .center-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(45deg);
-      color: white;
-      font-size: 20px;
+    #countdown {
+      font-size: 1.3em;
       font-weight: bold;
-      text-align: center;
+      color: #ff3366;
+      margin: 20px 0;
     }
 
     .names {
-      font-size: 18px;
-      color: #fff;
-      margin-top: 10px;
-    }
-
-    .names span {
-      display: block;
-      margin: 5px 0;
-      font-weight: 600;
+      margin-top: 25px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #800040;
     }
 
     .zodiac {
-      font-size: 16px;
-      color: #fff8f8;
-      opacity: 0.9;
+      font-size: 1em;
+      color: #555;
     }
 
-    @media screen and (max-width: 480px) {
-      .heart {
-        width: 150px;
-        height: 150px;
-      }
+    .footer {
+      margin-top: 40px;
+      font-style: italic;
+      font-size: 0.9em;
+      color: #666;
+    }
 
-      .heart::before,
-      .heart::after {
-        width: 150px;
-        height: 150px;
-      }
-
-      .center-text {
-        font-size: 16px;
-      }
-
-      .names {
-        font-size: 16px;
-      }
-
-      .zodiac {
-        font-size: 14px;
-      }
+    @media (max-width: 600px) {
+      h1 { font-size: 1.5em; }
+      .message { font-size: 1em; }
+      #countdown { font-size: 1.1em; }
     }
   </style>
 </head>
 <body>
+  <div class="heart">❤️</div>
+  <h1>Chúng mình đã bên nhau 300 ngày rồi!</h1>
 
-  <div class="heart">
-    <div class="center-text">300 ngày</div>
+  <div class="message">
+    Mỗi ngày trôi qua là một hành trình tuyệt vời bên nhau.<br>
+    Cảm ơn em vì đã đến và cùng mình đi qua từng khoảnh khắc 💕<br>
+    Mãi yêu em nhé, cô gái của anh!
   </div>
+
+  <div id="countdown">Đếm ngược đến ngày kỷ niệm tiếp theo...</div>
 
   <div class="names">
-    <span>💑 Nguyễn Thái Sang ❤️ Nguyễn Thị Ánh Linh</span>
-    <div class="zodiac">♎ Thiên Bình &nbsp; + &nbsp; ♍ Xử Nữ</div>
+    💑 Sang ❤️ Linh
+    <div class="zodiac">♎ Thiên Bình + ♍ Xử Nữ</div>
   </div>
 
+  <div class="footer">
+    Từ Sang gửi đến cô gái nhỏ 💌
+  </div>
+
+  <script>
+  const startDate = new Date("2024-09-16");
+  const today = new Date();
+
+  // Số ngày đã bên nhau
+  const diffTime = today - startDate;
+  const daysTogether = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  document.getElementById("daysTogether").textContent = daysTogether;
+
+  // Kỷ niệm 1 năm
+  const nextMilestone = 365;
+  const nextDate = new Date(startDate.getTime() + nextMilestone * 24 * 60 * 60 * 1000);
+  document.getElementById("nextMilestone").textContent = `${nextMilestone} ngày (1 năm)`;
+  document.getElementById("nextDate").textContent = nextDate.toLocaleDateString("vi-VN");
+
+  // Cập nhật đếm ngược
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = nextDate.getTime() - now;
+
+    if (distance < 0) {
+      document.getElementById("countdown").innerHTML = "🎉 Hôm nay là cột mốc 1 năm rồi đó!";
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("countdown").innerHTML =
+      `⏳ Còn ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây là đến mốc ${nextMilestone} ngày bên nhau 💞`;
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+  </script>
 </body>
 </html>
