@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>💖 Kỷ niệm 300 ngày 💖</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #fff0f5, #ffe4e1);
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 50px 20px;
+      margin: 0;
+      color: #333;
+    }
+
+    .heart {
+      font-size: 120px;
+      color: red;
+      animation: pulse 1.5s infinite;
+      position: relative;
+    }
+
+    .days {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 1px 1px 4px #000;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    #milestoneText {
+      font-size: 1.6em;
+      margin-top: 30px;
+      min-height: 60px;
+      transition: opacity 1s;
+    }
+
+    #imageBox {
+      margin-top: 20px;
+    }
+
+    #imageBox img {
+      max-width: 300px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: opacity 1s ease-in-out;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-style: italic;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="heart">
+    ❤️
+    <div class="days">300 ngày</div>
+  </div>
+
+  <div id="milestoneText">Đang tải...</div>
+
+  <div id="imageBox">
+    <img id="milestoneImage" src="" alt="Kỷ niệm" style="opacity: 0;">
+  </div>
+
+  <div class="footer">Từ [Tên bạn] đến [Tên người ấy] – Mãi bên nhau 🥰</div>
+
+  <script>
+    const milestones = [
+      {
+        text: "Ngày tỏ tình đầu tiên ✨",
+        img: "https://i.imgur.com/7YV1F3W.jpg"
+      },
+      {
+        text: "Nắm tay nhau lần đầu 💑",
+        img: "https://i.imgur.com/8l0N6eK.jpg"
+      },
+      {
+        text: "Nụ hôn đầu tiên 💋",
+        img: "https://i.imgur.com/vg5W4XQ.jpg"
+      },
+      {
+        text: "Lần đầu đi du lịch cùng nhau 🏞️",
+        img: "https://i.imgur.com/D5W4o2K.jpg"
+      },
+      {
+        text: "Cùng nhau vượt qua khó khăn ❤️‍🔥",
+        img: "https://i.imgur.com/ev1gZGl.jpg"
+      },
+      {
+        text: "Và hôm nay... 300 ngày rồi đó! 🎉",
+        img: "https://i.imgur.com/B4XwIdW.jpg"
+      }
+    ];
+
+    let current = 0;
+
+    function showMilestone() {
+      const textBox = document.getElementById("milestoneText");
+      const img = document.getElementById("milestoneImage");
+
+      textBox.style.opacity = 0;
+      img.style.opacity = 0;
+
+      setTimeout(() => {
+        textBox.innerText = milestones[current].text;
+        img.src = milestones[current].img;
+
+        textBox.style.opacity = 1;
+        img.onload = () => img.style.opacity = 1;
+
+        current = (current + 1) % milestones.length;
+      }, 600);
+    }
+
+    showMilestone();
+    setInterval(showMilestone, 5000);
+  </script>
+
+</body>
+</html>
