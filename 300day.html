@@ -1,105 +1,127 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Kỷ niệm tình yêu</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kỷ niệm của chúng mình</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #ffe6eb;
+      background-color: #ffe6ec;
       color: #333;
       text-align: center;
-      padding: 40px;
+      padding: 20px;
+      margin: 0;
     }
     h1 {
-      color: #ff0080;
-      font-size: 32px;
+      color: #ff1f5c;
+      font-size: 1.8em;
+    }
+    h2 {
+      font-size: 1.2em;
+      margin: 10px 0;
     }
     .heart {
-      font-size: 50px;
-      animation: heartbeat 1.2s infinite;
+      font-size: 2.5em;
+      animation: beat 1s infinite;
     }
-    @keyframes heartbeat {
-      0% { transform: scale(1); }
-      25% { transform: scale(1.2); }
-      50% { transform: scale(1); }
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
     }
-    .milestone {
+    .couple {
       font-weight: bold;
-      font-size: 20px;
+      font-size: 1.2em;
+      margin-top: 15px;
       color: #ff3366;
+    }
+    .zodiac {
+      font-size: 1em;
+      margin: 10px 0;
+    }
+    .countdown {
+      font-size: 1.1em;
       margin-top: 20px;
+      color: #d6004e;
+      font-weight: bold;
     }
     .footer {
       margin-top: 30px;
-      font-size: 14px;
-      color: #a36;
-    }
-    .zodiac {
-      font-size: 20px;
-      margin-top: 15px;
-    }
-    .zodiac span {
-      font-size: 24px;
-      margin: 0 6px;
+      font-size: 0.9em;
+      color: #777;
     }
     .wish {
-      margin-top: 30px;
-      font-size: 18px;
-      font-style: italic;
-      color: #cc0066;
+      margin-top: 25px;
+      font-size: 1.1em;
+      color: #cc3366;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5em;
+      }
+      .countdown {
+        font-size: 1em;
+      }
+      .wish {
+        font-size: 1em;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="heart">💖</div>
+  <h1 id="daysTogether">Chúng mình đã bên nhau ... ngày rồi!</h1>
+  <h2>Mỗi ngày trôi qua là một hành trình tuyệt vời cùng nhau.<br>
+    Cảm ơn em vì đã đến và cùng anh đi qua từng khoảnh khắc 💕<br>
+    Mãi yêu em nhé, cô gái của anh!
+  </h2>
 
-  <div class="heart">💗</div>
-  <h1 id="dayCountText">...</h1>
+  <div class="countdown" id="countdownTo1Year">⏳ Đếm ngược đến ngày kỷ niệm 1 năm...</div>
 
-  <p>Mỗi ngày trôi qua là một hành trình tuyệt vời bên nhau.<br>
-  Cảm ơn em vì đã đến và cùng mình đi qua từng khoảnh khắc 💕<br>
-  Mãi yêu em nhé, cô gái của anh!</p>
+  <div class="wish">🌟 Chúc em luôn hạnh phúc, cười thật tươi mỗi ngày và mãi là cô bé đáng yêu của anh 🥰</div>
 
-  <div class="milestone" id="nextMilestone">Đếm ngược đến ngày kỷ niệm tiếp theo...</div>
-
-  <div class="zodiac">🌻 <strong>Sang</strong> ❤️ <strong>Linh</strong><br>
-    <span>♎ Thiên Bình</span> + <span>♍ Xử Nữ</span>
-  </div>
-
-  <div class="wish">💌 Anh chúc tình yêu của anh luôn rạng rỡ như ánh nắng, ngọt ngào như nụ cười em. Dù có ra sao, anh cũng sẽ luôn ở đây, bên em!</div>
-
+  <div class="couple">🌸 Sang ❤️ Linh</div>
+  <div class="zodiac">♎ Thiên Bình + ♍ Xử Nữ</div>
   <div class="footer">Từ Sang gửi đến cô gái nhỏ 💌</div>
 
   <script>
+    // Ngày bắt đầu yêu nhau
     const startDate = new Date("2024-09-16");
-    const today = new Date();
-    const diffTime = today - startDate;
-    const daysTogether = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    const yearMilestone = 365;
-    const nextAnniversary = new Date(startDate.getTime() + yearMilestone * 24 * 60 * 60 * 1000);
+    const now = new Date();
 
-    document.getElementById("dayCountText").innerText = `Chúng mình đã bên nhau ${daysTogether} ngày rồi!`;
+    // Tính số ngày đã bên nhau
+    const daysTogether = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+    document.getElementById("daysTogether").textContent = `Chúng mình đã bên nhau ${daysTogether} ngày rồi!`;
 
-    // Đếm ngược đến ngày kỷ niệm 1 năm
-    function countdownTo(date) {
+    // Mốc 1 năm sau ngày bắt đầu
+    const oneYearDate = new Date(startDate);
+    oneYearDate.setFullYear(startDate.getFullYear() + 1);
+
+    function updateCountdown() {
       const now = new Date();
-      const timeDiff = date - now;
+      const timeDiff = oneYearDate - now;
+
       if (timeDiff <= 0) {
-        document.getElementById("nextMilestone").innerText = "Hôm nay là kỷ niệm 1 năm rồi đó! 🎉";
+        document.getElementById("countdownTo1Year").textContent = "🎉 Hôm nay là kỷ niệm 1 năm rồi đóoo! 🎉";
         return;
       }
+
       const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((timeDiff / (1000 * 60)) % 60);
       const seconds = Math.floor((timeDiff / 1000) % 60);
 
-      document.getElementById("nextMilestone").innerText =
-        `Chỉ còn ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây nữa là kỷ niệm 1 năm đó nhaaa 💖`;
-
-      setTimeout(() => countdownTo(date), 1000);
+      document.getElementById("countdownTo1Year").textContent =
+        `⏳ Còn ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây nữa đến kỷ niệm 1 năm 💘`;
     }
 
-    countdownTo(nextAnniversary);
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
