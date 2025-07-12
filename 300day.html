@@ -1,185 +1,163 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>💖 300 ngày bên nhau 💖</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Kỷ niệm 300 ngày 💖</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
+      margin: 0;
+      padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #fff0f5, #ffe4e1);
-      color: #333;
-      overflow-x: hidden;
+      background: radial-gradient(circle, #fff0f5, #ffe4e1);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
     }
     .heart {
-      width: 150px;
-      height: 150px;
-      background: red;
       position: relative;
-      margin: 60px auto 20px;
+      width: 200px;
+      height: 180px;
+      background: pink;
       transform: rotate(-45deg);
       animation: pulse 1.5s infinite;
     }
-    .heart::before, .heart::after {
+    .heart::before,
+    .heart::after {
       content: "";
-      width: 150px;
-      height: 150px;
-      background: red;
       position: absolute;
+      width: 200px;
+      height: 180px;
+      background: pink;
       border-radius: 50%;
     }
     .heart::before {
-      top: -75px;
+      top: -100px;
       left: 0;
     }
     .heart::after {
-      left: 75px;
+      left: 100px;
       top: 0;
     }
     @keyframes pulse {
-      0% { transform: scale(1) rotate(-45deg); }
-      50% { transform: scale(1.1) rotate(-45deg); }
-      100% { transform: scale(1) rotate(-45deg); }
+      0%, 100% {
+        transform: scale(1) rotate(-45deg);
+      }
+      50% {
+        transform: scale(1.05) rotate(-45deg);
+      }
     }
-
-    h1 {
-      text-align: center;
-      font-family: 'Sacramento', cursive;
-      font-size: 2.5em;
-      margin-bottom: 10px;
-    }
-
-    #daysCounter {
-      text-align: center;
-      font-size: 2em;
-      color: #e91e63;
-      margin-bottom: 30px;
-    }
-
-    .message-container {
-      max-width: 600px;
-      margin: 20px auto;
-      text-align: center;
-      padding: 20px;
-      border-radius: 15px;
-      background: rgba(255, 255, 255, 0.7);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    .message-container img {
-      max-width: 100%;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .album {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px;
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .album img {
+    .names {
+      position: absolute;
+      top: 65px;
+      left: 0;
       width: 100%;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
+      text-align: center;
+      font-size: 20px;
+      color: white;
+      font-weight: bold;
+      transform: rotate(45deg);
+    }
+    h1 {
+      margin-top: 30px;
+      font-size: 32px;
+      color: #d63384;
+      text-shadow: 1px 1px 2px #fff;
+    }
+    .counter {
+      font-size: 24px;
+      margin: 10px 0;
+      color: #ff1493;
+    }
+    .message {
+      max-width: 600px;
+      padding: 20px;
+      background: #fffafa;
+      border: 2px dashed #ffb6c1;
+      border-radius: 12px;
+      margin-top: 20px;
+      font-size: 18px;
+      line-height: 1.6;
+      text-align: center;
+      color: #c71585;
     }
 
-    .album img:hover {
-      transform: scale(1.05);
-    }
-
-    @media (max-width: 480px) {
-      h1 { font-size: 2em; }
-      .heart { width: 100px; height: 100px; }
-      .heart::before, .heart::after { width: 100px; height: 100px; }
+    #blackScreen {
+      display: none;
+      background: black;
+      color: white;
+      font-size: 24px;
+      text-align: center;
+      padding-top: 20%;
+      height: 100vh;
     }
   </style>
 </head>
 <body>
 
-  <div class="heart"></div>
-  <h1>16/09/2024 → 13/07/2025</h1>
-  <div id="daysCounter">Đang đếm ngày yêu nhau...</div>
-
-  <div class="message-container" id="messageBox">
-    <!-- Nội dung sẽ được hiển thị tại đây -->
+  <div class="heart">
+    <div class="names">Sang 💗 Em</div>
   </div>
 
-  <h2 style="text-align:center; margin-top:40px;">📷 Album ảnh yêu thương</h2>
-  <div class="album">
-    <img src="https://drive.google.com/uc?id=18fV_JZtgbFsQpA888FAr4oBcl3ypGAEB" alt="ảnh 1" />
-    <img src="https://i.imgur.com/vg5W4XQ.jpg" alt="ảnh 2" />
-    <img src="https://i.imgur.com/D5W4o2K.jpg" alt="ảnh 3" />
-    <img src="https://i.imgur.com/B4XwIdW.jpg" alt="ảnh 4" />
-    <img src="https://i.imgur.com/8l0N6eK.jpg" alt="ảnh 5" />
+  <h1>🌸 Kỷ niệm 300 ngày bên nhau 🌸</h1>
+  <div class="counter">Ngày: <span id="dayCounter">0</span>/300</div>
+
+  <div class="message">
+    Cảm ơn em đã đồng hành cùng anh suốt 300 ngày qua. <br>
+    Dù là nắng ấm hay mưa rào, ta vẫn luôn bên nhau. <br>
+    Mong rằng từng khoảnh khắc bên em sẽ luôn là điều anh trân trọng nhất. <br>
+    Yêu em thật nhiều 💕
   </div>
+
+  <div id="blackScreen">💔 Anh buồn lắm...</div>
 
   <script>
-    // Hiển thị số ngày yêu nhau
-    const startDate = new Date("2024-09-16");
-    const targetDate = new Date("2025-07-13");
+    // === Thông tin sinh nhật, ví dụ: 01/01/2000 + 05/02/2001 = 01012000 + 05022001 = 03024001 (ví dụ)
+    const correctPassword = "11"; // bạn nhập tổng ngày sinh hai người vào đây (tự đặt số hợp lý)
 
-    const countDays = () => {
-      const now = new Date();
-      const diff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-      const goal = Math.floor((targetDate - startDate) / (1000 * 60 * 60 * 24));
-      document.getElementById("daysCounter").innerHTML =
-        `❤️ Hôm nay là ngày thứ <strong>${diff}</strong> bên nhau! (${goal} ngày yêu)`;
-    };
-    countDays();
+    // Hiển thị popup đầu tiên
+    setTimeout(() => {
+      const answer = confirm("Em có yêu anh không? 🥺");
 
-    // Lời chúc và ảnh kèm theo
-    const messages = [
-      {
-        text: "Ngày ấy mình bắt đầu một chuyện tình 💘",
-        img: "https://drive.google.com/uc?id=18fV_JZtgbFsQpA888FAr4oBcl3ypGAEB"
-      },
-      {
-        text: "Những buổi tối tâm sự không biết chán 🌙",
-        img: "https://i.imgur.com/8l0N6eK.jpg"
-      },
-      {
-        text: "Cái nắm tay đầu tiên còn run run 🥹",
-        img: "https://i.imgur.com/vg5W4XQ.jpg"
-      },
-      {
-        text: "Cùng nhau đi thật xa, nhưng gần thật gần 🏞️",
-        img: "https://i.imgur.com/D5W4o2K.jpg"
-      },
-      {
-        text: "300 ngày bên nhau rồi đó 🥰",
-        img: "https://i.imgur.com/B4XwIdW.jpg"
+      if (answer) {
+        const pass = prompt("Vậy nhập mật khẩu là tổng số ngày sinh của 2 đứa mình nha 😘:");
+
+        if (pass === correctPassword) {
+          document.body.style.display = "flex";
+          startCounter();
+        } else {
+          alert("Sai rồi em ơi! 😢");
+          document.getElementById("blackScreen").style.display = "block";
+        }
+      } else {
+        document.getElementById("blackScreen").style.display = "block";
       }
-    ];
+    }, 300);
 
-    let index = 0;
-    const messageBox = document.getElementById("messageBox");
+    function startCounter() {
+      const startDate = new Date("2024-09-16");
+      const endDate = new Date("2025-07-13");
+      const now = new Date();
 
-    function showNextMessage() {
-      if (index >= messages.length) return;
-      const { text, img } = messages[index];
-      messageBox.innerHTML = `
-        <p style="font-size:1.2em;">${text}</p>
-        <img src="${img}" alt="love pic">
-      `;
-      index++;
-      setTimeout(showNextMessage, 4000); // chuyển sau 4s
+      const totalDays = 300;
+      const currentDays = Math.min(
+        Math.floor((now - startDate) / (1000 * 60 * 60 * 24)),
+        totalDays
+      );
+
+      let counter = 0;
+      const counterElement = document.getElementById("dayCounter");
+
+      const interval = setInterval(() => {
+        if (counter <= currentDays) {
+          counterElement.textContent = counter;
+          counter++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 30);
     }
-
-    showNextMessage();
   </script>
-
 </body>
 </html>
