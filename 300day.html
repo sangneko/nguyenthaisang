@@ -2,132 +2,104 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>💖 Kỷ niệm 300 ngày bên nhau 💖</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kỷ niệm tình yêu</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #ffe0e9, #ffc0cb);
-      text-align: center;
-      padding: 30px;
+      background-color: #ffe6eb;
       color: #333;
+      text-align: center;
+      padding: 40px;
     }
-
     h1 {
-      font-size: 2em;
-      margin-bottom: 20px;
-      color: #d80073;
+      color: #ff0080;
+      font-size: 32px;
     }
-
     .heart {
-      font-size: 3em;
-      color: red;
-      animation: pulse 1s infinite;
-      margin-bottom: 10px;
+      font-size: 50px;
+      animation: heartbeat 1.2s infinite;
     }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.2); }
+      50% { transform: scale(1); }
     }
-
-    .message {
-      font-size: 1.2em;
-      margin: 15px 0;
-      line-height: 1.6;
-      color: #444;
-    }
-
-    #countdown {
-      font-size: 1.3em;
+    .milestone {
       font-weight: bold;
+      font-size: 20px;
       color: #ff3366;
-      margin: 20px 0;
+      margin-top: 20px;
     }
-
-    .names {
-      margin-top: 25px;
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #800040;
-    }
-
-    .zodiac {
-      font-size: 1em;
-      color: #555;
-    }
-
     .footer {
-      margin-top: 40px;
-      font-style: italic;
-      font-size: 0.9em;
-      color: #666;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #a36;
     }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 1.5em; }
-      .message { font-size: 1em; }
-      #countdown { font-size: 1.1em; }
+    .zodiac {
+      font-size: 20px;
+      margin-top: 15px;
+    }
+    .zodiac span {
+      font-size: 24px;
+      margin: 0 6px;
+    }
+    .wish {
+      margin-top: 30px;
+      font-size: 18px;
+      font-style: italic;
+      color: #cc0066;
     }
   </style>
 </head>
 <body>
-  <div class="heart">❤️</div>
-  <h1>Chúng mình đã bên nhau 300 ngày rồi!</h1>
 
-  <div class="message">
-    Mỗi ngày trôi qua là một hành trình tuyệt vời bên nhau.<br>
-    Cảm ơn em vì đã đến và cùng mình đi qua từng khoảnh khắc 💕<br>
-    Mãi yêu em nhé, cô gái của anh!
+  <div class="heart">💗</div>
+  <h1 id="dayCountText">...</h1>
+
+  <p>Mỗi ngày trôi qua là một hành trình tuyệt vời bên nhau.<br>
+  Cảm ơn em vì đã đến và cùng mình đi qua từng khoảnh khắc 💕<br>
+  Mãi yêu em nhé, cô gái của anh!</p>
+
+  <div class="milestone" id="nextMilestone">Đếm ngược đến ngày kỷ niệm tiếp theo...</div>
+
+  <div class="zodiac">🌻 <strong>Sang</strong> ❤️ <strong>Linh</strong><br>
+    <span>♎ Thiên Bình</span> + <span>♍ Xử Nữ</span>
   </div>
 
-  <div id="countdown">Đếm ngược đến ngày kỷ niệm tiếp theo...</div>
+  <div class="wish">💌 Anh chúc tình yêu của anh luôn rạng rỡ như ánh nắng, ngọt ngào như nụ cười em. Dù có ra sao, anh cũng sẽ luôn ở đây, bên em!</div>
 
-  <div class="names">
-    💑 Sang ❤️ Linh
-    <div class="zodiac">♎ Thiên Bình + ♍ Xử Nữ</div>
-  </div>
-
-  <div class="footer">
-    Từ Sang gửi đến cô gái nhỏ 💌
-  </div>
+  <div class="footer">Từ Sang gửi đến cô gái nhỏ 💌</div>
 
   <script>
-  const startDate = new Date("2024-09-16");
-  const today = new Date();
+    const startDate = new Date("2024-09-16");
+    const today = new Date();
+    const diffTime = today - startDate;
+    const daysTogether = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const yearMilestone = 365;
+    const nextAnniversary = new Date(startDate.getTime() + yearMilestone * 24 * 60 * 60 * 1000);
 
-  // Số ngày đã bên nhau
-  const diffTime = today - startDate;
-  const daysTogether = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  document.getElementById("daysTogether").textContent = daysTogether;
+    document.getElementById("dayCountText").innerText = `Chúng mình đã bên nhau ${daysTogether} ngày rồi!`;
 
-  // Kỷ niệm 1 năm
-  const nextMilestone = 365;
-  const nextDate = new Date(startDate.getTime() + nextMilestone * 24 * 60 * 60 * 1000);
-  document.getElementById("nextMilestone").textContent = `${nextMilestone} ngày (1 năm)`;
-  document.getElementById("nextDate").textContent = nextDate.toLocaleDateString("vi-VN");
+    // Đếm ngược đến ngày kỷ niệm 1 năm
+    function countdownTo(date) {
+      const now = new Date();
+      const timeDiff = date - now;
+      if (timeDiff <= 0) {
+        document.getElementById("nextMilestone").innerText = "Hôm nay là kỷ niệm 1 năm rồi đó! 🎉";
+        return;
+      }
+      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((timeDiff / (1000 * 60)) % 60);
+      const seconds = Math.floor((timeDiff / 1000) % 60);
 
-  // Cập nhật đếm ngược
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = nextDate.getTime() - now;
+      document.getElementById("nextMilestone").innerText =
+        `Chỉ còn ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây nữa là kỷ niệm 1 năm đó nhaaa 💖`;
 
-    if (distance < 0) {
-      document.getElementById("countdown").innerHTML = "🎉 Hôm nay là cột mốc 1 năm rồi đó!";
-      return;
+      setTimeout(() => countdownTo(date), 1000);
     }
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    document.getElementById("countdown").innerHTML =
-      `⏳ Còn ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây là đến mốc ${nextMilestone} ngày bên nhau 💞`;
-  }
-
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
+    countdownTo(nextAnniversary);
   </script>
 </body>
 </html>
