@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tự động gửi khảo sát ô nhiễm không khí</title>
+</head>
+<body>
+  <h2>Đang gửi khảo sát, vui lòng chờ...</h2>
+
+  <script>
+    const formData = new FormData();
+
+    // 📝 Thay các entry.xxx bằng đúng mã từ form bạn lấy được
+    formData.append("entry.1111111111", "18 – 30");         // Độ tuổi
+    formData.append("entry.2222222222", "Thành phố Hồ Chí Minh"); // Nơi ở hiện tại
+    formData.append("entry.3333333333", "Có");              // Bạn có thấy ô nhiễm không khí không?
+    formData.append("entry.4444444444", "Nghiêm trọng");    // Mức độ
+    formData.append("entry.5555555555", "Khó thở");         // Tác động (có thể nhiều giá trị!)
+    formData.append("entry.6666666666", "Cây xanh đô thị"); // Mong muốn cải thiện
+    formData.append("entry.7777777777", "Có");              // Có sẵn sàng dùng thiết bị giám sát?
+    formData.append("entry.8888888888", "Dưới 50.000đ");    // Sẵn sàng chi trả
+
+    fetch("https://docs.google.com/forms/d/e/1FAIpQLSc7jifY5m7JVNsKEDe20foErjIqIVUMQ0ssOn6uwzTGd7i28w/formResponse", {
+      method: "POST",
+      mode: "no-cors",
+      body: formData
+    }).then(() => {
+      document.body.innerHTML = "<h2>Đã gửi khảo sát thành công! Cảm ơn bạn.</h2>";
+    }).catch(error => {
+      document.body.innerHTML = "<h2>Lỗi gửi khảo sát!</h2><p>" + error + "</p>";
+    });
+  </script>
+</body>
+</html>
