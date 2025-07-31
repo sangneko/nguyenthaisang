@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gemini Chatbot</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f4f4f4; }
+    #chatbox { max-width: 600px; margin: auto; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 0 10px #ccc; }
+    .msg { margin: 10px 0; }
+    .user { color: blue; font-weight: bold; }
+    .bot { color: green; font-weight: bold; }
+    input[type="text"] { width: 80%; padding: 10px; }
+    button { padding: 10px 20px; }
+  </style>
+</head>
+<body>
+
+<div id="chatbox">
+  <h2>Chat với AI (Gemini)</h2>
+  <div id="messages"></div>
+  <input type="text" id="userInput" placeholder="Nhập tin nhắn..." />
+  <button onclick="sendMessage()">Gửi</button>
+</div>
+
+<script>
+// 🔗 Điền link backend bạn tạo bằng Replit bên dưới
+const BACKEND_URL = "https://910b8edd-aca4-4c55-ab44-def6d51ec125-00-11yekzklfwu32.pike.replit.dev/chat";
+
+async function sendMessage() {
+  const input = document.getElementById("userInput");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  document.getElementById("messages").innerHTML += `<div class="msg"><span class="user">Bạn:</span> ${msg}</div>`;
+  input.value = "";
+
+  try {
+    const res = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: msg })
+    });
+
+    const data = await res.json();
+    document.getElementById("messages").innerHTML += `<div class="msg"><span class="bot">Bot:</span> ${data.reply}</div>`;
+  } catch (error) {
+    document.getElementById("messages").innerHTML += `<div class="msg"><span class="bot">Bot:</span> Lỗi gọi API.</div>`;
+  }
+}
+</script>
+
+</body>
+</html>
 
