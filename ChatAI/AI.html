@@ -2,93 +2,62 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Gemini Chatbot</title>
+  <title>Gemini AI Chat</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      display: flex; flex-direction: column;
-      height: 100vh; background: #f0f0f0;
-    }
-    #chatbox {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px;
-      background: #fff;
-    }
-    .message {
-      margin: 5px 0;
-      padding: 8px 12px;
-      border-radius: 10px;
-      max-width: 80%;
-    }
-    .user { background: #dcf8c6; align-self: flex-end; }
-    .bot { background: #e4e6eb; align-self: flex-start; }
-    #inputArea {
-      display: flex;
-      padding: 10px;
-      background: #ddd;
-    }
-    #inputArea input {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      font-size: 1em;
-    }
-    #inputArea button {
-      margin-left: 10px;
-      padding: 10px 20px;
-      font-size: 1em;
-      border: none;
-      border-radius: 5px;
-      background: #4caf50;
-      color: white;
-      cursor: pointer;
-    }
+    body { font-family: sans-serif; background: #f3f3f3; padding: 20px; }
+    #chatbox { height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background: #fff; }
+    .message { margin: 10px 0; }
+    .user { color: blue; }
+    .bot { color: green; }
+    input, button { padding: 10px; font-size: 16px; }
   </style>
 </head>
 <body>
-  <div id="chatbox"></div>
-  <div id="inputArea">
-    <input type="text" id="userInput" placeholder="Nhập tin nhắn..." />
-    <button onclick="sendMessage()">Gửi</button>
-  </div>
 
-  <script>
-    const API_URL = "https://910b8edd-aca4-4c55-ab44-def6d51ec125-00-11yekzklfwu32.pike.replit.dev/chat";
+<h2>Gemini AI Chat</h2>
+<div id="chatbox"></div>
+<br />
+<input type="text" id="input" placeholder="Nhập câu hỏi..." style="width: 70%;" />
+<button onclick="send()">Gửi</button>
 
-    function addMessage(sender, text) {
-      const msg = document.createElement("div");
-      msg.className = "message " + (sender === "User" ? "user" : "bot");
-      msg.textContent = `${sender}: ${text}`;
-      document.getElementById("chatbox").appendChild(msg);
-      document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
-    }
+<script>
+const API_KEY = "AIzaSyBzruPp6ugnStszQbc_Wk9rOAHuq4SE6uA"; // 🔁 Thay bằng API key từ Google AI Studio
+const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + API_KEY;
 
-    async function sendMessage() {
-      const input = document.getElementById("userInput");
-      const text = input.value.trim();
-      if (!text) return;
-      addMessage("User", text);
-      input.value = "";
+const chatbox = document.getElementById("chatbox");
+const input = document.getElementById("input");
 
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text })
-        });
-        const data = await res.json();
-        if (data.reply) {
-          addMessage("Bot", data.reply);
-        } else {
-          addMessage("Bot", "❌ Không có phản hồi.");
-        }
-      } catch (err) {
-        addMessage("Bot", "❌ Lỗi gọi API.");
-      }
-    }
-  </script>
+let history = [];
+
+function addMessage(sender, text) {
+  const msg = document.createElement("div");
+  msg.className = "message " + sender;
+  msg.innerHTML = `<strong>${sender === "user" ? "Bạn" : "Bot"}:</strong> ${text}`;
+  chatbox.appendChild(msg);
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+async function send() {
+  const userInput = input.value.trim();
+  if (!userInput) return;
+  addMessage("user", userInput);
+  input.value = "";
+
+  history.push({ role: "user", parts: [{ text: userInput }] });
+
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ contents: history })
+  });
+
+  const data = await response.json();
+  const botReply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Không có phản hồi.";
+  addMessage("bot", botReply);
+
+  history.push({ role: "model", parts: [{ text: botReply }] });
+}
+</script>
+
 </body>
 </html>
