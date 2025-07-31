@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatBox = document.getElementById('chat-box');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
-    const apiKey = 'AIzaSyBzruPp6ugnStszQbc_Wk9rOAHuq4SE6uA'; // <-- THAY THẾ BẰNG API KEY CỦA BẠN
+    const apiKey = 'AIzaSyAG33fN9eznRmQlBNyxpmB-LdyIgtNhL0U'; // <-- THAY THẾ BẰNG API KEY CỦA BẠN
     const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     // Hàm thêm tin nhắn vào chat box
