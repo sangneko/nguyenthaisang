@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Đếm Số</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Game Đếm Số</h1>
+
+        <div id="auth-section">
+            <div id="auth-form">
+                <h2>Đăng nhập / Đăng ký</h2>
+                <input type="email" id="email" placeholder="Email của bạn">
+                <input type="password" id="password" placeholder="Mật khẩu của bạn">
+                <input type="text" id="username-register" placeholder="Tên hiển thị (đăng ký)">
+                <button id="signup-button">Đăng ký</button>
+                <button id="login-button">Đăng nhập</button>
+            </div>
+            <div id="user-info" style="display:none;">
+                <p>Chào mừng, <strong id="current-username"></strong>!</p>
+                <button id="logout-button">Đăng xuất</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="game-section" style="display:none;">
+            <h2>Bấm để Đếm!</h2>
+            <div class="counter-display">
+                Số lần bấm: <span id="click-count">0</span>
+            </div>
+            <button id="click-button">Bấm tôi!</button>
+            <button id="save-score-button" style="margin-left: 10px;">Lưu điểm</button>
+            <button id="reset-button">Đặt lại</button>
+        </div>
+
+        <hr>
+
+        <div id="scoreboard-section">
+            <h2>Bảng Xếp Hạng</h2>
+            <ul id="scoreboard-list">
+                <li>Đang tải...</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
