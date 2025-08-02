@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const SUPABASE_URL = 'https://ucsxzcxnjtqijqizyskd.supabase.co'; // Ví dụ: 'https://abcdefg1234.supabase.co'
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjc3h6Y3huanRxaWpxaXp5c2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMTIxMTAsImV4cCI6MjA2OTY4ODExMH0.8UcwzE9M0PEgBfGfToU1tdcCYCX69MfofXZ5p6Ql7DQ'; // Ví dụ: 'eyJhbGciOiJIUzI1Ni...'
 
+    // Khởi tạo Supabase client
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // --- Biến và Elements ---
@@ -14,12 +15,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const loginButton = document.getElementById('login-button');
     const logoutButton = document.getElementById('logout-button');
     const currentUsernameSpan = document.getElementById('current-username');
-    const authForm = document.getElementById('auth-form'); // Đổi từ login-form
+    const authForm = document.getElementById('auth-form');
     const userInfo = document.getElementById('user-info');
     const gameSection = document.getElementById('game-section');
     const clickCountSpan = document.getElementById('click-count');
     const clickButton = document.getElementById('click-button');
-    const saveScoreButton = document.getElementById('save-score-button'); // Nút lưu điểm mới
+    const saveScoreButton = document.getElementById('save-score-button');
     const resetButton = document.getElementById('reset-button');
     const scoreboardList = document.getElementById('scoreboard-list');
 
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Chức năng Kiểm tra trạng thái đăng nhập ---
     async function checkUserSession() {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user } } = await supabase.auth.getUser(); // Lấy thông tin user hiện tại
         if (user) {
             currentUserId = user.id;
             await getAndSetUsername(user.id); // Lấy tên hiển thị từ bảng users
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             showLoggedOutState();
         }
-        await loadScoreboard(); // Luôn tải bảng xếp hạng
+        await loadScoreboard(); // Luôn tải bảng xếp hạng khi khởi động/thay đổi trạng thái
     }
 
     async function getAndSetUsername(userId) {
@@ -54,8 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else if (data) {
             currentLoggedInUsername = data.username;
         } else {
-            // Trường hợp người dùng đăng ký nhưng chưa có username trong bảng 'users' (chỉ xảy ra nếu bạn không tạo user entry sau signup)
-            currentLoggedInUsername = 'Người dùng mới';
+            currentLoggedInUsername = 'Người dùng mới'; // Trường hợp user tồn tại nhưng chưa có entry trong bảng users (hiếm khi xảy ra với code upsert)
         }
         currentUsernameSpan.textContent = currentLoggedInUsername;
     }
@@ -87,31 +87,48 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error: authError } = await supabase.auth.signUp({
             email: email,
-            password: password,
-            options: {
-                data: {
-                    username: username // Supabase Auth có thể lưu metadata, nhưng chúng ta sẽ dùng bảng 'users' riêng
-                }
-            }
+            password: password
         });
 
-        if (error) {
-            alert(`Đăng ký thất bại: ${error.message}`);
-        } else if (data.user) {
-            // Sau khi đăng ký thành công, lưu tên hiển thị vào bảng 'users'
-            const { error: insertError } = await supabase
-                .from('users')
-                .insert({ id: data.user.id, username: username });
+        if (authError) {
+            alert(`Đăng ký thất bại: ${authError.message}`);
+            return;
+        }
 
-            if (insertError) {
-                console.error('Lỗi khi lưu tên hiển thị:', insertError.message);
-                alert('Đăng ký thành công, nhưng không thể lưu tên hiển thị. Vui lòng thử lại hoặc liên hệ hỗ trợ.');
+        if (data.user) {
+            // Người dùng đã được tạo thành công trong Supabase Auth.
+            // Bây giờ, chèn tên người dùng vào bảng 'users' tùy chỉnh.
+            // Sử dụng .upsert() để tránh lỗi trùng lặp khóa chính.
+            const { error: insertUserError } = await supabase
+                .from('users')
+                .upsert({ id: data.user.id, username: username });
+
+            if (insertUserError) {
+                // Lỗi 23505 là lỗi khóa trùng lặp (duplicate key).
+                // Nếu là lỗi này, có thể hồ sơ đã tồn tại, ta có thể bỏ qua hoặc cảnh báo.
+                if (insertUserError.code === '23505' && insertUserError.message.includes('users_pkey')) {
+                    console.warn('Hồ sơ người dùng đã tồn tại trong bảng "users", tiếp tục...');
+                } else {
+                    console.error('Lỗi khi lưu tên hiển thị vào bảng users:', insertUserError.message);
+                    alert('Đăng ký thành công tài khoản, nhưng không thể lưu tên hiển thị. Vui lòng thử lại hoặc liên hệ hỗ trợ.');
+                    return;
+                }
+            }
+            
+            alert('Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản (nếu bạn bật xác minh email trong Supabase).');
+            
+            // Tự động đăng nhập sau khi đăng ký thành công
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+            if (signInError) {
+                alert(`Lỗi đăng nhập tự động sau đăng ký: ${signInError.message}`);
+                showLoggedOutState();
             } else {
-                alert('Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản (nếu bạn bật xác minh email trong Supabase).');
-                // Tự động đăng nhập sau khi đăng ký thành công
-                await signIn();
+                await checkUserSession(); // Cập nhật UI và tải dữ liệu
             }
         }
     }
@@ -133,10 +150,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (error) {
             alert(`Đăng nhập thất bại: ${error.message}`);
         } else if (data.user) {
-            currentUserId = data.user.id;
-            await getAndSetUsername(data.user.id);
-            showLoggedInState();
-            await loadClickCountForUser(); // Tải điểm đã lưu
+            await checkUserSession(); // Cập nhật UI và tải dữ liệu
             alert(`Chào mừng, ${currentLoggedInUsername}!`);
         }
     }
@@ -161,7 +175,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         clickCount++;
         clickCountSpan.textContent = clickCount;
-        // Không lưu mỗi lần bấm, chỉ lưu khi người dùng nhấn "Lưu điểm"
     }
 
     async function saveScore() {
@@ -170,7 +183,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Kiểm tra xem đã có điểm của user này chưa
+        // Upsert điểm số: cập nhật nếu đã có, chèn nếu chưa có
+        // Đảm bảo chỉ lưu điểm cao nhất
         const { data: existingScore, error: fetchError } = await supabase
             .from('scores')
             .select('score')
@@ -184,7 +198,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (existingScore) {
-            // Nếu đã có điểm, cập nhật nếu điểm hiện tại cao hơn
+            // Nếu đã có điểm, chỉ cập nhật nếu điểm hiện tại cao hơn
             if (clickCount > existingScore.score) {
                 const { error: updateError } = await supabase
                     .from('scores')
@@ -274,7 +288,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             scoreboardList.innerHTML = ''; // Xóa các mục cũ
             data.forEach((item, index) => {
                 const li = document.createElement('li');
-                const username = item.users ? item.users.username : 'Ẩn danh'; // Lấy username từ đối tượng users
+                // Kiểm tra xem item.users có tồn tại không trước khi truy cập username
+                const username = item.users ? item.users.username : 'Người dùng ẩn danh'; 
                 li.innerHTML = `<span>${index + 1}. ${username}:</span> <span>${item.score} điểm</span>`;
                 scoreboardList.appendChild(li);
             });
@@ -286,7 +301,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     loginButton.addEventListener('click', signIn);
     logoutButton.addEventListener('click', signOut);
     clickButton.addEventListener('click', incrementClick);
-    saveScoreButton.addEventListener('click', saveScore); // Gán sự kiện cho nút "Lưu điểm"
+    saveScoreButton.addEventListener('click', saveScore);
     resetButton.addEventListener('click', resetClick);
 
     // Kiểm tra trạng thái đăng nhập khi trang được nạp lần đầu
