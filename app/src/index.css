@@ -1,0 +1,28 @@
+/* You can add global styles here if needed.
+   Currently, App.css handles most styling. */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Flexbox utilities for Auth.js */
+.row {
+  display: flex;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.col-6 {
+  width: 100%; /* Default for smaller screens */
+  max-width: 600px; /* Adjust as needed */
+}
+
+@media (min-width: 768px) {
+  .col-6 {
+    width: 50%; /* On larger screens, take 50% width */
+  }
+}
