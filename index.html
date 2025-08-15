@@ -260,7 +260,48 @@
             line-height: 1.6;
             margin-bottom: 15px;
         }
-        /* Đã bỏ các style liên quan đến ul/li/a/span trong modal-content vì không còn sử dụng */
+
+        /* New styles for the website link block */
+        .website-link-block {
+            background-color: rgba(0, 0, 0, 0.05); /* Slightly darker background */
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        body.dark-mode .website-link-block {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.05);
+        }
+
+        .website-link-block p {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--text-dark); /* Ensure text is readable */
+        }
+        body.dark-mode .website-link-block p {
+             color: var(--text-light);
+        }
+
+        .website-link-block .website-button {
+            display: inline-block;
+            background-color: var(--discord-blurple); /* Use discord-blurple for the button */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 1.05em;
+        }
+
+        .website-link-block .website-button:hover {
+            background-color: #5b6fb8; /* Slightly darker blurple on hover */
+            transform: translateY(-2px);
+        }
 
         /* Điều chỉnh responsive */
         @media (max-width: 768px) {
@@ -283,11 +324,10 @@
             .modal-content h2 {
                 font-size: 1.5em;
             }
-            .modal-content p { /* Chỉ giữ lại p vì không còn li/ul */
+            .modal-content p {
                 font-size: 1em;
             }
 
-            /* Adjust text modal close button for smaller screens */
             .modal-overlay .modal-close-btn {
                 top: 5px;
                 right: 5px;
@@ -295,6 +335,13 @@
                 height: 35px;
                 font-size: 1.5em;
             }
+             .website-link-block {
+                padding: 12px 15px;
+             }
+             .website-link-block .website-button {
+                padding: 8px 15px;
+                font-size: 1em;
+             }
         }
     </style>
 </head>
@@ -325,6 +372,13 @@
             <h2>🎉 Chào mừng đến với trang web của Sang! 🎉</h2>
             <p>Xin chào bạn bè, người thân và các bạn học sinh sinh viên! Đây là trang web cá nhân của tôi, nơi tôi chia sẻ những công cụ và tiện ích nhỏ mà tôi tự xây dựng.</p>
             <p>Hy vọng bạn sẽ tìm thấy điều gì đó hữu ích và thú vị ở đây. Đừng ngần ngại liên hệ nếu bạn có bất kỳ câu hỏi hoặc ý kiến đóng góp nào nhé!</p>
+
+            <div class="website-link-block">
+                <p>Khám phá trang web khác:</p>
+                <a href="https://www.nguyenthaisang.io.vn/" class="website-button" target="_blank" onclick="closeTextNotificationModal(); playClick();">
+                    <i class="fas fa-globe"></i> Truy cập NGUYEN THAI SANG
+                </a>
+            </div>
         </div>
     </div>
 
