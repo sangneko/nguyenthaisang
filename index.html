@@ -14,19 +14,12 @@
             --text-dark: #111;
             --glass-bg: rgba(255, 255, 255, 0.2);
 
-            /* Các biến CSS riêng cho phần trạng thái bot */
             --discord-blurple: #7289DA;
-            --bot-card-bg: rgba(255, 255, 255, 0.9); /* Nền nhẹ cho bot status */
-            --bot-card-bg-dark: rgba(0, 0, 0, 0.5); /* Nền tối cho bot status */
-            --modal-bg: rgba(255, 255, 255, 0.95); /* Nền cho modal (popup) */
-            --modal-bg-dark: rgba(23, 27, 30, 0.95); /* Nền tối cho modal */
-            --online-color: #28A745;
-            --offline-color: #DC3545;
-            --loading-color: #FFC107;
-            --border-radius-small: 8px; /* Bo tròn góc nhỏ hơn */
-            --border-radius-medium: 12px; /* Bo tròn góc trung bình cho modal */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); /* Đổ bóng nhẹ */
-            --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.15); /* Đổ bóng khi hover */
+            --modal-bg: rgba(255, 255, 255, 0.95);
+            --modal-bg-dark: rgba(23, 27, 30, 0.95);
+            --border-radius-medium: 12px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.15);
         }
 
         * {
@@ -132,7 +125,7 @@
             font-size: 15px;
             backdrop-filter: blur(8px);
             color: #fff;
-            z-index: 101; /* Đảm bảo trên mọi thứ */
+            z-index: 101;
         }
 
         .toggle-mode {
@@ -147,7 +140,7 @@
             color: #111;
             cursor: pointer;
             transition: 0.3s ease;
-            z-index: 101; /* Đảm bảo trên mọi thứ */
+            z-index: 101;
         }
 
         .toggle-mode:hover {
@@ -179,22 +172,22 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- Styles for general Modal (used for text popup now) --- */
+        /* Styles for Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6); /* Nền tối mờ */
+            background: rgba(0, 0, 0, 0.6);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1050; /* Cao nhất, tương tự như video modal trước đây */
+            z-index: 1050;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
-            backdrop-filter: blur(3px); /* Hiệu ứng mờ nền */
+            backdrop-filter: blur(3px);
         }
 
         .modal-overlay.active {
@@ -208,18 +201,18 @@
             border-radius: var(--border-radius-medium);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             width: 90%;
-            max-width: 500px; /* Kích thước tối đa trên PC */
+            max-width: 500px;
             position: relative;
             transform: translateY(20px);
             opacity: 0;
             transition: transform 0.3s ease, opacity 0.3s ease;
-            color: var(--text-dark); /* Màu chữ mặc định */
-            text-align: left; /* Để văn bản trong popup không bị căn giữa */
+            color: var(--text-dark);
+            text-align: left;
         }
 
         body.dark-mode .modal-content {
             background: var(--modal-bg-dark);
-            color: var(--text-light); /* Màu chữ cho dark mode */
+            color: var(--text-light);
         }
 
         .modal-overlay.active .modal-content {
@@ -232,27 +225,27 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-            border-radius: 50%; /* Make it round */
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
             width: 40px;
             height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white; /* White 'X' */
-            font-size: 1.8em; /* Slightly smaller to fit circle */
-            z-index: 1060; /* Higher than content and overlay */
+            color: white;
+            font-size: 1.8em;
+            z-index: 1060;
             cursor: pointer;
             transition: background-color 0.2s ease, transform 0.2s ease;
-            text-shadow: none; /* Remove text shadow for cleaner look */
+            text-shadow: none;
         }
         .modal-overlay .modal-close-btn:hover {
-            background-color: rgba(0, 0, 0, 0.7); /* Darker on hover */
+            background-color: rgba(0, 0, 0, 0.7);
             transform: scale(1.05);
         }
 
         .modal-content h2 {
-            color: var(--discord-blurple); /* Màu xanh đặc trưng của Discord */
+            color: var(--discord-blurple);
             font-size: 1.8em;
             margin-bottom: 15px;
             border-bottom: 2px solid rgba(0, 0, 0, 0.1);
@@ -267,70 +260,12 @@
             line-height: 1.6;
             margin-bottom: 15px;
         }
-        .modal-content ul {
-            list-style-type: disc;
-            margin-left: 25px;
-            margin-bottom: 15px;
-        }
-        .modal-content li {
-            margin-bottom: 5px;
-        }
-
-        /* --- New styles for Notification Bar --- */
-        .notification-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #4CAF50; /* Green background for success/info */
-            color: white;
-            text-align: center;
-            padding: 10px 15px;
-            font-size: 1.1em;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            z-index: 1000; /* Above most content, below modals */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.5s ease-in-out;
-            transform: translateY(-100%); /* Start off-screen */
-            opacity: 0;
-        }
-
-        .notification-bar.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .notification-bar-content {
-            flex-grow: 1;
-        }
-
-        .notification-bar .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5em;
-            cursor: pointer;
-            margin-left: 15px;
-            line-height: 1;
-            padding: 0 5px;
-            transition: color 0.2s ease;
-        }
-
-        .notification-bar .close-btn:hover {
-            color: #f0f0f0;
-        }
-
-        body.dark-mode .notification-bar {
-            background-color: #2e7d32; /* Darker green for dark mode */
-        }
-
+        /* Đã bỏ các style liên quan đến ul/li/a/span trong modal-content vì không còn sử dụng */
 
         /* Điều chỉnh responsive */
         @media (max-width: 768px) {
             body {
-                padding-top: 60px; /* Thêm padding trên để tránh bị thanh thông báo che */
+                padding-top: 40px;
                 padding-bottom: 20px;
             }
             footer {
@@ -341,24 +276,15 @@
 
             .modal-content {
                 width: 95%;
-                max-height: 80vh; /* Giới hạn chiều cao trên mobile */
-                overflow-y: auto; /* Thêm scroll nếu nội dung quá dài */
+                max-height: 80vh;
+                overflow-y: auto;
                 padding: 20px;
             }
             .modal-content h2 {
                 font-size: 1.5em;
             }
-            .modal-content p, .modal-content li {
+            .modal-content p { /* Chỉ giữ lại p vì không còn li/ul */
                 font-size: 1em;
-            }
-
-            .notification-bar {
-                font-size: 0.9em;
-                padding: 8px 10px;
-            }
-            .notification-bar .close-btn {
-                font-size: 1.2em;
-                margin-left: 10px;
             }
 
             /* Adjust text modal close button for smaller screens */
@@ -373,13 +299,6 @@
     </style>
 </head>
 <body>
-    <div class="notification-bar" id="notificationBar">
-        <span class="notification-bar-content">
-            Chào mừng bạn đến với trang web của NGUYEN THAI SANG!
-        </span>
-        <button class="close-btn" onclick="dismissNotification()">&times;</button>
-    </div>
-
     <button class="toggle-mode" onclick="toggleMode()">🌗 Đổi nền</button>
     <div class="clock" id="clock">--:--:--</div>
 
@@ -405,13 +324,6 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <h2>🎉 Chào mừng đến với trang web của Sang! 🎉</h2>
             <p>Xin chào bạn bè, người thân và các bạn học sinh sinh viên! Đây là trang web cá nhân của tôi, nơi tôi chia sẻ những công cụ và tiện ích nhỏ mà tôi tự xây dựng.</p>
-            <p>Bạn có thể khám phá các tính năng sau:</p>
-            <ul>
-                <li>🌦️ **Xem Thời tiết và Độ ẩm:** Cập nhật thông tin thời tiết gần bạn.</li>
-                <li>⏳ **Đếm ngược đến 2026:** Cùng chờ đợi một năm mới đầy hứa hẹn.</li>
-                <li>📚 **Tính điểm KTHP:** Công cụ giúp bạn dễ dàng tính điểm thi cuối học phần.</li>
-                <li>... và nhiều tính năng khác đang chờ bạn khám phá!</li>
-            </ul>
             <p>Hy vọng bạn sẽ tìm thấy điều gì đó hữu ích và thú vị ở đây. Đừng ngần ngại liên hệ nếu bạn có bất kỳ câu hỏi hoặc ý kiến đóng góp nào nhé!</p>
         </div>
     </div>
@@ -441,7 +353,6 @@
 
         function toggleMode() {
             document.body.classList.toggle('dark-mode');
-            // Lưu trạng thái dark mode vào localStorage để nhớ lần sau
             if (document.body.classList.contains('dark-mode')) {
                 localStorage.setItem('darkMode', 'enabled');
             } else {
@@ -455,7 +366,6 @@
             sound.play();
         }
 
-        // ===================== Logic cho Text Notification Modal =====================
         function openTextNotificationModal() {
             const textModal = document.getElementById('text-notification-modal-overlay');
             textModal.classList.add('active');
@@ -464,41 +374,23 @@
         function closeTextNotificationModal(event) {
             const textModal = document.getElementById('text-notification-modal-overlay');
 
-            // Only close if clicking on the overlay or the close button
             if (event && (event.target === textModal || event.target.closest('.modal-close-btn') === document.querySelector('#text-notification-modal-overlay .modal-close-btn'))) {
                 textModal.classList.remove('active');
             }
         }
-        // =================== Kết thúc Logic cho Text Notification Modal ===================
 
-        // ===================== Logic cho Notification Bar =====================
-        function showNotification() {
-            const notificationBar = document.getElementById('notificationBar');
-            notificationBar.classList.add('show');
-        }
-
-        function dismissNotification() {
-            const notificationBar = document.getElementById('notificationBar');
-            notificationBar.classList.remove('show');
-        }
-        // =================== Kết thúc Logic cho Notification Bar ===================
-
-
-        // Kiểm tra trạng thái dark mode đã lưu
         if (localStorage.getItem('darkMode') === 'enabled') {
             document.body.classList.add('dark-mode');
         }
 
-        // Khởi tạo các hàm khi trang tải
         updateClock();
+        setInterval(updateClock, 1000);
 
-        // Thiết lập cập nhật định kỳ
-        setInterval(updateClock, 1000); // Cập nhật đồng hồ mỗi giây
-
-        // Open the text notification modal and show notification bar when the page loads
         window.onload = function() {
-            openTextNotificationModal(); // Show the text notification popup
-            showNotification(); // Show notification bar on load
+            if (!sessionStorage.getItem('popupShown')) {
+                openTextNotificationModal();
+                sessionStorage.setItem('popupShown', 'true');
+            }
         };
     </script>
 </body>
