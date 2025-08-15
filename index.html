@@ -179,103 +179,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Styles cho phần trạng thái bot (compact view) */
-        .bot-status-container {
-            position: absolute;
-            bottom: 15px; /* Đặt ở dưới */
-            right: 15px; /* Đặt ở góc phải */
-            width: 180px; /* Chiều rộng nhỏ gọn */
-            background: var(--bot-card-bg);
-            border-radius: var(--border-radius-small);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            padding: 12px;
-            text-align: left;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px); /* Hiệu ứng mờ nền */
-            z-index: 100; /* Đảm bảo nó nằm trên các phần tử khác */
-            color: var(--text-dark); /* Màu chữ mặc định cho light mode */
-            border: 1px solid rgba(255,255,255,0.5); /* Viền nhẹ */
-        }
-
-        body.dark-mode .bot-status-container {
-            background: var(--bot-card-bg-dark);
-            color: var(--text-light); /* Màu chữ cho dark mode */
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .bot-status-container:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
-        }
-
-        .bot-status-container h3 {
-            font-size: 1.1em;
-            margin-bottom: 8px;
-            color: var(--discord-blurple);
-        }
-
-        .bot-status-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 6px;
-        }
-
-        .bot-status-item i {
-            font-size: 1em;
-            margin-right: 8px;
-            color: var(--discord-blurple);
-        }
-
-        .bot-status-item strong {
-            font-weight: 600;
-            margin-right: 5px;
-            color: inherit; /* Kế thừa màu chữ từ container */
-        }
-
-        .bot-status-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 5px;
-            vertical-align: middle;
-            box-shadow: 0 0 3px rgba(0,0,0,0.2);
-        }
-        .bot-status-online { background-color: var(--online-color); }
-        .bot-status-offline { background-color: var(--offline-color); }
-        .bot-status-loading { background-color: var(--loading-color); }
-
-        .bot-last-updated {
-            font-size: 0.7em;
-            color: var(--light-text-color);
-            margin-top: 10px;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            padding-top: 5px;
-        }
-
-        body.dark-mode .bot-last-updated {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Nút xem chi tiết */
-        .view-details-btn {
-            background: var(--discord-blurple);
-            color: white;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 5px;
-            font-size: 0.8em;
-            cursor: pointer;
-            margin-top: 8px;
-            transition: background 0.2s ease;
-            width: 100%; /* Chiếm toàn bộ chiều rộng của khung nhỏ */
-        }
-        .view-details-btn:hover {
-            background: #5d6fb9;
-        }
-
-
         /* Styles cho Modal (popup) */
         .modal-overlay {
             position: fixed;
@@ -324,7 +227,7 @@
         }
 
         .modal-close-btn {
-            position: absolute;
+            position: absolute; /* Default for general modals */
             top: 15px;
             right: 15px;
             background: none;
@@ -387,6 +290,128 @@
             color: var(--text-light);
         }
 
+        /* --- Styles for Video Modal --- */
+        .video-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Darker background for video */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1050; /* Higher z-index than other modals */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .video-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .video-modal-content {
+            background: #000; /* Black background for video */
+            border-radius: var(--border-radius-medium);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 700px; /* Max width for the video container */
+            max-height: 80vh; /* Max height to prevent it from being too tall */
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            overflow: hidden; /* Ensure video stays within bounds */
+        }
+
+        .video-modal-overlay.active .video-modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* NEW STYLE for video modal's close button (positioned relative to overlay) */
+        .video-modal-overlay .modal-close-btn {
+            position: absolute; /* Position relative to the overlay */
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+            border-radius: 50%; /* Make it round */
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white; /* White 'X' */
+            font-size: 1.8em; /* Slightly smaller to fit circle */
+            z-index: 1060; /* Higher than content and overlay */
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            text-shadow: none; /* Remove text shadow for cleaner look */
+        }
+        .video-modal-overlay .modal-close-btn:hover {
+            background-color: rgba(0, 0, 0, 0.7); /* Darker on hover */
+            transform: scale(1.05);
+        }
+
+        .video-player {
+            width: 100%;
+            height: 100%;
+            display: block; /* Remove extra space below video */
+        }
+
+        /* --- New styles for Notification Bar --- */
+        .notification-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #4CAF50; /* Green background for success/info */
+            color: white;
+            text-align: center;
+            padding: 10px 15px;
+            font-size: 1.1em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Above most content, below modals */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s ease-in-out;
+            transform: translateY(-100%); /* Start off-screen */
+            opacity: 0;
+        }
+
+        .notification-bar.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .notification-bar-content {
+            flex-grow: 1;
+        }
+
+        .notification-bar .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            margin-left: 15px;
+            line-height: 1;
+            padding: 0 5px;
+            transition: color 0.2s ease;
+        }
+
+        .notification-bar .close-btn:hover {
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .notification-bar {
+            background-color: #2e7d32; /* Darker green for dark mode */
+        }
+
 
         /* Điều chỉnh responsive */
         @media (max-width: 768px) {
@@ -424,10 +449,40 @@
             .modal-stat-item {
                 text-align: center; /* Căn giữa trên mobile */
             }
+
+            .video-modal-content {
+                max-width: 95%; /* Adjust max width for mobile */
+                max-height: 70vh; /* Adjust max height for mobile */
+            }
+
+            .notification-bar {
+                font-size: 0.9em;
+                padding: 8px 10px;
+            }
+            .notification-bar .close-btn {
+                font-size: 1.2em;
+                margin-left: 10px;
+            }
+
+            /* Adjust video modal close button for smaller screens */
+            .video-modal-overlay .modal-close-btn {
+                top: 5px;
+                right: 5px;
+                width: 35px;
+                height: 35px;
+                font-size: 1.5em;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="notification-bar" id="notificationBar">
+       // <span class="notification-bar-content">
+            Chào mừng bạn đến với trang web của NGUYEN THAI SANG!
+       // </span>
+        <button class="close-btn" onclick="dismissNotification()">&times;</button>
+    </div>
+
     <button class="toggle-mode" onclick="toggleMode()">🌗 Đổi nền</button>
     <div class="clock" id="clock">--:--:--</div>
 
@@ -446,102 +501,108 @@
         <a class="button-link" href="bua.html" onclick="playClick()">🔨 Búa</a>
         <a class="button-link" href="nhanguiyeuthuong.html" onclick="playClick()">Nhắn gửi yêu thương</a>
         <a class="button-link" href="wiki.html" onclick="playClick()">Wikipedia</a>
-        
     </div>
 
-
-
-    <style>
-        .popup-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-        .popup-box {
-            background: #000;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 90%;
-            max-height: 80%;
-            animation: fadeIn 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .popup-box video {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .close-btn {
-            display: block;
-            margin: 10px auto 0;
-            padding: 8px 15px;
-            background: #ff4b4b;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .close-btn:hover {
-            background: #cc0000;
-        }
-    </style>
-    
-    <!-- Popup Video -->
-    <div id="popup" class="popup-overlay">
-        <div class="popup-box">
-            <video controls autoplay>
+    <div class="video-modal-overlay" id="video-modal-overlay" onclick="closeVideoModal(event)">
+        <button class="modal-close-btn" onclick="closeVideoModal()">&times;</button>
+        <div class="video-modal-content" onclick="event.stopPropagation()">
+            <video id="introVideo" class="video-player" controls autoplay loop>
                 <source src="https://s3.cloudfly.vn/mybucket/Version%205.8%20_Sunspray%20Summer%20Resort_%20Trailer%20_%20Genshin%20Impact%20%23NewVersion%20%23Trailer%20%23GenshinImpact.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=N12TIFK5L059IK15QPO9%2F20250815%2FHN%2Fs3%2Faws4_request&X-Amz-Date=20250815T150446Z&X-Amz-Expires=1800&X-Amz-Signature=8a424e5a8e999285020989c1ca60cf5298ccb615ab43fad95bed617493ef6da9&X-Amz-SignedHeaders=host&x-id=GetObject" type="video/mp4">
-                Trình duyệt của bạn không hỗ trợ phát video.
+                Trình duyệt của bạn không hỗ trợ video này.
             </video>
-            <button class="close-btn" onclick="closePopup()">Đóng</button>
         </div>
     </div>
 
-    
-
-    <div class="bot-status-container" id="bot-status-container">
-        <h3>Discord Bot</h3>
-        <div id="bot-status-compact">
-            <div class="bot-status-item">
-                <i class="fas fa-signal"></i> <strong>Trạng thái:</strong> <span class="bot-status-loading bot-status-indicator"></span> <span>Đang tải...</span>
-            </div>
-            <div class="bot-status-item">
-                <i class="fas fa-clock"></i> <strong>Uptime:</strong> <span>Đang tải...</span>
-            </div>
-        </div>
-        <button class="view-details-btn" onclick="openBotDetailsModal()">Xem chi tiết</button>
-        <div class="bot-last-updated" id="bot-last-updated">Cập nhật: Đang tải...</div>
-    </div>
-    <div class="modal-overlay" id="bot-details-modal-overlay" onclick="closeBotDetailsModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="modal-close-btn" onclick="closeBotDetailsModal()">&times;</button>
-            <h2>Chi tiết Trạng thái Bot</h2>
-            <div class="modal-stats-grid" id="bot-details-content">
-                <p>Đang tải thông số chi tiết...</p>
-            </div>
-        </div>
-    </div>
     <footer>
         &copy; 2025 | Thiết kế bởi Tôi
     </footer>
 
     <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
 
-    
-<script>
-    function closePopup() {
-        document.getElementById('popup').style.display = 'none';
-    }
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('vi-VN');
+            const date = now.toLocaleDateString('vi-VN');
+            document.getElementById('clock').textContent = `${time} | ${date}`;
+
+            const hour = now.getHours();
+            let greeting = "Chào bạn!";
+            if (hour >= 5 && hour < 11) greeting = "🌅 Chúc bạn buổi sáng tốt lành!";
+            else if (hour >= 11 && hour < 14) greeting = "🍽️ Buổi trưa vui vẻ nhé!";
+            else if (hour >= 14 && hour < 18) greeting = "☕ Buổi chiều an lành!";
+            else if (hour >= 18 && hour < 22) greeting = "🌇 Chúc buổi tối thư giãn!";
+            else greeting = "🌙 Khuya rồi, nhớ ngủ sớm nhé!";
+            document.getElementById('greeting').textContent = greeting;
+        }
+
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+            // Lưu trạng thái dark mode vào localStorage để nhớ lần sau
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        function playClick() {
+            const sound = document.getElementById('clickSound');
+            sound.currentTime = 0;
+            sound.play();
+        }
+
+        // ===================== Logic cho Video Modal =====================
+        function openVideoModal() {
+            const videoModal = document.getElementById('video-modal-overlay');
+            const videoPlayer = document.getElementById('introVideo');
+            videoModal.classList.add('active');
+            videoPlayer.play(); // Auto-play the video when the modal opens
+        }
+
+        function closeVideoModal(event) {
+            const videoModal = document.getElementById('video-modal-overlay');
+            const videoPlayer = document.getElementById('introVideo');
+
+            // Only close if clicking on the overlay or the close button
+            // This condition is crucial for making the close button work when clicked directly
+            if (event && (event.target === videoModal || event.target.closest('.modal-close-btn') === document.querySelector('.video-modal-overlay .modal-close-btn'))) {
+                videoModal.classList.remove('active');
+                videoPlayer.pause(); // Pause the video when the modal closes
+                videoPlayer.currentTime = 0; // Reset video to the beginning
+            }
+        }
+        // =================== Kết thúc Logic cho Video Modal ===================
+
+        // ===================== Logic cho Notification Bar =====================
+        function showNotification() {
+            const notificationBar = document.getElementById('notificationBar');
+            notificationBar.classList.add('show');
+        }
+
+        function dismissNotification() {
+            const notificationBar = document.getElementById('notificationBar');
+            notificationBar.classList.remove('show');
+        }
+        // =================== Kết thúc Logic cho Notification Bar ===================
+
+
+        // Kiểm tra trạng thái dark mode đã lưu
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Khởi tạo các hàm khi trang tải
+        updateClock();
+
+        // Thiết lập cập nhật định kỳ
+        setInterval(updateClock, 1000); // Cập nhật đồng hồ mỗi giây
+
+        // Open the video modal and show notification when the page loads
+        window.onload = function() {
+            openVideoModal();
+            showNotification(); // Show notification bar on load
+        };
     </script>
-    
 </body>
 </html>
