@@ -374,7 +374,7 @@
             <p>Hy vọng bạn sẽ tìm thấy điều gì đó hữu ích và thú vị ở đây. Đừng ngần ngại liên hệ nếu bạn có bất kỳ câu hỏi hoặc ý kiến đóng góp nào nhé!</p>
 
             <div class="website-link-block">
-                <p>Khám phá trang web khác:</p>
+                <p>Khám phá trang web chính của tôi để biết thêm các dự án và thông tin:</p>
                 <a href="https://www.nguyenthaisang.io.vn/" class="website-button" target="_blank" onclick="closeTextNotificationModal(); playClick();">
                     <i class="fas fa-globe"></i> Truy cập NGUYEN THAI SANG
                 </a>
@@ -440,12 +440,11 @@
         updateClock();
         setInterval(updateClock, 1000);
 
+        // --- Thay đổi chính ở đây: Đã loại bỏ phần kiểm tra sessionStorage ---
         window.onload = function() {
-            if (!sessionStorage.getItem('popupShown')) {
-                openTextNotificationModal();
-                sessionStorage.setItem('popupShown', 'true');
-            }
+            openTextNotificationModal(); // Popup sẽ luôn hiển thị khi trang tải
         };
+        // --- End of change ---
     </script>
 </body>
 </html>
