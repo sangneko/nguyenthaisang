@@ -449,6 +449,20 @@
         
     </div>
 
+
+    <!-- Popup Video -->
+    <div id="popup" class="popup-overlay">
+        <div class="popup-box">
+            <video controls autoplay>
+                <source src="https://s3.cloudfly.vn/mybucket/Version%205.8%20_Sunspray%20Summer%20Resort_%20Trailer%20_%20Genshin%20Impact%20%23NewVersion%20%23Trailer%20%23GenshinImpact.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=N12TIFK5L059IK15QPO9%2F20250815%2FHN%2Fs3%2Faws4_request&X-Amz-Date=20250815T150446Z&X-Amz-Expires=1800&X-Amz-Signature=8a424e5a8e999285020989c1ca60cf5298ccb615ab43fad95bed617493ef6da9&X-Amz-SignedHeaders=host&x-id=GetObject" type="video/mp4">
+                Trình duyệt của bạn không hỗ trợ phát video.
+            </video>
+            <button class="close-btn" onclick="closePopup()">Đóng</button>
+        </div>
+    </div>
+
+    
+
     <div class="bot-status-container" id="bot-status-container">
         <h3>Discord Bot</h3>
         <div id="bot-status-compact">
@@ -477,229 +491,12 @@
 
     <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
 
-    <script>
-        // =========================================================================
-        // *** BIN ID CỦA BẠN TỪ JSONbin.io ***
-        // Đảm bảo BIN ID này là chính xác
-        const API_URL = 'https://api.jsonbin.io/v3/b/685776368561e97a502925f3'; 
-        // =========================================================================
-
-        let botData = null; // Biến để lưu trữ toàn bộ dữ liệu bot
-
-        function updateClock() {
-            const now = new Date();
-            const time = now.toLocaleTimeString('vi-VN');
-            const date = now.toLocaleDateString('vi-VN');
-            document.getElementById('clock').textContent = `${time} | ${date}`;
-
-            const hour = now.getHours();
-            let greeting = "Chào bạn!";
-            if (hour >= 5 && hour < 11) greeting = "🌅 Chúc bạn buổi sáng tốt lành!";
-            else if (hour >= 11 && hour < 14) greeting = "🍽️ Buổi trưa vui vẻ nhé!";
-            else if (hour >= 14 && hour < 18) greeting = "☕ Buổi chiều an lành!";
-            else if (hour >= 18 && hour < 22) greeting = "🌇 Chúc buổi tối thư giãn!";
-            else greeting = "🌙 Khuya rồi, nhớ ngủ sớm nhé!";
-            document.getElementById('greeting').textContent = greeting;
-        }
-
-        function toggleMode() {
-            document.body.classList.toggle('dark-mode');
-            // Lưu trạng thái dark mode vào localStorage để nhớ lần sau
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                localStorage.setItem('darkMode', 'disabled');
-            }
-        }
-
-        function playClick() {
-            const sound = document.getElementById('clickSound');
-            sound.currentTime = 0;
-            sound.play();
-        }
-
-        // ======================== Logic cho trạng thái bot ========================
-        async function fetchBotStats() {
-            try {
-                const response = await fetch(API_URL);
-                if (!response.ok) {
-                    displayBotOfflineStats();
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const responseData = await response.json();
-                botData = responseData.record; // Lưu toàn bộ dữ liệu vào biến global
-
-                updateCompactBotView();
-                // Không cần gọi updateDetailedBotView ở đây, nó sẽ được gọi khi mở modal
-                // Điều này giúp tránh việc cập nhật modal khi nó không hiển thị, tiết kiệm tài nguyên.
-
-            } catch (error) {
-                console.error('Lỗi khi tải thông số bot:', error); 
-                displayBotOfflineStats();
-                botData = null; // Reset data nếu có lỗi
-            }
-        }
-
-        function updateCompactBotView() {
-            if (!botData) {
-                displayBotOfflineStats();
-                return;
-            }
-
-            let statusText = 'Offline';
-            let statusClass = 'bot-status-offline';
-
-            if (botData.status === 'online') {
-                statusText = 'Online';
-                statusClass = 'bot-status-online';
-            } else if (botData.status === 'loading') { 
-                statusText = 'Đang tải...';
-                statusClass = 'bot-status-loading';
-            }
-
-            document.getElementById('bot-status-compact').innerHTML = `
-                <div class="bot-status-item">
-                    <i class="fas fa-signal"></i> <strong>Trạng thái:</strong> <span class="${statusClass} bot-status-indicator"></span> <span>${statusText}</span>
-                </div>
-                <div class="bot-status-item">
-                    <i class="fas fa-clock"></i> <strong>Uptime:</strong> <span>${formatUptime(botData.uptime)}</span>
-                </div>
-            `;
-
-            const lastUpdatedTime = botData.lastUpdated ? new Date(botData.lastUpdated).toLocaleString('vi-VN') : 'Đang chờ...';
-            document.getElementById('bot-last-updated').textContent = `Cập nhật: ${lastUpdatedTime}`;
-        }
-
-
-        function displayBotOfflineStats() {
-            document.getElementById('bot-status-compact').innerHTML = `
-                <div class="bot-status-item">
-                    <i class="fas fa-signal"></i> <strong>Trạng thái:</strong> <span class="bot-status-offline bot-status-indicator"></span> <span>Offline</span>
-                </div>
-                <div class="bot-status-item">
-                    <i class="fas fa-clock"></i> <strong>Uptime:</strong> <span>Không có dữ liệu</span>
-                </div>
-            `;
-            document.getElementById('bot-last-updated').textContent = `Cập nhật: Lỗi! ${new Date().toLocaleString('vi-VN')}`;
-        }
-
-        function formatUptime(ms) {
-            if (ms === undefined || ms === null || isNaN(ms)) return 'Không có dữ liệu';
-            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-            ms %= (1000 * 60 * 60 * 24);
-            const hours = Math.floor(ms / (1000 * 60 * 60));
-            ms %= (1000 * 60 * 60);
-            const minutes = Math.floor(ms / (1000 * 60));
-            ms %= (1000 * 60);
-            const seconds = Math.floor(ms / 1000);
-
-            let parts = [];
-            if (days > 0) parts.push(`${days} ngày`);
-            if (hours > 0) parts.push(`${hours} giờ`);
-            if (minutes > 0) parts.push(`${minutes} phút`);
-            // Hiển thị giây chỉ khi không có phần thời gian lớn hơn, hoặc nếu là thời gian ngắn
-            if (seconds > 0 || parts.length === 0) parts.push(`${seconds} giây`); 
-
-            return parts.join(', ');
-        }
-        // ===================== Kết thúc Logic cho trạng thái bot =====================
-
-        // ===================== Logic cho Modal hiển thị chi tiết =====================
-        function openBotDetailsModal() {
-            const modal = document.getElementById('bot-details-modal-overlay');
-            modal.classList.add('active');
-            updateDetailedBotView(botData); // Cập nhật nội dung modal khi mở
-        }
-
-        function closeBotDetailsModal(event) {
-            // Đóng modal nếu click vào overlay hoặc nút đóng, nhưng không đóng nếu click vào modal-content
-            if (event && event.target.id !== 'bot-details-modal-overlay' && event.target.className !== 'modal-close-btn') {
-                return;
-            }
-            const modal = document.getElementById('bot-details-modal-overlay');
-            modal.classList.remove('active');
-        }
-
-        function updateDetailedBotView(data) {
-            const detailsContent = document.getElementById('bot-details-content');
-            if (!data) {
-                detailsContent.innerHTML = `<p>Không có dữ liệu chi tiết. Bot có thể đang offline hoặc chưa cập nhật.</p>`;
-                return;
-            }
-
-            let statusText = 'Offline';
-            let statusClass = 'bot-status-offline';
-            if (data.status === 'online') {
-                statusText = 'Online';
-                statusClass = 'bot-status-online';
-            } else if (data.status === 'loading') {
-                statusText = 'Đang tải...';
-                statusClass = 'bot-status-loading';
-            }
-
-            detailsContent.innerHTML = `
-                <div class="modal-stat-item">
-                    <i class="fas fa-signal"></i> 
-                    <strong>Trạng thái:</strong> 
-                    <span class="${statusClass} bot-status-indicator"></span> <span>${statusText}</span>
-                </div>
-                <div class="modal-stat-item">
-                    <i class="fas fa-network-wired"></i> 
-                    <strong>Độ trễ API:</strong> <span>${data.apiLatency ? `${data.apiLatency} ms` : 'N/A'}</span>
-                </div>
-                <div class="modal-stat-item">
-                    <i class="fas fa-clock"></i> 
-                    <strong>Uptime:</strong> <span>${formatUptime(data.uptime)}</span>
-                </div>
-                <div class="modal-stat-item">
-                    <i class="fas fa-server"></i> 
-                    <strong>Số Máy chủ:</strong> <span>${data.guildCount || 'N/A'}</span>
-                </div>
-                <div class="modal-stat-item">
-                    <i class="fas fa-users"></i> 
-                    <strong>Số Người dùng:</strong> <span>${data.userCount || 'N/A'}</span>
-                </div>
-                <div class="modal-stat-item">
-                    <i class="fas fa-hashtag"></i> 
-                    <strong>Số Kênh:</strong> <span>${data.channelCount || 'N/A'}</span>
-                </div>
-                <div class="modal-stat-item">
-                    <i class="fas fa-memory"></i> 
-                    <strong>RAM (Tổng):</strong> <span>${(data.memoryUsage && data.memoryUsage.rss) ? `${parseFloat(data.memoryUsage.rss).toFixed(2)} MB` : 'N/A'}</span>
-                </div>
-                <div class="modal-stat-item">
-                    <i class="fas fa-hdd"></i> 
-                    <strong>RAM (Heap):</strong> <span>${(data.memoryUsage && data.memoryUsage.heapUsed) ? `${parseFloat(data.memoryUsage.heapUsed).toFixed(2)} MB` : 'N/A'}</span>
-                </div>
-                <div class="modal-stat-item">
-                    <i class="fas fa-microchip"></i> 
-                    <strong>Tải CPU (1p):</strong> <span>${(data.cpuLoad && data.cpuLoad.oneMin) ? `${parseFloat(data.cpuLoad.oneMin).toFixed(2)}%` : 'N/A'}</span>
-                </div>
-                <div class="modal-stat-item">
-                    <i class="fas fa-microchip"></i> 
-                    <strong>Tải CPU (5p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fiveMin) ? `${parseFloat(data.cpuLoad.fiveMin).toFixed(2)}%` : 'N/A'}</span>
-                </div>
-                <div class="modal-stat-item">
-                    <i class="fas fa-microchip"></i> 
-                    <strong>Tải CPU (15p):</strong> <span>${(data.cpuLoad && data.cpuLoad.fifteenMin) ? `${parseFloat(data.cpuLoad.fifteenMin).toFixed(2)}%` : 'N/A'}</span>
-                </div>
-            `;
-        }
-        // =================== Kết thúc Logic cho Modal hiển thị chi tiết ===================
-
-
-        // Kiểm tra trạng thái dark mode đã lưu
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-        }
-
-        // Khởi tạo các hàm khi trang tải
-        updateClock();
-        fetchBotStats(); // Lần đầu tiên tải trạng thái bot
-
-        // Thiết lập cập nhật định kỳ
-        setInterval(updateClock, 1000); // Cập nhật đồng hồ mỗi giây
-        setInterval(fetchBotStats, 3000); // Cập nhật trạng thái bot mỗi 3 giây
+    
+<script>
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
     </script>
+    
 </body>
 </html>
