@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài giải Câu 2</title>
+    <title>Bài giải Câu 2 (Dùng ẩn X, Y)</title>
     <style>
         /* CSS để trang trí cho bài giải */
         body {
@@ -59,7 +59,7 @@
 <body>
 
     <div class="container">
-        <h1>📝 Bài giải Câu 2</h1>
+        <h1>📝 Bài giải Câu 2 (Dùng ẩn X, Y)</h1>
 
         <div class="problem-statement">
             <p><strong>Đề bài:</strong> Một mảnh vườn hình chữ nhật có chu vi là 90m. Nếu giảm chiều dài đi 5m và tăng chiều rộng thêm 2m thì diện tích mảnh vườn tăng thêm 10m². Tính chiều dài và chiều rộng ban đầu của mảnh vườn.</p>
@@ -75,50 +75,50 @@
             <li>
                 <strong>Gọi các ẩn số:</strong>
                 <ul>
-                    <li>Gọi chiều dài ban đầu của mảnh vườn là <code>l</code> (m).</li>
-                    <li>Gọi chiều rộng ban đầu của mảnh vườn là <code>w</code> (m).</li>
-                    <li><em>Điều kiện: <code>l > w > 0</code></em></li>
+                    <li>Gọi chiều dài ban đầu của mảnh vườn là <code>x</code> (m).</li>
+                    <li>Gọi chiều rộng ban đầu của mảnh vườn là <code>y</code> (m).</li>
+                    <li><em>Điều kiện: <code>x > y > 0</code></em></li>
                 </ul>
             </li>
 
             <li>
                 <strong>Lập hệ phương trình từ các dữ kiện:</strong>
                 <p><strong>Từ chu vi:</strong> Chu vi là 90m, ta có phương trình:</p>
-                <p><code>2 &times; (l + w) = 90</code> &rArr; <code>l + w = 45</code> &nbsp; (1)</p>
+                <p><code>2 &times; (x + y) = 90</code> &rArr; <code>x + y = 45</code> &nbsp; (1)</p>
                 
                 <p><strong>Từ sự thay đổi diện tích:</strong></p>
                 <ul>
-                    <li>Chiều dài mới: <code>l - 5</code> (m)</li>
-                    <li>Chiều rộng mới: <code>w + 2</code> (m)</li>
-                    <li>Diện tích ban đầu: <code>S₁ = l &times; w</code> (m²)</li>
-                    <li>Diện tích mới: <code>S₂ = (l - 5) &times; (w + 2)</code> (m²)</li>
+                    <li>Chiều dài mới: <code>x - 5</code> (m)</li>
+                    <li>Chiều rộng mới: <code>y + 2</code> (m)</li>
+                    <li>Diện tích ban đầu: <code>S₁ = x &times; y</code> (m²)</li>
+                    <li>Diện tích mới: <code>S₂ = (x - 5) &times; (y + 2)</code> (m²)</li>
                 </ul>
                 <p>Vì diện tích mới tăng 10m², ta có phương trình:</p>
-                <p><code>(l - 5)(w + 2) = (l &times; w) + 10</code></p>
-                <p><code>lw + 2l - 5w - 10 = lw + 10</code></p>
-                <p><code>2l - 5w = 20</code> &nbsp; (2)</p>
+                <p><code>(x - 5)(y + 2) = (x &times; y) + 10</code></p>
+                <p><code>xy + 2x - 5y - 10 = xy + 10</code></p>
+                <p><code>2x - 5y = 20</code> &nbsp; (2)</p>
             </li>
 
             <li>
                 <strong>Giải hệ phương trình:</strong>
                 <p>Ta có hệ phương trình:</p>
                 <p>
-                    <code>l + w = 45</code><br>
-                    <code>2l - 5w = 20</code>
+                    <code>x + y = 45</code><br>
+                    <code>2x - 5y = 20</code>
                 </p>
-                <p>Từ phương trình (1), ta rút ra: <code>l = 45 - w</code>.</p>
-                <p>Thế <code>l</code> vào phương trình (2):</p>
-                <p><code>2(45 - w) - 5w = 20</code></p>
-                <p><code>90 - 2w - 5w = 20</code></p>
-                <p><code>90 - 7w = 20</code></p>
-                <p><code>7w = 70</code> &rArr; <code><strong>w = 10</strong></code> (m)</p>
-                <p>Thay <code>w = 10</code> vào để tìm <code>l</code>:</p>
-                <p><code>l = 45 - 10</code> &rArr; <code><strong>l = 35</strong></code> (m)</p>
+                <p>Từ phương trình (1), ta rút ra: <code>x = 45 - y</code>.</p>
+                <p>Thế <code>x</code> vào phương trình (2):</p>
+                <p><code>2(45 - y) - 5y = 20</code></p>
+                <p><code>90 - 2y - 5y = 20</code></p>
+                <p><code>90 - 7y = 20</code></p>
+                <p><code>7y = 70</code> &rArr; <code><strong>y = 10</strong></code> (m)</p>
+                <p>Thay <code>y = 10</code> vào để tìm <code>x</code>:</p>
+                <p><code>x = 45 - 10</code> &rArr; <code><strong>x = 35</strong></code> (m)</p>
             </li>
 
             <li>
                 <strong>Kiểm tra và kết luận:</strong>
-                <p>Giá trị <code>l = 35m</code> và <code>w = 10m</code> thỏa mãn điều kiện ban đầu.</p>
+                <p>Giá trị <code>x = 35m</code> (chiều dài) và <code>y = 10m</code> (chiều rộng) thỏa mãn điều kiện ban đầu.</p>
                 <ul>
                     <li><strong>Kiểm tra chu vi:</strong> <code>2 &times; (35 + 10) = 2 &times; 45 = 90</code>m. (Đúng ✔️)</li>
                     <li><strong>Kiểm tra diện tích:</strong>
