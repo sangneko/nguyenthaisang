@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài giải Câu 2 (Dùng ẩn X, Y)</title>
+    <title>Bài giải Câu 2 </title>
     <style>
-        /* CSS để trang trí cho bài giải */
+        /* CSS Chung */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
             color: #333;
             background-color: #f4f4f9;
             margin: 0;
-            padding: 20px;
+            padding: 10px; /* Giảm padding cho body */
         }
         .container {
             max-width: 800px;
-            margin: auto;
+            margin: 0 auto; /* Đổi margin để căn giữa */
             background: #fff;
             padding: 25px 30px;
             border-radius: 10px;
@@ -50,9 +50,33 @@
             background-color: #eee;
             padding: 2px 5px;
             border-radius: 3px;
+            /* Giúp các dòng code dài tự động xuống hàng */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         ol li {
             margin-bottom: 15px;
+        }
+
+        /* --- CSS Dành riêng cho màn hình nhỏ (Điện thoại) --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 0; /* Bỏ padding của body trên mobile */
+            }
+            .container {
+                padding: 20px 15px; /* Giảm padding ngang để có nhiều không gian hơn */
+                border-radius: 0; /* Bỏ bo góc để vừa vặn toàn màn hình */
+                box-shadow: none; /* Bỏ shadow trên mobile */
+            }
+            h1 {
+                font-size: 1.5em; /* Giảm cỡ chữ tiêu đề chính */
+            }
+            h2 {
+                font-size: 1.3em; /* Giảm cỡ chữ tiêu đề phụ */
+            }
+            .final-answer {
+                font-size: 1.1em; /* Giảm cỡ chữ phần đáp án */
+            }
         }
     </style>
 </head>
@@ -75,8 +99,8 @@
             <li>
                 <strong>Gọi các ẩn số:</strong>
                 <ul>
-                    <li>Gọi chiều dài ban đầu của mảnh vườn là <code>x</code> (m).</li>
-                    <li>Gọi chiều rộng ban đầu của mảnh vườn là <code>y</code> (m).</li>
+                    <li>Gọi chiều dài ban đầu là <code>x</code> (m).</li>
+                    <li>Gọi chiều rộng ban đầu là <code>y</code> (m).</li>
                     <li><em>Điều kiện: <code>x > y > 0</code></em></li>
                 </ul>
             </li>
@@ -90,8 +114,6 @@
                 <ul>
                     <li>Chiều dài mới: <code>x - 5</code> (m)</li>
                     <li>Chiều rộng mới: <code>y + 2</code> (m)</li>
-                    <li>Diện tích ban đầu: <code>S₁ = x &times; y</code> (m²)</li>
-                    <li>Diện tích mới: <code>S₂ = (x - 5) &times; (y + 2)</code> (m²)</li>
                 </ul>
                 <p>Vì diện tích mới tăng 10m², ta có phương trình:</p>
                 <p><code>(x - 5)(y + 2) = (x &times; y) + 10</code></p>
@@ -109,26 +131,14 @@
                 <p>Từ phương trình (1), ta rút ra: <code>x = 45 - y</code>.</p>
                 <p>Thế <code>x</code> vào phương trình (2):</p>
                 <p><code>2(45 - y) - 5y = 20</code></p>
-                <p><code>90 - 2y - 5y = 20</code></p>
-                <p><code>90 - 7y = 20</code></p>
-                <p><code>7y = 70</code> &rArr; <code><strong>y = 10</strong></code> (m)</p>
+                <p><code>90 - 7y = 20</code> &rArr; <code>7y = 70</code> &rArr; <code><strong>y = 10</strong></code> (m)</p>
                 <p>Thay <code>y = 10</code> vào để tìm <code>x</code>:</p>
                 <p><code>x = 45 - 10</code> &rArr; <code><strong>x = 35</strong></code> (m)</p>
             </li>
 
             <li>
                 <strong>Kiểm tra và kết luận:</strong>
-                <p>Giá trị <code>x = 35m</code> (chiều dài) và <code>y = 10m</code> (chiều rộng) thỏa mãn điều kiện ban đầu.</p>
-                <ul>
-                    <li><strong>Kiểm tra chu vi:</strong> <code>2 &times; (35 + 10) = 2 &times; 45 = 90</code>m. (Đúng ✔️)</li>
-                    <li><strong>Kiểm tra diện tích:</strong>
-                        <ul>
-                            <li>Diện tích ban đầu: <code>35 &times; 10 = 350</code> m².</li>
-                            <li>Diện tích mới: <code>(35-5) &times; (10+2) = 30 &times; 12 = 360</code> m².</li>
-                            <li>Độ tăng diện tích: <code>360 - 350 = 10</code> m². (Đúng ✔️)</li>
-                        </ul>
-                    </li>
-                </ul>
+                <p>Giá trị <code>x = 35m</code> và <code>y = 10m</code> thỏa mãn điều kiện.</p>
                 <p>Vậy, chiều dài ban đầu của mảnh vườn là <strong>35m</strong> và chiều rộng ban đầu là <strong>10m</strong>.</p>
             </li>
         </ol>
