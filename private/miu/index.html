@@ -2,45 +2,133 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Upload nhiều file lên </title>
+  <title>Quản lý Upload File</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; background: #fafafa; }
-    h2 { color: #333; }
-    .progress { margin: 8px 0; background: #e0e0e0; border-radius: 4px; height: 20px; width: 100%; }
-    .bar { height: 100%; background: #4caf50; width: 0%; color: white; text-align: center; font-size: 12px; border-radius: 4px; }
-    .file-block { margin-bottom: 20px; padding: 10px; background: #fff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    a { color: #0077cc; text-decoration: none; }
+    body { 
+      font-family: Arial, sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+      background: #f0f4f8; 
+      color: #333; 
+    }
+    h2 { 
+      text-align: center; 
+      color: #0066cc; 
+      margin-bottom: 20px; 
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+    }
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    input[type="file"] {
+      display: block;
+      margin: 15px auto;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 100%;
+    }
+    button {
+      background: #0066cc;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+      margin-top: 10px;
+    }
+    button:hover { background: #004999; }
+    .progress {
+      margin: 10px 0; 
+      background: #e0e0e0; 
+      border-radius: 6px; 
+      height: 22px; 
+      width: 100%; 
+      overflow: hidden;
+    }
+    .bar {
+      height: 100%; 
+      background: linear-gradient(90deg, #4facfe, #00f2fe);
+      width: 0%; 
+      color: #fff; 
+      text-align: center; 
+      font-size: 12px; 
+      border-radius: 6px; 
+      line-height: 22px;
+      transition: width 0.3s ease;
+    }
+    .file-block {
+      margin-top: 15px;
+      padding: 12px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      text-align: left;
+      font-size: 14px;
+    }
+    .file-block strong { display: block; margin-bottom: 6px; color: #444; }
+    a { color: #0066cc; text-decoration: none; word-break: break-all; }
     a:hover { text-decoration: underline; }
+    ul { list-style: none; padding: 0; }
+    li {
+      padding: 10px;
+      margin: 6px 0;
+      background: #f9fbfd;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
   </style>
 </head>
 <body>
-  <h2>Upload nhiều file y</h2>
+  <div class="container">
+    <h2>📂 Quản lý File (Upload + Danh sách)</h2>
 
-  <input type="file" id="fileInput" multiple><br><br>
-  <button onclick="uploadFiles()">Bắt đầu Upload</button>
+    <!-- Khối upload -->
+    <div class="card">
+      <input type="file" id="fileInput" multiple>
+      <button onclick="uploadFiles()">📤 Bắt đầu Upload</button>
+      <div id="progressContainer"></div>
+    </div>
 
-  <div id="progressContainer"></div>
+    <!-- Khối danh sách file -->
+    <div class="card">
+      <h3>📑 Danh sách file trong bucket</h3>
+      <button onclick="listFiles()">🔄 Tải lại danh sách</button>
+      <ul id="fileList"></ul>
+    </div>
+  </div>
 
   <!-- AWS SDK -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1420.0/aws-sdk.min.js"></script>
   <script>
-    // ⚠️ Thay key/bucket/endpoint bằng của bạn
+    // ⚠️ Thay bằng thông tin của bạn
     const accessKey = "N12TIFK5L059IK15QPO9";
     const secretKey = "xqFsKI7fBDrlX6bL2mkDmrAuzTUMrneJbcOUbrTe";
     const bucket = "miu99207";
-    const endpoint = "s3.cloudfly.vn"; // Endpoint CloudFly
+    const endpoint = "s3.cloudfly.vn";
 
     AWS.config.update({
       accessKeyId: accessKey,
       secretAccessKey: secretKey,
-      region: "ap-southeast-1", // không quá quan trọng
+      region: "ap-southeast-1",
       s3ForcePathStyle: true,
     });
 
-    const s3 = new AWS.S3({
-      endpoint: new AWS.Endpoint(endpoint)
-    });
+    const s3 = new AWS.S3({ endpoint: new AWS.Endpoint(endpoint) });
 
+    // Upload nhiều file
     function uploadFiles() {
       const files = document.getElementById("fileInput").files;
       const container = document.getElementById("progressContainer");
@@ -53,23 +141,19 @@
 
       Array.from(files).forEach(file => {
         const safeId = file.name.replace(/[^a-z0-9]/gi,'_');
-
-        // UI
         const wrapper = document.createElement("div");
         wrapper.className = "file-block";
         wrapper.innerHTML = `<strong>${file.name}</strong>
           <div class="progress"><div class="bar" id="bar-${safeId}">0%</div></div>`;
         container.appendChild(wrapper);
 
-        // Tạo tên file unique để tránh ghi đè
         const uniqueKey = Date.now() + "-" + file.name;
-
         const params = {
           Bucket: bucket,
           Key: uniqueKey,
           Body: file,
-          ContentType: file.type || "application/octet-stream", // giữ đúng định dạng
-          ACL: "public-read" // nếu muốn link tải trực tiếp xem được
+          ContentType: file.type || "application/octet-stream",
+          ACL: "public-read"
         };
 
         s3.upload(params)
@@ -81,13 +165,42 @@
           })
           .send((err, data) => {
             if (err) {
-              wrapper.innerHTML += `<div style="color:red">❌ Lỗi upload: ${err}</div>`;
+              wrapper.innerHTML += `<div style="color:red">❌ Lỗi: ${err}</div>`;
             } else {
-              wrapper.innerHTML += `<br>✅ Upload xong! <a href="${data.Location}" target="_blank">Tải file</a>`;
+              wrapper.innerHTML += `<div>✅ Xong! <br>
+                <a href="${data.Location}" target="_blank">${data.Location}</a></div>`;
+              listFiles(); // tự động reload danh sách
             }
           });
       });
     }
+
+    // Liệt kê tất cả file trong bucket
+    function listFiles() {
+      const listEl = document.getElementById("fileList");
+      listEl.innerHTML = "<li>⏳ Đang tải...</li>";
+
+      s3.listObjectsV2({ Bucket: bucket }, (err, data) => {
+        if (err) {
+          listEl.innerHTML = `<li style="color:red">❌ Lỗi: ${err}</li>`;
+        } else {
+          if (!data.Contents || data.Contents.length === 0) {
+            listEl.innerHTML = "<li>📭 Chưa có file nào.</li>";
+            return;
+          }
+          listEl.innerHTML = "";
+          data.Contents.forEach(obj => {
+            const url = `https://${bucket}.${endpoint}/${obj.Key}`;
+            const li = document.createElement("li");
+            li.innerHTML = `📄 <a href="${url}" target="_blank">${obj.Key}</a>`;
+            listEl.appendChild(li);
+          });
+        }
+      });
+    }
+
+    // Load danh sách khi mở trang
+    window.onload = listFiles;
   </script>
 </body>
 </html>
