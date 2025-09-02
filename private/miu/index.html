@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Upload nhiều file </title>
+  <title>Upload nhiều file lên </title>
   <style>
     body { font-family: Arial, sans-serif; margin: 40px; background: #fafafa; }
     h2 { color: #333; }
@@ -14,7 +14,7 @@
   </style>
 </head>
 <body>
-  <h2>Upload nhiều file </h2>
+  <h2>Upload nhiều file y</h2>
 
   <input type="file" id="fileInput" multiple><br><br>
   <button onclick="uploadFiles()">Bắt đầu Upload</button>
@@ -52,11 +52,13 @@
       }
 
       Array.from(files).forEach(file => {
+        const safeId = file.name.replace(/[^a-z0-9]/gi,'_');
+
         // UI
         const wrapper = document.createElement("div");
         wrapper.className = "file-block";
         wrapper.innerHTML = `<strong>${file.name}</strong>
-          <div class="progress"><div class="bar" id="bar-${file.name.replace(/[^a-z0-9]/gi,'_')}">0%</div></div>`;
+          <div class="progress"><div class="bar" id="bar-${safeId}">0%</div></div>`;
         container.appendChild(wrapper);
 
         // Tạo tên file unique để tránh ghi đè
@@ -65,13 +67,15 @@
         const params = {
           Bucket: bucket,
           Key: uniqueKey,
-          Body: file
+          Body: file,
+          ContentType: file.type || "application/octet-stream", // giữ đúng định dạng
+          ACL: "public-read" // nếu muốn link tải trực tiếp xem được
         };
 
         s3.upload(params)
           .on("httpUploadProgress", evt => {
             const percent = Math.round((evt.loaded / evt.total) * 100);
-            const bar = document.getElementById(`bar-${file.name.replace(/[^a-z0-9]/gi,'_')}`);
+            const bar = document.getElementById(`bar-${safeId}`);
             bar.style.width = percent + "%";
             bar.textContent = percent + "%";
           })
