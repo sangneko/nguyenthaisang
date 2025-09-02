@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload nhiều file </title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background: #fafafa; }
+    h2 { color: #333; }
+    .progress { margin: 8px 0; background: #e0e0e0; border-radius: 4px; height: 20px; width: 100%; }
+    .bar { height: 100%; background: #4caf50; width: 0%; color: white; text-align: center; font-size: 12px; border-radius: 4px; }
+    .file-block { margin-bottom: 20px; padding: 10px; background: #fff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    a { color: #0077cc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h2>Upload nhiều file </h2>
+
+  <input type="file" id="fileInput" multiple><br><br>
+  <button onclick="uploadFiles()">Bắt đầu Upload</button>
+
+  <div id="progressContainer"></div>
+
+  <!-- AWS SDK -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1420.0/aws-sdk.min.js"></script>
+  <script>
+    // ⚠️ Thay key/bucket/endpoint bằng của bạn
+    const accessKey = "N12TIFK5L059IK15QPO9";
+    const secretKey = "xqFsKI7fBDrlX6bL2mkDmrAuzTUMrneJbcOUbrTe";
+    const bucket = "miu99207";
+    const endpoint = "s3.cloudfly.vn"; // Endpoint CloudFly
+
+    AWS.config.update({
+      accessKeyId: accessKey,
+      secretAccessKey: secretKey,
+      region: "ap-southeast-1", // không quá quan trọng
+      s3ForcePathStyle: true,
+    });
+
+    const s3 = new AWS.S3({
+      endpoint: new AWS.Endpoint(endpoint)
+    });
+
+    function uploadFiles() {
+      const files = document.getElementById("fileInput").files;
+      const container = document.getElementById("progressContainer");
+      container.innerHTML = "";
+
+      if (files.length === 0) {
+        alert("Vui lòng chọn file để upload!");
+        return;
+      }
+
+      Array.from(files).forEach(file => {
+        // UI
+        const wrapper = document.createElement("div");
+        wrapper.className = "file-block";
+        wrapper.innerHTML = `<strong>${file.name}</strong>
+          <div class="progress"><div class="bar" id="bar-${file.name.replace(/[^a-z0-9]/gi,'_')}">0%</div></div>`;
+        container.appendChild(wrapper);
+
+        // Tạo tên file unique để tránh ghi đè
+        const uniqueKey = Date.now() + "-" + file.name;
+
+        const params = {
+          Bucket: bucket,
+          Key: uniqueKey,
+          Body: file
+        };
+
+        s3.upload(params)
+          .on("httpUploadProgress", evt => {
+            const percent = Math.round((evt.loaded / evt.total) * 100);
+            const bar = document.getElementById(`bar-${file.name.replace(/[^a-z0-9]/gi,'_')}`);
+            bar.style.width = percent + "%";
+            bar.textContent = percent + "%";
+          })
+          .send((err, data) => {
+            if (err) {
+              wrapper.innerHTML += `<div style="color:red">❌ Lỗi upload: ${err}</div>`;
+            } else {
+              wrapper.innerHTML += `<br>✅ Upload xong! <a href="${data.Location}" target="_blank">Tải file</a>`;
+            }
+          });
+      });
+    }
+  </script>
+</body>
+</html>
