@@ -33,9 +33,9 @@
 
     <!-- Upload -->
     <div class="card">
-      <h3>⬆️ Tải lên file</h3>
-      <input type="file" id="fileInput">
-      <button onclick="uploadFile()">Tải lên</button>
+      <h3>⬆️ Tải lên nhiều file</h3>
+      <input type="file" id="fileInput" multiple>
+      <button onclick="uploadFiles()">Tải lên</button>
       <div id="uploadStatus"></div>
     </div>
 
@@ -116,30 +116,39 @@
       });
     }
 
-    // Upload file
-    function uploadFile() {
-      const file = document.getElementById("fileInput").files[0];
+    // Upload nhiều file
+    function uploadFiles() {
+      const files = document.getElementById("fileInput").files;
       const status = document.getElementById("uploadStatus");
-      if (!file) {
-        status.innerText = "⚠️ Chưa chọn file.";
+
+      if (!files.length) {
+        status.innerText = "⚠️ Chưa chọn file nào.";
         return;
       }
 
-      const params = {
-        Bucket: bucket,
-        Key: file.name,
-        Body: file,
-        ACL: "public-read" // cho phép xem file qua link
-      };
+      status.innerHTML = `⏳ Đang tải lên ${files.length} file...<br>`;
+      
+      let uploadedCount = 0;
 
-      status.innerText = "⏳ Đang tải lên...";
-      s3.upload(params, (err, data) => {
-        if (err) {
-          status.innerText = `❌ Lỗi: ${err}`;
-        } else {
-          status.innerText = `✅ Tải lên thành công: ${file.name}`;
-          listFiles(); // tải lại danh sách
-        }
+      Array.from(files).forEach(file => {
+        const params = {
+          Bucket: bucket,
+          Key: file.name,
+          Body: file,
+          ACL: "public-read"
+        };
+
+        s3.upload(params, (err, data) => {
+          if (err) {
+            status.innerHTML += `❌ Lỗi file ${file.name}: ${err}<br>`;
+          } else {
+            status.innerHTML += `✅ Tải lên thành công: ${file.name}<br>`;
+          }
+          uploadedCount++;
+          if (uploadedCount === files.length) {
+            listFiles(); // tải lại danh sách sau khi tất cả xong
+          }
+        });
       });
     }
 
