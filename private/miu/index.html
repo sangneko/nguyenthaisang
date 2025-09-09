@@ -2,64 +2,42 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Xem Ảnh & Video trong Bucket</title>
+  <title>Xem & Tải Ảnh, Video trong Bucket</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { 
-      font-family: Arial, sans-serif; 
-      margin: 0; 
-      padding: 20px; 
-      background: #f0f4f8; 
-      color: #333; 
-    }
-    h2 { 
-      text-align: center; 
-      color: #0066cc; 
-      margin-bottom: 20px; 
-    }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-    }
-    .card {
-      background: #fff;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
+      background: #f0f4f8;
+      color: #333;
     }
+    h2 { text-align: center; color: #0066cc; margin-bottom: 20px; }
+    .container { max-width: 1200px; margin: auto; }
+    .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
     h3 { margin-top: 0; color: #444; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .item {
-      text-align: center;
-      background: #fafafa;
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-    img, video {
-      width: 100%;
-      max-height: 250px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 8px;
-    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .item { text-align: center; background: #fafafa; border-radius: 10px; padding: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    img, video { width: 100%; max-height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
     video { background: #000; }
-    .info {
-      font-size: 13px;
-      color: #555;
-      word-break: break-all;
-    }
+    .info { font-size: 13px; color: #555; word-break: break-all; }
+    .links a { margin: 0 5px; text-decoration: none; color: #0066cc; }
+    input[type="file"] { margin-top: 10px; }
+    button { padding: 6px 12px; border: none; border-radius: 6px; background: #0066cc; color: #fff; cursor: pointer; }
+    button:hover { background: #004999; }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>📑 Danh sách Ảnh & Video trong Bucket</h2>
-    <button onclick="listFiles()">🔄 Tải lại danh sách</button>
+
+    <!-- Upload -->
+    <div class="card">
+      <h3>⬆️ Tải lên file</h3>
+      <input type="file" id="fileInput">
+      <button onclick="uploadFile()">Tải lên</button>
+      <div id="uploadStatus"></div>
+    </div>
 
     <div class="card">
       <h3>🖼 Ảnh</h3>
@@ -75,10 +53,9 @@
   <!-- AWS SDK -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1420.0/aws-sdk.min.js"></script>
   <script>
-    // ⚠️ Thay bằng thông tin bucket của bạn
     const accessKey = "N12TIFK5L059IK15QPO9";
     const secretKey = "xqFsKI7fBDrlX6bL2mkDmrAuzTUMrneJbcOUbrTe";
-    const bucket = "miu99207";
+    const bucket = "xinghui";
     const endpoint = "s3.cloudfly.vn";
 
     AWS.config.update({
@@ -114,21 +91,54 @@
             const url = `https://${bucket}.${endpoint}/${obj.Key}`;
             const date = new Date(obj.LastModified).toLocaleString("vi-VN");
 
-            // Tạo khối item
             const item = document.createElement("div");
             item.className = "item";
 
-            // Nếu là ảnh
+            let mediaHtml = "";
             if (/\.(jpg|jpeg|png|gif|webp)$/i.test(obj.Key)) {
-              item.innerHTML = `<img src="${url}" alt="${obj.Key}"><div class="info">📄 ${obj.Key}<br>📅 ${date}</div>`;
+              mediaHtml = `<img src="${url}" alt="${obj.Key}">`;
               imageList.appendChild(item);
-            }
-            // Nếu là video
-            else if (/\.(mp4|webm|ogg)$/i.test(obj.Key)) {
-              item.innerHTML = `<video src="${url}" controls></video><div class="info">📄 ${obj.Key}<br>📅 ${date}</div>`;
+            } else if (/\.(mp4|webm|ogg)$/i.test(obj.Key)) {
+              mediaHtml = `<video src="${url}" controls></video>`;
               videoList.appendChild(item);
             }
+
+            item.innerHTML = `
+              ${mediaHtml}
+              <div class="info">📄 ${obj.Key}<br>📅 ${date}</div>
+              <div class="links">
+                <a href="${url}" target="_blank">Xem</a> |
+                <a href="${url}" download>📥 Tải về</a>
+              </div>
+            `;
           });
+        }
+      });
+    }
+
+    // Upload file
+    function uploadFile() {
+      const file = document.getElementById("fileInput").files[0];
+      const status = document.getElementById("uploadStatus");
+      if (!file) {
+        status.innerText = "⚠️ Chưa chọn file.";
+        return;
+      }
+
+      const params = {
+        Bucket: bucket,
+        Key: file.name,
+        Body: file,
+        ACL: "public-read" // cho phép xem file qua link
+      };
+
+      status.innerText = "⏳ Đang tải lên...";
+      s3.upload(params, (err, data) => {
+        if (err) {
+          status.innerText = `❌ Lỗi: ${err}`;
+        } else {
+          status.innerText = `✅ Tải lên thành công: ${file.name}`;
+          listFiles(); // tải lại danh sách
         }
       });
     }
