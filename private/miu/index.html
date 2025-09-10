@@ -2,61 +2,65 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Xem & Tải Ảnh, Video trong Bucket</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload & Quản lý File</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #f0f4f8;
-      color: #333;
+    body { font-family: "Segoe UI", Tahoma, sans-serif; margin: 0; padding: 20px; background: #f9fafb; }
+    h2 { color: #222; text-align: center; margin-bottom: 20px; }
+    .container { max-width: 700px; margin: auto; }
+    .btn {
+      display: inline-block; padding: 6px 12px; border: none; border-radius: 6px;
+      font-size: 14px; cursor: pointer; margin: 2px; transition: 0.3s;
     }
-    h2 { text-align: center; color: #0066cc; margin-bottom: 20px; }
-    .container { max-width: 1200px; margin: auto; }
-    .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
-    h3 { margin-top: 0; color: #444; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .item { text-align: center; background: #fafafa; border-radius: 10px; padding: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
-    img, video { width: 100%; max-height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
-    video { background: #000; }
-    .info { font-size: 13px; color: #555; word-break: break-all; }
-    .links a { margin: 0 5px; text-decoration: none; color: #0066cc; }
-    input[type="file"] { margin-top: 10px; }
-    button { padding: 6px 12px; border: none; border-radius: 6px; background: #0066cc; color: #fff; cursor: pointer; }
-    button:hover { background: #004999; }
+    .btn-upload { background: #4caf50; color: white; width: 100%; }
+    .btn-upload:hover { background: #45a049; }
+    .btn-zip { background: #0077cc; color: white; width: 100%; }
+    .btn-zip:hover { background: #005fa3; }
+    .btn-small { font-size: 12px; padding: 4px 8px; }
+    .btn-del { background: #e53935; color: white; }
+    .btn-del:hover { background: #c62828; }
+    .btn-rename { background: #ff9800; color: white; }
+    .btn-rename:hover { background: #ef6c00; }
+    .btn-download { background: #2196f3; color: white; }
+    .btn-download:hover { background: #1976d2; }
+    input[type=file] { margin: 15px 0; width: 100%; }
+    .file-block {
+      background: white; margin: 10px 0; padding: 12px; border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .progress { margin: 8px 0; background: #eee; border-radius: 8px; height: 20px; width: 100%; }
+    .bar { height: 100%; background: linear-gradient(90deg,#4caf50,#81c784); width: 0%; color: white; text-align: center; font-size: 12px; border-radius: 8px; }
+    a { color: #0077cc; text-decoration: none; word-break: break-all; }
+    a:hover { text-decoration: underline; }
+    .file-list { margin-top: 20px; }
+    .file-item { padding: 8px; background: #fff; margin: 6px 0; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .file-actions { margin-top: 5px; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>📑 Danh sách Ảnh & Video trong Bucket</h2>
+    <h2>📤 Upload & Quản lý File</h2>
 
-    <!-- Upload -->
-    <div class="card">
-      <h3>⬆️ Tải lên nhiều file</h3>
-      <input type="file" id="fileInput" multiple>
-      <button onclick="uploadFiles()">Tải lên</button>
-      <div id="uploadStatus"></div>
-    </div>
+    <input type="file" id="fileInput" multiple>
+    <button class="btn btn-upload" onclick="uploadFiles()">Bắt đầu Upload</button>
+    <button class="btn btn-zip" onclick="downloadAllAsZip()">⬇️ Tải tất cả (ZIP)</button>
 
-    <div class="card">
-      <h3>🖼 Ảnh</h3>
-      <div class="grid" id="imageList"></div>
-    </div>
-
-    <div class="card">
-      <h3>🎬 Video</h3>
-      <div class="grid" id="videoList"></div>
-    </div>
+    <div id="progressContainer"></div>
+    <div id="fileList" class="file-list"></div>
   </div>
 
   <!-- AWS SDK -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1420.0/aws-sdk.min.js"></script>
+  <!-- JSZip + FileSaver -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
   <script>
+    // ⚠️ Thay key/bucket/endpoint bằng của bạn
     const accessKey = "N12TIFK5L059IK15QPO9";
     const secretKey = "xqFsKI7fBDrlX6bL2mkDmrAuzTUMrneJbcOUbrTe";
     const bucket = "xinghui";
-    const endpoint = "s3.cloudfly.vn";
+    const endpoint = "s3.cloudfly.vn"; // CloudFly endpoint
 
     AWS.config.update({
       accessKeyId: accessKey,
@@ -67,93 +71,157 @@
 
     const s3 = new AWS.S3({ endpoint: new AWS.Endpoint(endpoint) });
 
-    // Liệt kê và hiển thị file
-    function listFiles() {
-      const imageList = document.getElementById("imageList");
-      const videoList = document.getElementById("videoList");
-
-      imageList.innerHTML = "⏳ Đang tải...";
-      videoList.innerHTML = "";
-
-      s3.listObjectsV2({ Bucket: bucket }, (err, data) => {
-        if (err) {
-          imageList.innerHTML = `<span style="color:red">❌ Lỗi: ${err}</span>`;
-        } else {
-          if (!data.Contents || data.Contents.length === 0) {
-            imageList.innerHTML = "📭 Chưa có file nào.";
-            return;
-          }
-
-          imageList.innerHTML = "";
-          videoList.innerHTML = "";
-
-          data.Contents.forEach(obj => {
-            const url = `https://${bucket}.${endpoint}/${obj.Key}`;
-            const date = new Date(obj.LastModified).toLocaleString("vi-VN");
-
-            const item = document.createElement("div");
-            item.className = "item";
-
-            let mediaHtml = "";
-            if (/\.(jpg|jpeg|png|gif|webp)$/i.test(obj.Key)) {
-              mediaHtml = `<img src="${url}" alt="${obj.Key}">`;
-              imageList.appendChild(item);
-            } else if (/\.(mp4|webm|ogg)$/i.test(obj.Key)) {
-              mediaHtml = `<video src="${url}" controls></video>`;
-              videoList.appendChild(item);
-            }
-
-            item.innerHTML = `
-              ${mediaHtml}
-              <div class="info">📄 ${obj.Key}<br>📅 ${date}</div>
-              <div class="links">
-                <a href="${url}" target="_blank">Xem</a> |
-                <a href="${url}" download>📥 Tải về</a>
-              </div>
-            `;
-          });
-        }
-      });
-    }
-
-    // Upload nhiều file
     function uploadFiles() {
       const files = document.getElementById("fileInput").files;
-      const status = document.getElementById("uploadStatus");
+      const container = document.getElementById("progressContainer");
+      container.innerHTML = "";
 
-      if (!files.length) {
-        status.innerText = "⚠️ Chưa chọn file nào.";
+      if (files.length === 0) {
+        alert("Vui lòng chọn file để upload!");
         return;
       }
 
-      status.innerHTML = `⏳ Đang tải lên ${files.length} file...<br>`;
-      
-      let uploadedCount = 0;
-
       Array.from(files).forEach(file => {
+        const safeId = file.name.replace(/[^a-z0-9]/gi,'_');
+        const wrapper = document.createElement("div");
+        wrapper.className = "file-block";
+        wrapper.innerHTML = `<strong>${file.name}</strong>
+          <div class="progress"><div class="bar" id="bar-${safeId}">0%</div></div>`;
+        container.appendChild(wrapper);
+
+        const uniqueKey = Date.now() + "-" + file.name;
         const params = {
           Bucket: bucket,
-          Key: file.name,
+          Key: uniqueKey,
           Body: file,
+          ContentType: file.type || "application/octet-stream",
           ACL: "public-read"
         };
 
-        s3.upload(params, (err, data) => {
-          if (err) {
-            status.innerHTML += `❌ Lỗi file ${file.name}: ${err}<br>`;
-          } else {
-            status.innerHTML += `✅ Tải lên thành công: ${file.name}<br>`;
+        s3.upload(params)
+          .on("httpUploadProgress", evt => {
+            const percent = Math.round((evt.loaded / evt.total) * 100);
+            const bar = document.getElementById(`bar-${safeId}`);
+            bar.style.width = percent + "%";
+            bar.textContent = percent + "%";
+          })
+          .send((err, data) => {
+            if (err) {
+              wrapper.innerHTML += `<div style="color:red">❌ Lỗi upload: ${err}</div>`;
+            } else {
+              wrapper.innerHTML += `<br>✅ Upload xong! <a href="${data.Location}" target="_blank">${data.Location}</a>`;
+              loadFileList();
+            }
+          });
+      });
+    }
+
+    // Hiển thị toàn bộ file trong bucket
+    function loadFileList() {
+      s3.listObjectsV2({ Bucket: bucket }, (err, data) => {
+        if (err) {
+          console.error("Lỗi list:", err);
+          return;
+        }
+        const listDiv = document.getElementById("fileList");
+        listDiv.innerHTML = "<h3>📂 File trong Bucket:</h3>";
+        data.Contents.forEach(obj => {
+          const url = `https://${bucket}.${endpoint}/${obj.Key}`;
+          const item = document.createElement("div");
+          item.className = "file-item";
+          item.innerHTML = `
+            📄 <a href="${url}" target="_blank">${obj.Key}</a>
+            <div class="file-actions">
+              <button class="btn btn-small btn-download" onclick="downloadFile('${obj.Key}')">⬇️ Tải</button>
+              <button class="btn btn-small btn-rename" onclick="renameFile('${obj.Key}')">✏️ Đổi tên</button>
+              <button class="btn btn-small btn-del" onclick="deleteFile('${obj.Key}')">🗑️ Xóa</button>
+            </div>`;
+          listDiv.appendChild(item);
+        });
+      });
+    }
+
+    // Tải file
+    function downloadFile(key) {
+      const url = `https://${bucket}.${endpoint}/${key}`;
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = key.split("/").pop();
+      link.click();
+    }
+
+    // Đổi tên file
+    function renameFile(oldKey) {
+      const newName = prompt("Nhập tên mới:", oldKey);
+      if (!newName || newName === oldKey) return;
+
+      // Copy sang file mới
+      s3.copyObject({
+        Bucket: bucket,
+        CopySource: `${bucket}/${oldKey}`,
+        Key: newName,
+        ACL: "public-read"
+      }, (err) => {
+        if (err) {
+          alert("❌ Lỗi đổi tên: " + err);
+          return;
+        }
+        // Xóa file cũ
+        s3.deleteObject({ Bucket: bucket, Key: oldKey }, (err2) => {
+          if (err2) {
+            alert("❌ Lỗi xóa file cũ: " + err2);
           }
-          uploadedCount++;
-          if (uploadedCount === files.length) {
-            listFiles(); // tải lại danh sách sau khi tất cả xong
+          loadFileList();
+        });
+      });
+    }
+
+    // Xóa file
+    function deleteFile(key) {
+      if (!confirm("Bạn có chắc muốn xóa file này?")) return;
+      s3.deleteObject({ Bucket: bucket, Key: key }, (err) => {
+        if (err) {
+          alert("❌ Lỗi xóa: " + err);
+          return;
+        }
+        loadFileList();
+      });
+    }
+
+    // Tải tất cả file thành ZIP
+    async function downloadAllAsZip() {
+      s3.listObjectsV2({ Bucket: bucket }, async (err, data) => {
+        if (err) {
+          alert("Không thể lấy danh sách file: " + err);
+          return;
+        }
+        if (!data.Contents.length) {
+          alert("Bucket trống!");
+          return;
+        }
+
+        const zip = new JSZip();
+        const folder = zip.folder("bucket_files");
+
+        for (let obj of data.Contents) {
+          const url = `https://${bucket}.${endpoint}/${obj.Key}`;
+          try {
+            const res = await fetch(url);
+            const blob = await res.blob();
+            folder.file(obj.Key, blob);
+          } catch (e) {
+            console.error("Không tải được:", obj.Key, e);
           }
+        }
+
+        zip.generateAsync({ type: "blob" }).then(content => {
+          saveAs(content, "bucket_files.zip");
         });
       });
     }
 
     // Load danh sách khi mở trang
-    window.onload = listFiles;
+    loadFileList();
   </script>
 </body>
 </html>
