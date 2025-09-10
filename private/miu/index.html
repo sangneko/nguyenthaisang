@@ -71,6 +71,7 @@
 
     const s3 = new AWS.S3({ endpoint: new AWS.Endpoint(endpoint) });
 
+    // Upload nhiều file
     function uploadFiles() {
       const files = document.getElementById("fileInput").files;
       const container = document.getElementById("progressContainer");
@@ -109,7 +110,12 @@
             if (err) {
               wrapper.innerHTML += `<div style="color:red">❌ Lỗi upload: ${err}</div>`;
             } else {
-              wrapper.innerHTML += `<br>✅ Upload xong! <a href="${data.Location}" target="_blank">${data.Location}</a>`;
+              const fileUrl = data.Location;
+              wrapper.innerHTML += `
+                <br>✅ Upload xong!
+                <a href="${fileUrl}" target="_blank">${fileUrl}</a>
+                <button class="btn btn-small btn-download" onclick="downloadFile('${uniqueKey}')">⬇️ Tải về máy</button>
+              `;
               loadFileList();
             }
           });
@@ -132,7 +138,7 @@
           item.innerHTML = `
             📄 <a href="${url}" target="_blank">${obj.Key}</a>
             <div class="file-actions">
-              <button class="btn btn-small btn-download" onclick="downloadFile('${obj.Key}')">⬇️ Tải</button>
+              <button class="btn btn-small btn-download" onclick="downloadFile('${obj.Key}')">⬇️ Tải về máy</button>
               <button class="btn btn-small btn-rename" onclick="renameFile('${obj.Key}')">✏️ Đổi tên</button>
               <button class="btn btn-small btn-del" onclick="deleteFile('${obj.Key}')">🗑️ Xóa</button>
             </div>`;
@@ -141,13 +147,15 @@
       });
     }
 
-    // Tải file
+    // Tải file về máy
     function downloadFile(key) {
       const url = `https://${bucket}.${endpoint}/${key}`;
       const link = document.createElement("a");
       link.href = url;
-      link.download = key.split("/").pop();
+      link.download = key.split("/").pop(); // ép tải
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
     }
 
     // Đổi tên file
@@ -155,7 +163,6 @@
       const newName = prompt("Nhập tên mới:", oldKey);
       if (!newName || newName === oldKey) return;
 
-      // Copy sang file mới
       s3.copyObject({
         Bucket: bucket,
         CopySource: `${bucket}/${oldKey}`,
@@ -166,11 +173,8 @@
           alert("❌ Lỗi đổi tên: " + err);
           return;
         }
-        // Xóa file cũ
         s3.deleteObject({ Bucket: bucket, Key: oldKey }, (err2) => {
-          if (err2) {
-            alert("❌ Lỗi xóa file cũ: " + err2);
-          }
+          if (err2) alert("❌ Lỗi xóa file cũ: " + err2);
           loadFileList();
         });
       });
