@@ -2,265 +2,188 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Upload & Quản lý File</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản lý Bucket</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1489.0/aws-sdk.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <style>
-    body { font-family: "Segoe UI", Tahoma, sans-serif; margin: 0; padding: 20px; background: #f9fafb; }
-    h2 { color: #222; text-align: center; margin-bottom: 20px; }
-    .container { max-width: 700px; margin: auto; }
-    .btn {
-      display: inline-block; padding: 10px 16px; border: none; border-radius: 6px;
-      font-size: 15px; cursor: pointer; margin: 5px 0; transition: 0.3s;
-    }
-    .btn-upload { background: #4caf50; color: white; width: 100%; }
-    .btn-upload:hover { background: #45a049; }
-    .btn-zip { background: #0077cc; color: white; width: 100%; }
-    .btn-zip:hover { background: #005fa3; }
-    input[type=file] { margin: 15px 0; width: 100%; }
-    .file-block {
-      background: white; margin: 10px 0; padding: 12px; border-radius: 10px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
-    .progress { margin: 8px 0; background: #eee; border-radius: 8px; height: 20px; width: 100%; }
-    .bar { height: 100%; background: linear-gradient(90deg,#4caf50,#81c784); width: 0%; color: white; text-align: center; font-size: 12px; border-radius: 8px; }
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f0f4f8; color: #333; }
+    h2 { margin-bottom: 10px; }
+    .btn { background: #2563eb; color: white; padding: 6px 12px; margin: 5px; border: none; border-radius: 6px; cursor: pointer; }
+    .btn:hover { background: #1d4ed8; }
+    .btn-small { padding: 3px 8px; font-size: 0.9em; }
+    .btn-del { background: #dc2626; }
+    .btn-del:hover { background: #b91c1c; }
     .file-list { margin-top: 20px; }
-    .file-actions button {
-      margin: 3px; padding: 6px 10px; font-size: 13px; border-radius: 5px; cursor: pointer;
-    }
-    .btn-small { font-size: 13px; }
-    .btn-download { background: #28a745; color: #fff; }
-    .btn-rename { background: #ff9800; color: #fff; }
-    .btn-del { background: #e53935; color: #fff; }
+    .file-item { padding: 6px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
+    .file-actions button { margin-left: 5px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>📤 Upload & Quản lý File</h2>
 
-    <input type="file" id="fileInput" multiple>
-    <button class="btn btn-upload" onclick="uploadFiles()">⬆️ Bắt đầu Upload</button>
+  <h2>📂 Quản lý Bucket</h2>
 
-    <button class="btn btn-zip" onclick="downloadAllAsZip()">⬇️ Tải tất cả (ZIP)</button>
-    <button class="btn btn-zip" onclick="downloadAllImagesZip()">⬇️ Tải toàn bộ ảnh (ZIP)</button>
-    <button class="btn btn-zip" onclick="downloadAllImagesDirect()">⬇️ Tải toàn bộ ảnh (1 lần, không ZIP)</button>
+  <input type="file" id="fileInput" multiple>
+  <button class="btn" onclick="uploadFiles()">⬆️ Upload</button>
+  <br><br>
 
-    <div id="progressContainer"></div>
-    <div id="fileList" class="file-list"></div>
-  </div>
+  <button class="btn" onclick="downloadAllAsZip()">⬇️ Tải tất cả (ZIP)</button>
+  <button class="btn" onclick="downloadAllImagesAsZip()">⬇️ Tải toàn bộ ảnh (ZIP)</button>
+  <button class="btn" onclick="downloadAllImagesDirect()">⬇️ Tải toàn bộ ảnh (1 lần, không ZIP)</button>
 
-  <!-- AWS SDK -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1420.0/aws-sdk.min.js"></script>
-  <!-- JSZip + FileSaver -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <div class="file-list" id="fileList"></div>
 
-  <script>
-    // ⚠️ Thay key/bucket/endpoint bằng của bạn
-    const accessKey = "N12TIFK5L059IK15QPO9";
-    const secretKey = "xqFsKI7fBDrlX6bL2mkDmrAuzTUMrneJbcOUbrTe";
-    const bucket = "xinghui";
-    const endpoint = "s3.cloudfly.vn";
+<script>
+  // ⚙️ Config
+  const bucket = "xinghui";
+  const endpoint = "s3.cloudfly.vn";
+  const accessKeyId = "N12TIFK5L059IK15QPO9";
+  const secretAccessKey = "xqFsKI7fBDrlX6bL2mkDmrAuzTUMrneJbcOUbrTe";
 
-    AWS.config.update({
-      accessKeyId: accessKey,
-      secretAccessKey: secretKey,
-      region: "ap-southeast-1",
-      s3ForcePathStyle: true,
+  AWS.config.update({
+    accessKeyId,
+    secretAccessKey,
+    endpoint: new AWS.Endpoint(endpoint),
+    s3ForcePathStyle: true,
+    region: "ap-southeast-1"
+  });
+
+  const s3 = new AWS.S3();
+
+  // 📌 Upload nhiều file
+  function uploadFiles() {
+    const files = document.getElementById("fileInput").files;
+    if (!files.length) return alert("Chọn file để upload!");
+
+    Array.from(files).forEach(file => {
+      const params = { Bucket: bucket, Key: file.name, Body: file };
+      s3.upload(params, (err) => {
+        if (err) alert("❌ Lỗi upload: " + err);
+        else loadFileList();
+      });
     });
+  }
 
-    const s3 = new AWS.S3({ endpoint: new AWS.Endpoint(endpoint) });
+  // 📌 Load danh sách file
+  function loadFileList() {
+    s3.listObjectsV2({ Bucket: bucket }, (err, data) => {
+      if (err) return alert("Không thể load danh sách: " + err);
+      const fileList = document.getElementById("fileList");
+      fileList.innerHTML = "";
 
-    // Upload file
-    function uploadFiles() {
-      const files = document.getElementById("fileInput").files;
-      const container = document.getElementById("progressContainer");
-      container.innerHTML = "";
+      data.Contents.forEach(obj => {
+        const item = document.createElement("div");
+        item.className = "file-item";
+        const url = `https://${bucket}.${endpoint}/${encodeURIComponent(obj.Key)}`;
+        item.innerHTML = `
+          📄 <a href="${url}" target="_blank">${obj.Key}</a>
+          <div class="file-actions">
+            <button class="btn btn-small" onclick="downloadFile('${obj.Key}')">⬇️ Tải về máy</button>
+            <button class="btn btn-small btn-del" onclick="deleteFile('${obj.Key}')">🗑️ Xóa</button>
+          </div>`;
+        fileList.appendChild(item);
+      });
+    });
+  }
 
-      if (files.length === 0) {
-        alert("Vui lòng chọn file để upload!");
-        return;
+  // 📌 Tải 1 file (fetch + FileSaver)
+  async function downloadFile(key) {
+    try {
+      const url = `https://${bucket}.${endpoint}/${encodeURIComponent(key)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Lỗi tải file");
+      const blob = await res.blob();
+      saveAs(blob, key.split("/").pop());
+    } catch (e) {
+      alert("❌ Không tải được file: " + e);
+    }
+  }
+
+  // 📌 Xóa file
+  function deleteFile(key) {
+    if (!confirm("Xóa file " + key + "?")) return;
+    s3.deleteObject({ Bucket: bucket, Key: key }, (err) => {
+      if (err) alert("❌ Lỗi xóa: " + err);
+      else loadFileList();
+    });
+  }
+
+  // 📌 Tải tất cả file thành ZIP
+  async function downloadAllAsZip() {
+    s3.listObjectsV2({ Bucket: bucket }, async (err, data) => {
+      if (err) return alert("Không thể lấy danh sách: " + err);
+      const zip = new JSZip();
+
+      for (let obj of data.Contents) {
+        const url = `https://${bucket}.${endpoint}/${encodeURIComponent(obj.Key)}`;
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            const blob = await res.blob();
+            zip.file(obj.Key, blob);
+          }
+        } catch {}
       }
 
-      Array.from(files).forEach(file => {
-        const safeId = file.name.replace(/[^a-z0-9]/gi,'_');
-        const wrapper = document.createElement("div");
-        wrapper.className = "file-block";
-        wrapper.innerHTML = `<strong>${file.name}</strong>
-          <div class="progress"><div class="bar" id="bar-${safeId}">0%</div></div>`;
-        container.appendChild(wrapper);
+      const content = await zip.generateAsync({ type: "blob" });
+      saveAs(content, "all_files.zip");
+    });
+  }
 
-        const uniqueKey = Date.now() + "-" + file.name;
-        const params = {
-          Bucket: bucket,
-          Key: uniqueKey,
-          Body: file,
-          ContentType: file.type || "application/octet-stream",
-          ACL: "public-read"
-        };
+  // 📌 Tải toàn bộ ảnh thành ZIP
+  async function downloadAllImagesAsZip() {
+    s3.listObjectsV2({ Bucket: bucket }, async (err, data) => {
+      if (err) return alert("Không thể lấy danh sách: " + err);
+      const zip = new JSZip();
+      const folder = zip.folder("images");
 
-        s3.upload(params)
-          .on("httpUploadProgress", evt => {
-            const percent = Math.round((evt.loaded / evt.total) * 100);
-            const bar = document.getElementById(`bar-${safeId}`);
-            bar.style.width = percent + "%";
-            bar.textContent = percent + "%";
-          })
-          .send((err, data) => {
-            if (err) {
-              wrapper.innerHTML += `<div style="color:red">❌ Lỗi upload: ${err}</div>`;
-            } else {
-              wrapper.innerHTML += `<br>✅ Upload xong! <a href="${data.Location}" target="_blank">${data.Location}</a>`;
-              loadFileList();
-            }
-          });
-      });
-    }
+      const imageExts = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
+      const images = data.Contents.filter(obj =>
+        imageExts.some(ext => obj.Key.toLowerCase().endsWith(ext))
+      );
 
-    // Hiển thị toàn bộ file
-    function loadFileList() {
-      s3.listObjectsV2({ Bucket: bucket }, (err, data) => {
-        if (err) {
-          console.error("Lỗi list:", err);
-          return;
-        }
-        const listDiv = document.getElementById("fileList");
-        listDiv.innerHTML = "<h3>📂 File trong Bucket:</h3>";
-        data.Contents.forEach(obj => {
-          const url = `https://${bucket}.${endpoint}/${encodeURIComponent(obj.Key)}`;
-          const item = document.createElement("div");
-          item.className = "file-block";
-          item.innerHTML = `
-            📄 <a href="${url}" target="_blank">${obj.Key}</a>
-            <div class="file-actions">
-              <button class="btn btn-small btn-download" onclick="downloadFile('${obj.Key}')">⬇️ Tải về máy</button>
-              <button class="btn btn-small btn-rename" onclick="renameFile('${obj.Key}')">✏️ Đổi tên</button>
-              <button class="btn btn-small btn-del" onclick="deleteFile('${obj.Key}')">🗑️ Xóa</button>
-            </div>`;
-          listDiv.appendChild(item);
-        });
-      });
-    }
-
-    // Tải 1 file
-    function downloadFile(key) {
-      const url = `https://${bucket}.${endpoint}/${encodeURIComponent(key)}`;
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = key.split("/").pop();
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    // Đổi tên
-    function renameFile(oldKey) {
-      const newName = prompt("Nhập tên mới:", oldKey.split("/").pop());
-      if (!newName) return;
-
-      const newKey = Date.now() + "-" + newName;
-
-      s3.copyObject({
-        Bucket: bucket,
-        CopySource: `/${bucket}/${oldKey}`,
-        Key: newKey,
-        ACL: "public-read"
-      }, err => {
-        if (err) { alert("Lỗi đổi tên: " + err); return; }
-
-        s3.deleteObject({ Bucket: bucket, Key: oldKey }, err2 => {
-          if (err2) { alert("Lỗi xóa file cũ: " + err2); return; }
-          alert("✅ Đổi tên thành công!");
-          loadFileList();
-        });
-      });
-    }
-
-    // Xóa file
-    function deleteFile(key) {
-      if (!confirm("Bạn có chắc muốn xóa file này?")) return;
-      s3.deleteObject({ Bucket: bucket, Key: key }, err => {
-        if (err) { alert("Lỗi xóa: " + err); return; }
-        alert("🗑️ Đã xóa!");
-        loadFileList();
-      });
-    }
-
-    // Tải tất cả file thành ZIP
-    async function downloadAllAsZip() {
-      s3.listObjectsV2({ Bucket: bucket }, async (err, data) => {
-        if (err) { alert("Không thể lấy danh sách file: " + err); return; }
-        if (!data.Contents.length) { alert("Bucket trống!"); return; }
-
-        const zip = new JSZip();
-        for (let obj of data.Contents) {
-          const url = `https://${bucket}.${endpoint}/${encodeURIComponent(obj.Key)}`;
-          try {
-            const res = await fetch(url);
+      for (let obj of images) {
+        const url = `https://${bucket}.${endpoint}/${encodeURIComponent(obj.Key)}`;
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
             const blob = await res.blob();
-            zip.file(obj.Key, blob);
-          } catch (e) { console.error("Không tải được:", obj.Key, e); }
-        }
-        zip.generateAsync({ type: "blob" }).then(content => {
-          saveAs(content, "bucket_files.zip");
-        });
-      });
-    }
+            folder.file(obj.Key, blob);
+          }
+        } catch {}
+      }
 
-    // Tải toàn bộ ảnh (ZIP)
-    async function downloadAllImagesZip() {
-      s3.listObjectsV2({ Bucket: bucket }, async (err, data) => {
-        if (err) { alert("Không thể lấy danh sách file: " + err); return; }
+      const content = await zip.generateAsync({ type: "blob" });
+      saveAs(content, "all_images.zip");
+    });
+  }
 
-        const imageExts = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
-        const images = data.Contents.filter(obj =>
-          imageExts.some(ext => obj.Key.toLowerCase().endsWith(ext))
-        );
+  // 📌 Tải toàn bộ ảnh trực tiếp (không ZIP)
+  function downloadAllImagesDirect() {
+    s3.listObjectsV2({ Bucket: bucket }, async (err, data) => {
+      if (err) return alert("Không thể lấy danh sách: " + err);
+      const imageExts = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
+      const images = data.Contents.filter(obj =>
+        imageExts.some(ext => obj.Key.toLowerCase().endsWith(ext))
+      );
 
-        if (!images.length) { alert("Không có ảnh nào!"); return; }
-
-        const zip = new JSZip();
-        for (let obj of images) {
+      for (let i = 0; i < images.length; i++) {
+        const obj = images[i];
+        try {
           const url = `https://${bucket}.${endpoint}/${encodeURIComponent(obj.Key)}`;
-          try {
-            const res = await fetch(url);
-            const blob = await res.blob();
-            zip.file(obj.Key, blob);
-          } catch (e) { console.error("Không tải được:", obj.Key, e); }
-        }
-        zip.generateAsync({ type: "blob" }).then(content => {
-          saveAs(content, "all_images.zip");
-        });
-      });
-    }
+          const res = await fetch(url);
+          if (!res.ok) continue;
+          const blob = await res.blob();
+          saveAs(blob, obj.Key.split("/").pop());
+          await new Promise(r => setTimeout(r, 800)); // nghỉ 0.8s giữa các file
+        } catch {}
+      }
+    });
+  }
 
-    // Tải toàn bộ ảnh trực tiếp (không ZIP)
-    function downloadAllImagesDirect() {
-      s3.listObjectsV2({ Bucket: bucket }, (err, data) => {
-        if (err) { alert("Không thể lấy danh sách file: " + err); return; }
-
-        const imageExts = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
-        const images = data.Contents.filter(obj =>
-          imageExts.some(ext => obj.Key.toLowerCase().endsWith(ext))
-        );
-
-        if (!images.length) { alert("Không có ảnh nào!"); return; }
-
-        images.forEach((obj, i) => {
-          setTimeout(() => {
-            const url = `https://${bucket}.${endpoint}/${encodeURIComponent(obj.Key)}`;
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = obj.Key.split("/").pop();
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }, i * 500);
-        });
-      });
-    }
-
-    // Load khi mở trang
-    loadFileList();
-  </script>
+  // Tải danh sách lần đầu
+  loadFileList();
+</script>
 </body>
 </html>
