@@ -1,151 +1,483 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <title>Thời tiết & Độ ẩm toàn cầu</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #c9d6ff, #e2e2e2);
-      text-align: center;
-      padding: 40px;
-    }
-    .weather-box {
-      margin: 20px auto;
-      padding: 20px;
-      max-width: 400px;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-    #time {
-      font-size: 1.2em;
-      margin-bottom: 10px;
-    }
-    input, button {
-      padding: 10px;
-      margin: 10px;
-      width: 80%;
-      font-size: 16px;
-    }
-    #suggestionList div {
-      padding: 8px;
-      cursor: pointer;
-      border-bottom: 1px solid #ccc;
-      background: #f9f9f9;
-    }
-    #suggestionList div:hover {
-      background: #e0e0e0;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saigon Weather Command Center</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --glass: rgba(15, 23, 42, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text: #f8fafc;
+            --accent: #38bdf8;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --safe: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0; padding: 20px;
+            min-height: 100vh;
+            background: url('https://images.unsplash.com/photo-1565578762569-45037d0c34af?q=80&w=2070') no-repeat center center/cover fixed;
+            color: var(--text);
+            transition: background 1s ease;
+        }
+        
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: -1; backdrop-filter: blur(5px);
+        }
+
+        .container {
+            max-width: 1400px; margin: 0 auto;
+            display: grid; grid-template-columns: 320px 1fr; gap: 20px;
+        }
+
+        /* --- PANELS --- */
+        .panel {
+            background: var(--glass);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            display: flex; flex-direction: column;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar { gap: 15px; height: fit-content; }
+        
+        .search-wrapper { position: relative; }
+        input {
+            width: 100%; padding: 12px 20px 12px 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.4); color: white; outline: none; box-sizing: border-box;
+        }
+        .search-icon { position: absolute; left: 12px; top: 12px; color: rgba(255,255,255,0.5); }
+        
+        .suggestions-box {
+            position: absolute; top: 110%; left: 0; right: 0;
+            background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            overflow: hidden; display: none; z-index: 100;
+        }
+        .suggestion-item { padding: 10px 15px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; }
+        .suggestion-item:hover { background: rgba(255,255,255,0.1); }
+
+        .temp-huge { font-size: 5rem; font-weight: 200; line-height: 1; text-align: center; margin: 10px 0; }
+        .weather-desc { font-size: 1.2rem; text-transform: capitalize; color: var(--accent); text-align: center; font-weight: 500; }
+
+        /* Sun Times Widget */
+        .sun-widget {
+            background: var(--card-bg); border-radius: 15px; padding: 15px; margin-top: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .sun-item { text-align: center; }
+        .sun-time { font-size: 1.1rem; font-weight: bold; margin-top: 5px; }
+        .sun-label { font-size: 0.8rem; opacity: 0.7; }
+
+        /* --- RIGHT CONTENT --- */
+        .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .section-title { font-size: 1rem; font-weight: 600; color: var(--accent); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+
+        /* Wind & Storm Monitor */
+        .wind-monitor {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; align-items: center;
+        }
+        .compass-box {
+            position: relative; width: 120px; height: 120px; margin: 0 auto;
+            border: 2px solid rgba(255,255,255,0.1); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 70%);
+        }
+        .compass-arrow {
+            font-size: 3rem; color: var(--accent); transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 10px var(--accent));
+        }
+        .wind-stats div { margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
+        .storm-badge {
+            text-align: center; padding: 8px; border-radius: 8px; margin-top: 10px; font-weight: bold; font-size: 0.9rem;
+        }
+
+        /* Mini Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .stat-card { background: var(--card-bg); padding: 10px; border-radius: 10px; text-align: center; }
+        .stat-val { font-size: 1.1rem; font-weight: bold; margin-top: 5px; }
+        .stat-label { font-size: 0.7rem; opacity: 0.7; }
+
+        /* Map & Chart */
+        .map-box { height: 280px; width: 100%; border-radius: 15px; }
+        .chart-box { height: 220px; width: 100%; }
+
+        /* Pollutant Grid */
+        .pollutant-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+        .pol-item { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; text-align: center; }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
 </head>
 <body>
-  <h1>🌦️ Thời tiết & Độ ẩm hiện tại</h1>
 
-  <!-- Khu vực bạn đang sống -->
-  <div id="localWeather" class="weather-box">
-    <h2>📍 Khu vực của bạn</h2>
-    <p id="time"></p>
-    <p id="location">Đang xác định vị trí...</p>
-    <p id="temperature"></p>
-    <p id="humidity"></p>
-  </div>
+<div class="container">
+    <div class="panel sidebar">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="cityInput" placeholder="Tìm thành phố (Hanoi, Da Nang...)" autocomplete="off">
+            <div id="suggestions" class="suggestions-box"></div>
+        </div>
 
-  <!-- Tìm kiếm thành phố khác -->
-  <div class="weather-box">
-    <h2>🔎 Tra cứu thành phố khác</h2>
-    <input type="text" id="cityInput" placeholder="Nhập tên thành phố (ví dụ: Tokyo)" oninput="suggestCities()">
-    <div id="suggestionList"></div>
-    <button onclick="getCityWeather()">Xem thời tiết</button>
-    <div id="cityWeather">
-      <p id="cityTime"></p>
-      <p id="cityTemp"></p>
-      <p id="cityHumidity"></p>
+        <div>
+            <h2 id="cityName" style="margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-location-dot" style="color: var(--danger);"></i> <span>--</span>
+            </h2>
+            <div style="margin-top: 5px; color: #94a3b8; font-size: 0.95rem;">
+                <i class="far fa-clock"></i> <span id="localTime">--:--</span> (Giờ địa phương)
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <img id="weatherIcon" src="" style="width: 120px; display: none; margin: 0 auto;">
+            <div class="temp-huge" id="temp">--°</div>
+            <div class="weather-desc" id="desc">--</div>
+            <div style="margin-top: 5px;">Cảm giác như <b id="feelsLike">--°</b></div>
+        </div>
+
+        <div class="sun-widget">
+            <div class="sun-item">
+                <i class="fas fa-sun" style="color: #fbbf24; font-size: 1.5rem;"></i>
+                <div class="sun-time" id="sunrise">--:--</div>
+                <div class="sun-label">Bình minh</div>
+            </div>
+            <div style="height: 40px; width: 1px; background: rgba(255,255,255,0.1);"></div>
+            <div class="sun-item">
+                <i class="fas fa-moon" style="color: #94a3b8; font-size: 1.5rem;"></i>
+                <div class="sun-time" id="sunset">--:--</div>
+                <div class="sun-label">Hoàng hôn</div>
+            </div>
+        </div>
+
+        <button onclick="getLocation()" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #0ea5e9, #2563eb); border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer;">
+            <i class="fas fa-location-crosshairs"></i> Vị trí của tôi
+        </button>
     </div>
-  </div>
 
-  <script>
-    const apiKey = "30ec8fa879dfc32040b88d4abc84fa6d"; // 🔑 Thay bằng API Key từ openweathermap.org
+    <div style="display: flex; flex-direction: column;">
+        
+        <div class="content-grid">
+            <div class="panel">
+                <div class="section-title"><i class="fas fa-wind"></i> Theo dõi Gió & Bão</div>
+                <div class="wind-monitor">
+                    <div class="compass-box">
+                        <div style="position: absolute; top: 5px; font-size: 0.7rem; color: #aaa;">N</div>
+                        <div style="position: absolute; bottom: 5px; font-size: 0.7rem; color: #aaa;">S</div>
+                        <div style="position: absolute; right: 5px; font-size: 0.7rem; color: #aaa;">E</div>
+                        <div style="position: absolute; left: 5px; font-size: 0.7rem; color: #aaa;">W</div>
+                        <i id="compassArrow" class="fas fa-location-arrow compass-arrow"></i>
+                    </div>
+                    <div class="wind-stats">
+                        <div><span>Tốc độ</span> <b id="windSpeed">-- m/s</b></div>
+                        <div><span>Gió giật</span> <b id="gust">-- m/s</b></div>
+                        <div><span>Hướng</span> <b id="windDirText">--</b></div>
+                        <div><span>Góc</span> <b id="windDeg">--°</b></div>
+                    </div>
+                </div>
+                <div id="stormBadge" class="storm-badge" style="background: rgba(255,255,255,0.1); color: #ccc;">
+                    <i class="fas fa-shield-alt"></i> Đang phân tích dữ liệu bão...
+                </div>
+            </div>
 
-    // Hiển thị thời gian thực
-    function updateTime() {
-      const now = new Date();
-      document.getElementById("time").textContent = "⏰ " + now.toLocaleString();
+            <div class="panel">
+                <div class="section-title">
+                    <i class="fas fa-sliders-h"></i> Thông số môi trường
+                    <span id="aqiBadge" style="margin-left: auto; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; background: gray;">AQI: --</span>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-droplet" style="color: #38bdf8;"></i>
+                        <div class="stat-val" id="humidity">--%</div>
+                        <div class="stat-label">Độ ẩm</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-eye" style="color: #facc15;"></i>
+                        <div class="stat-val" id="visibility">--</div>
+                        <div class="stat-label">Tầm nhìn (km)</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-tachometer-alt" style="color: #f472b6;"></i>
+                        <div class="stat-val" id="pressure">--</div>
+                        <div class="stat-label">Áp suất</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-cloud" style="color: #cbd5e1;"></i>
+                        <div class="stat-val" id="clouds">--%</div>
+                        <div class="stat-label">Mây phủ</div>
+                    </div>
+                </div>
+
+                <div class="pollutant-grid">
+                    <div class="pol-item"><div style="font-weight:bold" id="pm25">--</div><div style="font-size:0.7rem">PM2.5</div></div>
+                    <div class="pol-item"><div style="font-weight:bold" id="pm10">--</div><div style="font-size:0.7rem">PM10</div></div>
+                    <div class="pol-item"><div style="font-weight:bold" id="no2">--</div><div style="font-size:0.7rem">NO₂</div></div>
+                    <div class="pol-item"><div style="font-weight:bold" id="co">--</div><div style="font-size:0.7rem">CO</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-bottom: 20px;">
+            <div class="section-title"><i class="fas fa-chart-line"></i> Biểu đồ nhiệt (24h)</div>
+            <div class="chart-box">
+                <canvas id="weatherChart"></canvas>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="panel">
+                <div class="section-title"><i class="fas fa-calendar-week"></i> Dự báo 5 ngày</div>
+                <div id="forecastList" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;"></div>
+            </div>
+            
+            <div class="panel" style="padding: 0; overflow: hidden;">
+                <div id="map" class="map-box"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    const apiKey = "30ec8fa879dfc32040b88d4abc84fa6d"; // Free API
+    let map, marker, weatherChart, clockInterval, debounceTimer;
+    let cityTimezoneOffset = 0;
+
+    // --- 1. INIT ---
+    function initMap() {
+        map = L.map('map', { zoomControl: false }).setView([10.762622, 106.660172], 10); // Default Saigon
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+        L.tileLayer(`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }).addTo(map);
     }
-    setInterval(updateTime, 1000);
-    updateTime();
 
-    // Lấy thời tiết theo vị trí
-    function getLocalWeather() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
+    function initChart() {
+        const ctx = document.getElementById('weatherChart').getContext('2d');
+        let grad = ctx.createLinearGradient(0, 0, 0, 300);
+        grad.addColorStop(0, 'rgba(56, 189, 248, 0.5)');
+        grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
 
-          fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=vi`)
-            .then(res => res.json())
-            .then(data => {
-              document.getElementById("location").textContent = `📍 ${data.name}, ${data.sys.country}`;
-              document.getElementById("temperature").textContent = `🌡️ Nhiệt độ: ${data.main.temp}°C`;
-              document.getElementById("humidity").textContent = `💧 Độ ẩm: ${data.main.humidity}%`;
-            });
-        }, () => {
-          document.getElementById("location").textContent = "Không thể lấy vị trí.";
+        weatherChart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: [], datasets: [{ data: [], borderColor: '#38bdf8', backgroundColor: grad, fill: true, tension: 0.4 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#ccc' }, grid: { display: false } }, y: { display: false } } }
         });
-      } else {
-        document.getElementById("location").textContent = "Trình duyệt không hỗ trợ định vị.";
-      }
     }
 
-    getLocalWeather();
+    // --- 2. SEARCH ---
+    const cityInput = document.getElementById('cityInput');
+    const suggestions = document.getElementById('suggestions');
+    const regionNames = new Intl.DisplayNames(['vi'], { type: 'region' });
 
-    // Lấy thời tiết theo tên thành phố
-    function getCityWeather() {
-      const city = document.getElementById("cityInput").value;
-      if (!city) return;
+    cityInput.addEventListener('input', function() {
+        const q = this.value.trim();
+        clearTimeout(debounceTimer);
+        if(q.length < 2) { suggestions.style.display = 'none'; return; }
+        debounceTimer = setTimeout(async () => {
+            try {
+                const res = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=5&appid=${apiKey}`);
+                const data = await res.json();
+                suggestions.innerHTML = '';
+                if(data.length) {
+                    suggestions.style.display = 'block';
+                    data.forEach(i => {
+                        const country = regionNames.of(i.country) || i.country;
+                        const div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        div.innerHTML = `<span>${i.name}</span><small>${country}</small>`;
+                        div.onclick = () => {
+                            cityInput.value = i.name;
+                            suggestions.style.display = 'none';
+                            fetchWeather(i.lat, i.lon);
+                        };
+                        suggestions.appendChild(div);
+                    });
+                }
+            } catch(e){}
+        }, 400);
+    });
 
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`)
-        .then(res => res.json())
-        .then(data => {
-          const now = new Date((data.dt + data.timezone) * 1000);
-          document.getElementById("cityTime").textContent = `🕒 Giờ địa phương: ${now.toUTCString()}`;
-          document.getElementById("cityTemp").textContent = `🌡️ Nhiệt độ: ${data.main.temp}°C`;
-          document.getElementById("cityHumidity").textContent = `💧 Độ ẩm: ${data.main.humidity}%`;
-        })
-        .catch(() => {
-          document.getElementById("cityTime").textContent = "Không tìm thấy thành phố.";
-          document.getElementById("cityTemp").textContent = "";
-          document.getElementById("cityHumidity").textContent = "";
+    document.addEventListener('click', e => { if(!cityInput.contains(e.target)) suggestions.style.display='none'; });
+
+    // --- 3. FETCH DATA ---
+    async function fetchWeather(lat, lon) {
+        try {
+            Swal.fire({ title: 'Đang tải...', didOpen: () => Swal.showLoading(), background: 'transparent', color: '#fff', showConfirmButton: false });
+            
+            const [w, f, a] = await Promise.all([
+                fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=vi`).then(r=>r.json()),
+                fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=vi`).then(r=>r.json()),
+                fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`).then(r=>r.json())
+            ]);
+
+            updateUI(w, f, a);
+            Swal.close();
+        } catch(e) { Swal.fire('Lỗi', 'Không tải được dữ liệu', 'error'); }
+    }
+
+    // --- 4. UPDATE UI ---
+    function updateUI(w, f, a) {
+        // Basic Info
+        document.getElementById('cityName').innerHTML = `<i class="fas fa-location-dot" style="color:var(--danger)"></i> ${w.name}, ${w.sys.country}`;
+        document.getElementById('temp').innerText = Math.round(w.main.temp) + "°";
+        const desc = w.weather[0].description;
+        document.getElementById('desc').innerText = desc.charAt(0).toUpperCase() + desc.slice(1);
+        document.getElementById('feelsLike').innerText = Math.round(w.main.feels_like) + "°";
+        document.getElementById('weatherIcon').src = `https://openweathermap.org/img/wn/${w.weather[0].icon}@4x.png`;
+        document.getElementById('weatherIcon').style.display = 'block';
+
+        // Sunrise / Sunset
+        document.getElementById('sunrise').innerText = new Date(w.sys.sunrise*1000).toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'});
+        document.getElementById('sunset').innerText = new Date(w.sys.sunset*1000).toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'});
+
+        // Clock
+        cityTimezoneOffset = w.timezone;
+        startClock();
+
+        // WIND & STORM LOGIC
+        const speed = w.wind.speed;
+        const deg = w.wind.deg;
+        const gust = w.wind.gust || 0;
+        
+        document.getElementById('windSpeed').innerText = speed + " m/s";
+        document.getElementById('gust').innerText = gust + " m/s";
+        document.getElementById('windDeg').innerText = deg + "°";
+        document.getElementById('windDirText').innerText = getWindDirection(deg);
+        
+        // Rotate Arrow (Leaflet marker rotation logic but for UI)
+        // Icon font-awesome points NE by default (45deg), so we adjust rotation
+        document.getElementById('compassArrow').style.transform = `rotate(${deg - 45}deg)`;
+
+        // Storm Analysis
+        const badge = document.getElementById('stormBadge');
+        const mainWeather = w.weather[0].main;
+        
+        if (mainWeather === 'Thunderstorm' || speed > 20 || gust > 25) {
+            badge.style.background = 'var(--danger)';
+            badge.style.color = '#fff';
+            badge.innerHTML = `<i class="fas fa-exclamation-triangle"></i> CẢNH BÁO: CÓ GIÔNG BÃO`;
+        } else if (speed > 10) {
+            badge.style.background = 'var(--warning)';
+            badge.style.color = '#fff';
+            badge.innerHTML = `<i class="fas fa-wind"></i> Cảnh báo: Gió Mạnh`;
+        } else {
+            badge.style.background = 'var(--safe)';
+            badge.style.color = '#fff';
+            badge.innerHTML = `<i class="fas fa-check-circle"></i> Tình trạng: An toàn`;
+        }
+
+        // Stats
+        document.getElementById('humidity').innerText = w.main.humidity + "%";
+        document.getElementById('visibility').innerText = (w.visibility/1000).toFixed(1);
+        document.getElementById('pressure').innerText = w.main.pressure;
+        document.getElementById('clouds').innerText = w.clouds.all + "%";
+
+        // Air Quality
+        const aqi = a.list[0].main.aqi;
+        const comps = a.list[0].components;
+        document.getElementById('pm25').innerText = comps.pm2_5;
+        document.getElementById('pm10').innerText = comps.pm10;
+        document.getElementById('no2').innerText = comps.no2;
+        document.getElementById('co').innerText = comps.co;
+        
+        const aqiTexts = {1:'Tốt', 2:'Khá', 3:'Trung bình', 4:'Kém', 5:'Nguy hại'};
+        const aqiColors = {1:'#10b981', 2:'#facc15', 3:'#f97316', 4:'#ef4444', 5:'#881337'};
+        const aqiBox = document.getElementById('aqiBadge');
+        aqiBox.innerText = `AQI: ${aqi} - ${aqiTexts[aqi]}`;
+        aqiBox.style.background = aqiColors[aqi];
+        aqiBox.style.color = aqi === 2 ? '#000' : '#fff';
+
+        // Background
+        updateBackground(w.weather[0].main);
+
+        // Map
+        if(map) {
+            map.setView([w.coord.lat, w.coord.lon], 11);
+            if(marker) map.removeLayer(marker);
+            marker = L.marker([w.coord.lat, w.coord.lon]).addTo(map).bindPopup(w.name).openPopup();
+        }
+
+        // Chart & Forecast
+        updateChartAndForecast(f.list);
+    }
+
+    function updateChartAndForecast(list) {
+        // Chart
+        const next24 = list.slice(0, 9);
+        weatherChart.data.labels = next24.map(i => new Date(i.dt*1000).getHours()+'h');
+        weatherChart.data.datasets[0].data = next24.map(i => Math.round(i.main.temp));
+        weatherChart.update();
+
+        // Forecast
+        const div = document.getElementById('forecastList');
+        div.innerHTML = '';
+        const daily = list.filter(i => i.dt_txt.includes("12:00:00"));
+        daily.forEach(d => {
+            const date = new Date(d.dt*1000);
+            div.innerHTML += `
+                <div style="background:var(--card-bg); padding:10px; border-radius:12px; min-width:80px; text-align:center;">
+                    <div style="color:var(--accent); font-weight:bold;">${date.toLocaleDateString('vi-VN',{weekday:'short'})}</div>
+                    <img src="https://openweathermap.org/img/wn/${d.weather[0].icon}.png" width="40">
+                    <div style="font-weight:bold">${Math.round(d.main.temp)}°</div>
+                </div>
+            `;
         });
     }
 
-    // Danh sách gợi ý thành phố phổ biến
-    const cityList = [
-      "Hanoi", "Ho Chi Minh City", "Da Nang", "Can Tho", "Tokyo", "Seoul", "Bangkok", "New York", "London", "Paris", "Sydney", "Moscow", "Dubai","Afghanistan", "Ai Cập", "Albania", "Algeria", "Andorra", "Angola", "Antigua và Barbuda", "Ả Rập Xê Út", "Argentina", "Armenia", "Ấn Độ", "Áo", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Bỉ", "Belize", "Benin", "Bhutan", "Bắc Macedonia", "Bolivia", "Bosna và Hercegovina", "Botswana", "Bồ Đào Nha", "Bờ Biển Ngà", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", "Campuchia", "Canada", "Chad", "Chile", "Colombia", "Comoros", "Cộng hòa Congo", "Cộng hòa Dân chủ Congo", "Cộng hòa Dominica", "Cộng hòa Séc", "Cộng hòa Trung Phi", "Costa Rica", "Croatia", "Cuba", "Djibouti", "Dominica", "Đan Mạch", "Đông Timor", "Đức", "Ecuador", "El Salvador", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Gabon", "Gambia", "Georgia", "Ghana", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Hà Lan", "Hàn Quốc", "Hoa Kỳ", "Honduras", "Hungary", "Hy Lạp", "Iceland", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Jamaica", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Lào", "Latvia", "Lesotho", "Liban", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", "Mauritius", "México", "Micronesia", "Moldova", "Monaco", "Mông Cổ", "Montenegro", "Mozambique", "Myanmar", "Na Uy", "Nam Phi", "Nam Sudan", "Nauru", "Nepal", "New Zealand", "Nga", "Niger", "Nigeria", "Nicaragua", "Nhật Bản", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Pháp", "Phần Lan", "Philippines", "Qatar", "Romania", "Rwanda", "Saint Kitts và Nevis", "Saint Lucia", "Saint Vincent và Grenadines", "Samoa", "San Marino", "São Tomé và Príncipe", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "Sri Lanka", "Sudan", "Suriname", "Syria", "Tajikistan", "Tanzania", "Tây Ban Nha", "Thái Lan", "Thổ Nhĩ Kỳ", "Thụy Điển", "Thụy Sĩ", "Timor-Leste", "Togo", "Tonga", "Trinidad và Tobago", "Triều Tiên", "Tunisia", "Turkmenistan", "Tuvalu", "Úc", "Uganda", "Ukraina", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican", "Venezuela", "Việt Nam", "Vương quốc Anh", "Yemen", "Zambia", "Zimbabwe"
-    ];
-
-    function suggestCities() {
-      const input = document.getElementById("cityInput").value.toLowerCase();
-      const suggestionBox = document.getElementById("suggestionList");
-      suggestionBox.innerHTML = "";
-
-      if (!input) return;
-
-      const suggestions = cityList.filter(city =>
-        city.toLowerCase().startsWith(input)
-      ).slice(0, 5);
-
-      suggestions.forEach(city => {
-        const div = document.createElement("div");
-        div.textContent = city;
-        div.onclick = () => {
-          document.getElementById("cityInput").value = city;
-          suggestionBox.innerHTML = "";
-          getCityWeather();
+    function startClock() {
+        if(clockInterval) clearInterval(clockInterval);
+        const update = () => {
+            const d = new Date();
+            const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+            const local = new Date(utc + (cityTimezoneOffset * 1000));
+            document.getElementById('localTime').innerText = local.toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'});
         };
-        suggestionBox.appendChild(div);
-      });
+        update();
+        clockInterval = setInterval(update, 1000);
     }
-  </script>
+
+    function getWindDirection(deg) {
+        const arr = ["Bắc", "Bắc ĐB", "Đông Bắc", "Đông ĐB", "Đông", "Đông ĐN", "Đông Nam", "Nam ĐN", "Nam", "Nam TN", "Tây Nam", "Tây TN", "Tây", "Tây TB", "Tây Bắc", "Bắc TB"];
+        return arr[Math.floor((deg / 22.5) + 0.5) % 16];
+    }
+
+    function updateBackground(cond) {
+        let url = 'https://images.unsplash.com/photo-1565578762569-45037d0c34af?q=80&w=2070'; // Default Saigon/City
+        const c = cond.toLowerCase();
+        if(c.includes('rain')) url = 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?q=80&w=1974';
+        else if(c.includes('cloud')) url = 'https://images.unsplash.com/photo-1501630834273-4b5604d2ee31?q=80&w=2070';
+        else if(c.includes('clear')) url = 'https://images.unsplash.com/photo-1601297183305-6df142704ea2?q=80&w=1974';
+        else if(c.includes('thunderstorm')) url = 'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?q=80&w=2071';
+        document.body.style.backgroundImage = `url('${url}')`;
+    }
+
+    function getLocation() {
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(p => fetchWeather(p.coords.latitude, p.coords.longitude));
+        }
+    }
+
+    window.onload = () => {
+        initMap();
+        initChart();
+        // Mặc định TP. Hồ Chí Minh (Saigon)
+        fetchWeather(10.762622, 106.660172);
+    };
+</script>
 </body>
 </html>
