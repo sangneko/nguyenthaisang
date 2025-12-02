@@ -5,396 +5,260 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>NGUYEN THAI SANG</title>
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/857/857681.png" type="image/png" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Segoe+UI&display=swap" rel="stylesheet">
+
     <style>
-        :root {
-            --bg-light: linear-gradient(135deg, #74ebd5, #acb6e5);
-            --bg-dark: linear-gradient(135deg, #1e1e1e, #111);
-            --text-light: #fff;
-            --text-dark: #111;
-            --glass-bg: rgba(255, 255, 255, 0.2);
+        /* --- GLOBAL RESET --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { overflow-x: hidden; width: 100%; min-height: 100vh; }
 
-            --discord-blurple: #7289DA;
-            --modal-bg: rgba(255, 255, 255, 0.95);
-            --modal-bg-dark: rgba(23, 27, 30, 0.95);
-            --border-radius-medium: 12px;
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.15);
+        /* --- NÚT CHUYỂN ĐỔI (LUÔN NỔI) --- */
+        .switch-btn {
+            position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 12px 20px; border-radius: 30px;
+            font-family: 'Segoe UI', sans-serif; font-weight: bold;
+            cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex; align-items: center; gap: 8px;
         }
+        .switch-btn:hover { background: #fff; color: #000; transform: scale(1.05); }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px 80px;
+        /* =================================================================
+           1. GIAO DIỆN CŨ (CLASSIC) - GIỮ NGUYÊN CODE GỐC
+           ================================================================= */
+        #classic-interface {
+            display: flex; /* Mặc định hiện */
+            flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; padding: 40px 20px 80px;
             text-align: center;
-            background: var(--bg-light);
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
             background-size: 400% 400%;
             animation: gradientBG 20s ease infinite;
-            color: var(--text-dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #111;
             transition: all 0.4s ease-in-out;
+        }
+
+        #classic-interface.dark-mode { background: linear-gradient(135deg, #1e1e1e, #111); color: #fff; }
+        
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        /* Elements của Classic */
+        .logo-c { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #fff; margin-bottom: 20px; transition: 0.3s; }
+        .logo-c:hover { transform: scale(1.05) rotate(3deg); }
+        .link-container-c { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 400px; padding: 10px; }
+        .button-link-c { 
+            text-decoration: none; padding: 14px 20px; border-radius: 12px; 
+            background: rgba(255, 255, 255, 0.9); color: #222; font-weight: bold; font-size: 16px; 
+            transition: 0.3s ease; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); display: block; 
+        }
+        .button-link-c:hover { background: #222; color: white; transform: translateY(-2px); }
+        
+        /* Dark mode support cho Classic */
+        #classic-interface.dark-mode .button-link-c { background: rgba(255, 255, 255, 0.08); color: #fff; }
+        #classic-interface.dark-mode .button-link-c:hover { background: #fff; color: #000; }
+        
+        .clock-c { position: absolute; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.2); padding: 8px 14px; border-radius: 12px; backdrop-filter: blur(8px); color: inherit; }
+        .toggle-mode-c { position: absolute; top: 20px; left: 20px; padding: 8px 14px; border-radius: 12px; font-weight: 600; border: none; background: rgba(255, 255, 255, 0.8); cursor: pointer; }
+
+        /* =================================================================
+           2. GIAO DIỆN MỚI (MODERN) - AURORA EFFECT
+           ================================================================= */
+        #modern-interface {
+            display: none; /* Mặc định ẩn */
             position: relative;
+            min-height: 100vh;
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a;
+            color: #fff;
+            overflow: hidden;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
-        body.dark-mode {
-            background: var(--bg-dark);
-            color: var(--text-light);
+        /* Background Blobs */
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; z-index: 1; animation: float 10s infinite alternate; }
+        .b1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #7c3aed; }
+        .b2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #db2777; }
+        .b3 { top: 40%; left: 40%; width: 300px; height: 300px; background: #2563eb; }
+        @keyframes float { 0% { transform: translate(0,0); } 100% { transform: translate(20px, 40px); } }
+
+        /* Panel Kính */
+        .aurora-panel {
+            position: relative; z-index: 10;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px; padding: 40px;
+            width: 100%; max-width: 900px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        /* Grid Layout */
+        .grid-m { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-top: 20px; }
 
-        .logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 3px solid #fff;
-            margin-bottom: 20px;
+        /* Card Style */
+        .card-m {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px; border-radius: 20px; text-decoration: none; color: #fff;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: 0.3s;
         }
+        .card-m:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.15); border-color: rgba(255,255,255,0.3); }
+        .card-m i { font-size: 1.8rem; margin-bottom: 10px; transition: 0.3s; }
+        .card-m:hover i { transform: scale(1.1); text-shadow: 0 0 15px currentColor; }
+        
+        /* Màu icon từng loại */
+        .i-weather { color: #38bdf8; } .i-time { color: #f472b6; } .i-calc { color: #4ade80; }
+        .i-book { color: #fbbf24; } .i-lang { color: #a78bfa; } .i-lock { color: #f43f5e; }
+        .i-tool { color: #94a3b8; } .i-love { color: #ff0064; } .i-wiki { color: #fff; }
 
-        .logo:hover {
-            transform: scale(1.05) rotate(3deg);
-        }
-
-        h1 {
-            font-size: 2.4em;
-            margin-bottom: 10px;
-            animation: fadeIn 1.5s ease;
-        }
-
-        .greeting {
-            font-size: 1.2em;
-            margin-bottom: 30px;
-            animation: fadeIn 2s ease;
-        }
-
-        .link-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            width: 100%;
-            max-width: 400px;
-            padding: 10px;
-        }
-
-        .button-link {
-            text-decoration: none;
-            padding: 14px 20px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #222;
-            font-weight: bold;
-            font-size: 16px;
-            transition: 0.3s ease;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .button-link:hover {
-            background: #222;
-            color: white;
-            transform: translateY(-2px) scale(1.02);
-        }
-
-        footer {
-            position: absolute;
-            bottom: 15px;
-            font-size: 14px;
-            color: #eee;
-        }
-
-        .clock {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--glass-bg);
-            padding: 8px 14px;
-            border-radius: 12px;
-            font-size: 15px;
-            backdrop-filter: blur(8px);
-            color: #fff;
-            z-index: 101;
-        }
-
-        .toggle-mode {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 8px 14px;
-            border-radius: 12px;
-            font-weight: 600;
-            border: none;
-            background: rgba(255, 255, 255, 0.8);
-            color: #111;
-            cursor: pointer;
-            transition: 0.3s ease;
-            z-index: 101;
-        }
-
-        .toggle-mode:hover {
-            background: #111;
-            color: #fff;
-        }
-
-        body.dark-mode .button-link {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-        }
-
-        body.dark-mode .button-link:hover {
-            background: #fff;
-            color: #000;
-        }
-
-        body.dark-mode .toggle-mode {
-            background: rgba(255, 255, 255, 0.15);
-            color: #fff;
-        }
-
-        body.dark-mode .clock {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Styles for Modal */
+        /* =================================================================
+           3. MODAL CHUNG (POPUP)
+           ================================================================= */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1050;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            backdrop-filter: blur(3px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center;
+            z-index: 10050; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(5px);
         }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content {
-            background: var(--modal-bg);
-            padding: 30px;
-            border-radius: var(--border-radius-medium);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            color: var(--text-dark);
-            text-align: left;
+            background: #fff; padding: 30px; border-radius: 12px; width: 90%; max-width: 500px;
+            position: relative; transform: translateY(20px); transition: 0.3s; color: #111;
         }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .modal-close-btn { position: absolute; top: 10px; right: 10px; background: #eee; border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; }
+        .website-link-block { background: #f0f0f0; padding: 15px; margin-top: 15px; border-radius: 10px; text-align: center; }
+        .website-button { display: inline-block; background: #7289DA; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; margin-top: 10px; }
 
-        body.dark-mode .modal-content {
-            background: var(--modal-bg-dark);
-            color: var(--text-light);
-        }
-
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* Style cho nút đóng popup */
-        .modal-overlay .modal-close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.8em;
-            z-index: 1060;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.2s ease;
-            text-shadow: none;
-        }
-        .modal-overlay .modal-close-btn:hover {
-            background-color: rgba(0, 0, 0, 0.7);
-            transform: scale(1.05);
-        }
-
-        .modal-content h2 {
-            color: var(--discord-blurple);
-            font-size: 1.8em;
-            margin-bottom: 15px;
-            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-            padding-bottom: 10px;
-        }
-        body.dark-mode .modal-content h2 {
-            border-bottom-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-content p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        /* New styles for the website link block */
-        .website-link-block {
-            background-color: rgba(0, 0, 0, 0.05); /* Slightly darker background */
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-align: center;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-        body.dark-mode .website-link-block {
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.05);
-        }
-
-        .website-link-block p {
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: var(--text-dark); /* Ensure text is readable */
-        }
-        body.dark-mode .website-link-block p {
-             color: var(--text-light);
-        }
-
-        .website-link-block .website-button {
-            display: inline-block;
-            background-color: var(--discord-blurple); /* Use discord-blurple for the button */
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            font-size: 1.05em;
-        }
-
-        .website-link-block .website-button:hover {
-            background-color: #5b6fb8; /* Slightly darker blurple on hover */
-            transform: translateY(-2px);
-        }
-
-        /* Điều chỉnh responsive */
-        @media (max-width: 768px) {
-            body {
-                padding-top: 40px;
-                padding-bottom: 20px;
-            }
-            footer {
-                position: static;
-                margin-top: 20px;
-                color: var(--light-text-color);
-            }
-
-            .modal-content {
-                width: 95%;
-                max-height: 80vh;
-                overflow-y: auto;
-                padding: 20px;
-            }
-            .modal-content h2 {
-                font-size: 1.5em;
-            }
-            .modal-content p {
-                font-size: 1em;
-            }
-
-            .modal-overlay .modal-close-btn {
-                top: 5px;
-                right: 5px;
-                width: 35px;
-                height: 35px;
-                font-size: 1.5em;
-            }
-             .website-link-block {
-                padding: 12px 15px;
-             }
-             .website-link-block .website-button {
-                padding: 8px 15px;
-                font-size: 1em;
-             }
-        }
     </style>
 </head>
 <body>
-    <button class="toggle-mode" onclick="toggleMode()">🌗 Đổi nền</button>
-    <div class="clock" id="clock">--:--:--</div>
 
-    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo" class="logo">
+    <button class="switch-btn" onclick="toggleInterface()">
+        <i class="fas fa-exchange-alt"></i> <span id="btn-text">Giao diện Mới</span>
+    </button>
 
-    <h1>Chào mừng bạn!</h1>
-    <div class="greeting" id="greeting">Chào bạn!</div>
+    <div id="classic-interface">
+        <button class="toggle-mode-c" onclick="toggleDarkMode()">🌗 Đổi nền</button>
+        <div class="clock-c" id="clock-c">--:--:--</div>
 
-    <div class="link-container">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo" class="logo-c">
+        <h1>Chào mừng bạn!</h1>
+        <div style="font-size: 1.2em; margin-bottom: 30px;" id="greeting-c">Chào bạn!</div>
+
+        <div class="link-container-c">
+            <a class="button-link-c" href="thoitietdoam.html" onclick="playClick()">🌦️ Xem Thời tiết và Độ ẩm</a>
+            <a class="button-link-c" href="demnguoc.html" onclick="playClick()">⏳ Đếm ngược đến 2026</a>
+            <a class="button-link-c" href="tdkthp.html" onclick="playClick()">📚 Tính điểm KTHP</a>
+            <a class="button-link-c" href="azota.html" onclick="playClick()">Ôn tập bằng đề azota</a>
+            <a class="button-link-c" href="ta4/test.html" onclick="playClick()">Thi Thử Tiếng Anh 4</a>
+            <a class="button-link-c" href="Lock.html" onclick="playClick()">🔒 Tính năng khóa</a>
+            <a class="button-link-c" href="bua.html" onclick="playClick()">🔨 Búa</a>
+            <a class="button-link-c" href="nhanguiyeuthuong.html" onclick="playClick()">Nhắn gửi yêu thương</a>
+            <a class="button-link-c" href="wiki.html" onclick="playClick()">Wikipedia</a>
+        </div>
+        <footer style="margin-top: 20px; opacity: 0.7;">&copy; 2025 | Thiết kế bởi Tôi</footer>
+    </div>
+
+    <div id="modern-interface">
+        <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
         
-        <a class="button-link" href="thoitietdoam.html" onclick="playClick()">🌦️ Xem Thời tiết và Độ ẩm</a>
-        <a class="button-link" href="demnguoc.html" onclick="playClick()">⏳ Đếm ngược đến 2026</a>
-        <a class="button-link" href="tdkthp.html" onclick="playClick()">📚 Tính điểm KTHP</a>
-        <a class="button-link" href="azota.html" onclick="playClick()">Ôn tập bằng đề azota</a>
-        <a class="button-link" href="ta4/test.html" onclick="playClick()">Thi Thử Tiếng Anh 4</a>
-        <a class="button-link" href="Lock.html" onclick="playClick()">🔒 Tính năng khóa</a>
-        <a class="button-link" href="bua.html" onclick="playClick()">🔨 Búa</a>
-        <a class="button-link" href="nhanguiyeuthuong.html" onclick="playClick()">Nhắn gửi yêu thương</a>
-        <a class="button-link" href="wiki.html" onclick="playClick()">Wikipedia</a>
+        <div class="aurora-panel">
+            <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width: 80px; border-radius: 50%; border: 2px solid white;">
+                <div>
+                    <h2 style="margin: 0; font-size: 2rem;">Nguyen Thai Sang</h2>
+                    <div id="greeting-m" style="color: #cbd5e1;">Welcome back!</div>
+                    <div id="clock-m" style="font-weight: bold; color: #fff;">--:--:--</div>
+                </div>
+            </div>
+
+            <div class="grid-m">
+                <a href="thoitietdoam.html" class="card-m" onclick="playClick()">
+                    <i class="fas fa-cloud-sun i-weather"></i> <span>Thời Tiết & Độ Ẩm</span>
+                </a>
+                <a href="demnguoc.html" class="card-m" onclick="playClick()">
+                    <i class="fas fa-hourglass-half i-time"></i> <span>Đếm Ngược 2026</span>
+                </a>
+                <a href="tdkthp.html" class="card-m" onclick="playClick()">
+                    <i class="fas fa-calculator i-calc"></i> <span>Tính Điểm KTHP</span>
+                </a>
+                <a href="azota.html" class="card-m" onclick="playClick()">
+                    <i class="fas fa-book-open i-book"></i> <span>Ôn Tập Azota</span>
+                </a>
+                <a href="ta4/test.html" class="card-m" onclick="playClick()">
+                    <i class="fas fa-language i-lang"></i> <span>Tiếng Anh 4</span>
+                </a>
+                <a href="Lock.html" class="card-m" onclick="playClick()">
+                    <i class="fas fa-lock i-lock"></i> <span>Tính Năng Khóa</span>
+                </a>
+                <a href="bua.html" class="card-m" onclick="playClick()">
+                    <i class="fas fa-hammer i-tool"></i> <span>Búa (Tools)</span>
+                </a>
+                <a href="nhanguiyeuthuong.html" class="card-m" onclick="playClick()">
+                    <i class="fas fa-heart i-love"></i> <span>Gửi Yêu Thương</span>
+                </a>
+                <a href="wiki.html" class="card-m" style="grid-column: span 2;" onclick="playClick()">
+                    <i class="fab fa-wikipedia-w i-wiki"></i> <span>Tra Cứu Wikipedia</span>
+                </a>
+            </div>
+        </div>
     </div>
 
     <div class="modal-overlay" id="text-notification-modal-overlay" onclick="closeTextNotificationModal(event)">
         <button class="modal-close-btn" onclick="closeTextNotificationModal()">&times;</button>
         <div class="modal-content" onclick="event.stopPropagation()">
             <h2>🎉 Chào mừng đến với trang web của Sang! 🎉</h2>
-            <p>Xin chào bạn bè, người thân và các bạn học sinh sinh viên! Đây là trang web cá nhân của tôi, nơi tôi chia sẻ những công cụ và tiện ích nhỏ mà tôi tự xây dựng.</p>
-            <p>Hy vọng bạn sẽ tìm thấy điều gì đó hữu ích và thú vị ở đây. Đừng ngần ngại liên hệ nếu bạn có bất kỳ câu hỏi hoặc ý kiến đóng góp nào nhé!</p>
-
+            <p>Xin chào bạn bè, người thân! Đây là trang web cá nhân của tôi.</p>
+            <p>Hy vọng bạn sẽ tìm thấy điều gì đó hữu ích tại đây.</p>
             <div class="website-link-block">
-                <p>Khám phá trang web chính của tôi để biết thêm các dự án và thông tin:</p>
+                <p>Khám phá trang web chính:</p>
                 <a href="https://www.nguyenthaisang.io.vn/" class="website-button" target="_blank" onclick="closeTextNotificationModal(); playClick();">
-                    <i class="fas fa-globe"></i> Truy cập nguyenthaisang.io.vn (Cùng Web)
+                    <i class="fas fa-globe"></i> Truy cập nguyenthaisang.io.vn
                 </a>
             </div>
         </div>
     </div>
 
-    <footer>
-        &copy; 2025 | Thiết kế bởi Tôi
-    </footer>
-
     <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
 
     <script>
+        // 1. LOGIC CHUYỂN GIAO DIỆN
+        const classicUI = document.getElementById('classic-interface');
+        const modernUI = document.getElementById('modern-interface');
+        const btnText = document.getElementById('btn-text');
+        let isModern = false;
+
+        function toggleInterface() {
+            isModern = !isModern;
+            if(isModern) {
+                classicUI.style.display = 'none';
+                modernUI.style.display = 'flex';
+                btnText.innerText = "Về Giao diện Cũ";
+            } else {
+                classicUI.style.display = 'flex';
+                modernUI.style.display = 'none';
+                btnText.innerText = "Giao diện Mới";
+            }
+        }
+
+        // 2. LOGIC ĐỒNG HỒ & GREETING (CẬP NHẬT CẢ 2 GIAO DIỆN)
         function updateClock() {
             const now = new Date();
             const time = now.toLocaleTimeString('vi-VN');
             const date = now.toLocaleDateString('vi-VN');
-            document.getElementById('clock').textContent = `${time} | ${date}`;
+            
+            // Update Classic
+            document.getElementById('clock-c').textContent = `${time} | ${date}`;
+            // Update Modern
+            document.getElementById('clock-m').textContent = `${time} | ${date}`;
 
             const hour = now.getHours();
             let greeting = "Chào bạn!";
@@ -403,49 +267,40 @@
             else if (hour >= 14 && hour < 18) greeting = "☕ Buổi chiều an lành!";
             else if (hour >= 18 && hour < 22) greeting = "🌇 Chúc buổi tối thư giãn!";
             else greeting = "🌙 Khuya rồi, nhớ ngủ sớm nhé!";
-            document.getElementById('greeting').textContent = greeting;
+            
+            // Update both
+            document.getElementById('greeting-c').textContent = greeting;
+            document.getElementById('greeting-m').textContent = greeting;
         }
 
-        function toggleMode() {
-            document.body.classList.toggle('dark-mode');
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                localStorage.setItem('darkMode', 'disabled');
-            }
+        // 3. DARK MODE (CHỈ DÀNH CHO CLASSIC)
+        function toggleDarkMode() {
+            document.getElementById('classic-interface').classList.toggle('dark-mode');
         }
 
+        // 4. MODAL & SOUND
         function playClick() {
             const sound = document.getElementById('clickSound');
-            sound.currentTime = 0;
-            sound.play();
+            sound.currentTime = 0; sound.play();
         }
 
         function openTextNotificationModal() {
-            const textModal = document.getElementById('text-notification-modal-overlay');
-            textModal.classList.add('active');
+            document.getElementById('text-notification-modal-overlay').classList.add('active');
         }
 
         function closeTextNotificationModal(event) {
-            const textModal = document.getElementById('text-notification-modal-overlay');
-
-            if (event && (event.target === textModal || event.target.closest('.modal-close-btn') === document.querySelector('#text-notification-modal-overlay .modal-close-btn'))) {
-                textModal.classList.remove('active');
+            const modal = document.getElementById('text-notification-modal-overlay');
+            if (!event || event.target === modal || event.target.closest('.modal-close-btn') || event.target.closest('.website-button')) {
+                modal.classList.remove('active');
             }
         }
 
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-        }
-
-        updateClock();
+        // INIT
         setInterval(updateClock, 1000);
-
-        // --- Thay đổi chính ở đây: Đã loại bỏ phần kiểm tra sessionStorage ---
+        updateClock();
         window.onload = function() {
-            openTextNotificationModal(); // Popup sẽ luôn hiển thị khi trang tải
+            openTextNotificationModal();
         };
-        // --- End of change ---
     </script>
 </body>
 </html>
