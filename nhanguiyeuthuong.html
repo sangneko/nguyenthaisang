@@ -1,217 +1,476 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Yêu Thương + Lyrics</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #ffe4e1, #fff0f5);
-    }
-    h1 {
-      text-align: center;
-      font-size: 32px;
-      color: #d81b60;
-      margin-top: 20px;
-    }
-    .container {
-      background: #fff;
-      border-radius: 20px;
-      padding: 20px;
-      max-width: 400px;
-      margin: 20px auto;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    textarea {
-      width: 100%;
-      height: 100px;
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 10px;
-      font-size: 16px;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      margin: 5px 0;
-      background: #ec407a;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #c2185b;
-    }
-    #heart-container {
-      position: relative;
-      margin-top: 15px;
-    }
-    #qrcode {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto;
-    }
-    #toggleMusicBtn {
-      position: fixed;
-      bottom: 15px;
-      right: 15px;
-      background: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      font-size: 18px;
-      cursor: pointer;
-      z-index: 1000;
-    }
-    #lyrics-box {
-      position: fixed;
-      bottom: 60px;
-      right: 15px;
-      max-width: 80vw;
-      background: rgba(255,255,255,0.9);
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 15px;
-      color: #d81b60;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      text-align: right;
-      z-index: 999;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Station Ultimate</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff8fa3;
+            --glass: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: background 0.5s ease;
+        }
+
+        /* --- PHẦN CONTROLS BÊN TRÁI (Ẩn trên mobile để đỡ rối) --- */
+        .sidebar {
+            position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.9);
+            padding: 15px; border-radius: 20px;
+            display: flex; flex-direction: column; gap: 15px;
+            box-shadow: var(--shadow);
+            z-index: 20;
+        }
+        .side-btn {
+            width: 45px; height: 45px; border-radius: 50%; border: none;
+            background: #fff; color: var(--primary); font-size: 20px;
+            cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .side-btn:hover { background: var(--primary); color: white; transform: scale(1.1); }
+        .tooltip { position: relative; }
+        .tooltip::after {
+            content: attr(data-tip); position: absolute; left: 60px; top: 10px;
+            background: #333; color: #fff; padding: 5px 10px; border-radius: 5px;
+            font-size: 12px; white-space: nowrap; opacity: 0; pointer-events: none; transition: 0.2s;
+        }
+        .side-btn:hover + .tooltip::after, .side-btn:hover::after { opacity: 1; }
+
+        /* --- CONTAINER CHÍNH GIỮA --- */
+        .main-panel {
+            position: relative;
+            background: var(--glass);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 2px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 25px;
+            width: 95%; max-width: 900px; height: 85vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Chia đôi: 1 bên nhập, 1 bên xem */
+            gap: 25px;
+            box-shadow: var(--shadow);
+            animation: popIn 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            overflow: hidden;
+        }
+
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
+
+        /* --- CỘT TRÁI: CẤU HÌNH --- */
+        .config-col {
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .config-col::-webkit-scrollbar { width: 5px; }
+        .config-col::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+
+        h2 { font-family: 'Dancing Script', cursive; color: var(--primary); margin: 0 0 15px 0; font-size: 2rem; }
+        
+        .section-title { font-size: 0.9rem; font-weight: 700; color: #555; margin: 15px 0 8px 0; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+
+        /* Tabs nhập liệu */
+        .input-tabs { display: flex; gap: 10px; margin-bottom: 10px; }
+        .tab-btn { flex: 1; padding: 8px; border: 1px solid var(--primary); background: transparent; color: var(--primary); border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .tab-btn.active { background: var(--primary); color: white; }
+
+        textarea, input[type="text"] {
+            width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #eee;
+            font-family: 'Quicksand', sans-serif; margin-bottom: 10px; outline: none; transition: 0.3s;
+            box-sizing: border-box; background: rgba(255,255,255,0.5);
+        }
+        textarea:focus, input:focus { border-color: var(--primary); background: #fff; }
+
+        /* Control Grid */
+        .control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .control-item label { font-size: 12px; color: #666; display: block; margin-bottom: 5px; }
+        
+        input[type="color"] { width: 100%; height: 40px; border: none; border-radius: 8px; cursor: pointer; }
+        select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
+
+        .file-upload {
+            position: relative; overflow: hidden; display: inline-block; width: 100%;
+            background: #f0f0f0; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; border: 2px dashed #ccc; color: #666; font-size: 13px;
+        }
+        .file-upload:hover { border-color: var(--primary); color: var(--primary); }
+        .file-upload input[type=file] { position: absolute; top: 0; right: 0; min-width: 100%; min-height: 100%; opacity: 0; cursor: pointer; }
+
+        /* --- CỘT PHẢI: PREVIEW --- */
+        .preview-col {
+            background: linear-gradient(to bottom, #fff5f7, #fff);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 1px solid #eee;
+            padding: 20px;
+        }
+
+        /* Khung chứa nội dung để in */
+        #capture-area {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            width: 100%; max-width: 350px;
+            transition: 0.3s;
+            overflow: hidden;
+        }
+
+        /* Sticker trang trí */
+        .sticker { position: absolute; width: 40px; animation: float 3s infinite ease-in-out; z-index: 10; pointer-events: none; }
+        .s-tl { top: 10px; left: 10px; } .s-tr { top: 10px; right: 10px; animation-delay: 1s; }
+        .s-bl { bottom: 10px; left: 10px; animation-delay: 2s; } .s-br { bottom: 10px; right: 10px; animation-delay: 0.5s; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* Logo giữa QR */
+        #qr-wrapper { position: relative; display: inline-block; margin: 15px 0; }
+        #logo-overlay {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 40px; height: 40px; border-radius: 5px; border: 2px solid white;
+            object-fit: cover; display: none; background: white;
+        }
+
+        /* Đếm ngày */
+        .days-counter {
+            font-size: 14px; color: #888; margin-top: 10px;
+            background: #f8f9fa; padding: 5px 15px; border-radius: 15px; display: inline-block;
+        }
+
+        /* Sóng nhạc giả lập */
+        .visualizer {
+            display: flex; gap: 3px; height: 30px; align-items: flex-end; justify-content: center; margin-top: 10px;
+        }
+        .bar { width: 4px; background: var(--primary); border-radius: 2px; animation: wave 1s infinite ease-in-out; }
+        @keyframes wave { 0%, 100% { height: 5px; } 50% { height: 25px; } }
+
+        /* Nút hành động lớn */
+        .action-btns { margin-top: 20px; display: flex; gap: 10px; width: 100%; max-width: 350px; }
+        .big-btn {
+            flex: 1; padding: 12px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Quicksand', sans-serif;
+        }
+        .btn-create { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3); }
+        .btn-save { background: white; color: var(--primary); border: 2px solid var(--primary); }
+        .big-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+
+        /* Ẩn Youtube */
+        #yt-player { display: none; }
+
+        /* Responsive Mobile */
+        @media (max-width: 768px) {
+            .main-panel { grid-template-columns: 1fr; overflow-y: auto; height: 95vh; }
+            .sidebar { display: none; } /* Ẩn thanh bên trên mobile */
+        }
+    </style>
 </head>
 <body>
-  <h1>💘 QR Yêu Thương 💘</h1>
-  <div class="container">
-    <textarea id="customMessage" placeholder="Nhập lời yêu thương..."></textarea>
-    <button onclick="generateQR()">Tạo QR</button>
-    <button onclick="downloadQR()">Tải ảnh</button>
-    <div id="heart-container">
-      <canvas id="qrcode"></canvas>
+
+    <div class="sidebar">
+        <div class="tooltip" data-tip="Đổi hình nền Web">
+            <button class="side-btn" onclick="document.getElementById('bgUpload').click()"><i class="fas fa-image"></i></button>
+        </div>
+        <div class="tooltip" data-tip="Ngẫu nhiên màu">
+            <button class="side-btn" onclick="randomTheme()"><i class="fas fa-dice"></i></button>
+        </div>
+        <div class="tooltip" data-tip="Bật/Tắt Nhạc">
+            <button class="side-btn" onclick="toggleMusic()" id="musicToggle"><i class="fas fa-music"></i></button>
+        </div>
     </div>
-  </div>
-  <div id="lyrics-box"><div id="lyrics-text">🎤 Lyrics sẽ hiển thị tại đây...</div></div>
-  <button id="toggleMusicBtn" onclick="toggleMusic()">🔇</button>
-  <div id="yt-player">
-    <iframe id="ytplayer" width="1" height="1"
-      src="https://www.youtube.com/embed/iK-Cji6J73Q?autoplay=1&mute=0&loop=1&playlist=iK-Cji6J73Q&enablejsapi=1"
-      frameborder="0" allow="autoplay" allowfullscreen></iframe>
-  </div>
-  <script>
-    const lyrics = [
-      { time: 24, text: "Giờ thì còn điều gì ngoài trừ ngàn nhung nhớ" },
-      { time: 27, text: "Người thì về bỏ lại bầu trời nhìn xác xơ" },
-      { time: 30, text: "Cả cuộc đời này còn nhỏ dại và giấc mơ" },
-      { time: 33, text: "Mà em đâu có hay, đâu biết chăng nơi này.." },
-      { time: 39, text: "Ngày nào mình vẫn còn tựa đầu rồi nắm tay" },
-      { time: 41, text: "Vậy mà tình chỉ là kỉ niệm thời đắm say" },
-      { time: 46, text: "Mất em.. Cơn đau anh đâu tính ngày.." },
-      { time: 50, text: "Đâu ai làm sai nhưng ta lại không gần nhau" },
-      { time: 53, text: "Em nghe gì không nhịp tim này không còn đau" },
-      { time: 56, text: "Đâm sâu thật sâu thật ra là không cần khâu" },
-      { time: 58, text: "Em dạy anh phải yêu thật lâu" },
-      { time: 59, text: "Mà khi rời xa lại không lần lau" },
-      { time: 61, text: "Anh thấy sao không em? Giấu cho ai xem" },
-      { time: 63, text: "Năm tháng đi bên nhau, cô đơn anh khóc trên vai em" },
-      { time: 66, text: "Đôi khi anh trách em sao đây? Sống ra sao đây" },
-      { time: 69, text: "Anh đâu có biết em đâu tha thiết" },
-      { time: 70, text: "Hôm nay em giết anh cao tay" },
-      { time: 72, text: "Thật lòng mình đi à.." },
-      { time: 73, text: "Như dừng chân đôi khi em luyến lưu gì" },
-      { time: 76, text: "Dư tình thân em tô thêm nét nhu mì" },
-      { time: 79, text: "Cho vào thân mong thời cơ đến khi..." },
-      { time: 84, text: "Em rời đi đã trong suy đoán anh mà" },
-      { time: 87, text: "Chỉ là anh không tin nó đến nhanh và..." },
-      { time: 90, text: "Yêu và yêu nhưng thôi giờ ta á a à a á a" },
-      { time: 94, text: "Giờ thì còn điều gì ngoài trừ ngàn nhung nhớ" },
-      { time: 96, text: "Người thì về bỏ lại bầu trời nhìn xác xơ" },
-      { time: 100, text: "Cả cuộc đời này còn nhỏ dại và giấc mơ" },
-      { time: 104, text: "Mà em đâu có hay, đâu biết chăng nơi này.." },
-      { time: 108, text: "Ngày nào mình vẫn còn tựa đầu rồi nắm tay" },
-      { time: 111, text: "Vậy mà tình chỉ là kỉ niệm thời đắm say" },
-      { time: 116, text: "Mất em.. Cơn đau anh đâu tính ngày.." },
-      { time: 130, text: "Cố giấu nước mắt quên em đi quên em đi quên em đi" },
-      { time: 133, text: "Những vết cắt trên đôi mi trên đôi mi trên đôi mi" },
-      { time: 136, text: "Đã biết chắc nên chia ly nên chia ly nên chia ly" },
-      { time: 138, text: "Đâu tiếc thương nữa chi." },
-      { time: 140, text: "Điều ngọt ngào mình quên đi em." },
-      { time: 143, text: "Đâu bận tâm cơn đau giày xéo tim gan" },
-      { time: 145, text: "Mang hình xăm đêm đêm cày nát tâm can" },
-      { time: 148, text: "Em bỏ quên trần gian rồi" },
-      { time: 150, text: "Rồi em ở đâu rồi em ở đâu rồi em ở đâu" },
-      { time: 152, text: "Rồi em ở đâu rồi em ơi!" },
-      { time: 154, text: "(Cố giấu nước mắt quên anh đi quên anh đi quên anh đi" },
-      { time: 156, text: "Những vết cắt trên đôi mi trên đôi mi trên đôi mi" },
-      { time: 159, text: "Đã biết chắc nên chia ly nên chia ly nên chia ly" },
-      { time: 162, text: "Đâu tiếc thương nữa chi)" },
-      { time: 164, text: "Giờ thì còn điều gì ngoài trừ ngàn nhung nhớ" },
-      { time: 166, text: "Người thì về bỏ lại bầu trời nhìn xác xơ" },
-      { time: 169, text: "Cả cuộc đời này còn nhỏ dại và giấc mơ" },
-      { time: 173, text: "Mà em đâu có hay, đâu biết chăng nơi này.." },
-      { time: 177, text: "Ngày nào mình vẫn còn tựa đầu rồi nắm tay" },
-      { time: 180, text: "Vậy mà tình chỉ là kỉ niệm thời đắm say" },
-      { time: 185, text: "Mất em.. Cơn đau anh đâu tính ngày.." },
-      { time: 188, text: "Cố giấu nước mắt quên em đi quên em đi quên em đi" },
-      { time: 191, text: "Những vết cắt trên đôi mi trên đôi mi trên đôi mi" },
-      { time: 194, text: "Đã biết chắc nên chia ly nên chia ly nên chia ly" },
-      { time: 197, text: "Đâu tiếc thương nữa chi" },
-      { time: 199, text: "Điều ngọt ngào mình quên đi em" },
-      { time: 200, text: "Cố giấu nước mắt quên em đi quên em đi quên em đi" },
-      { time: 202, text: "Những vết cắt trên đôi mi trên đôi mi trên đôi mi" },
-      { time: 205, text: "Đã biết chắc nên chia ly nên chia ly nên chia ly" },
-      { time: 308, text: "Đâu tiếc thương nữa chi" },
-      { time: 210, text: "Điều ngọt ngào mình quên đi em." }
-      
-    ];
+    
+    <input type="file" id="bgUpload" style="display: none;" accept="image/*" onchange="changeBackground(this)">
 
-    let startTime = 0, currentLyricIndex = 0, isMuted = false;
+    <div class="main-panel">
+        
+        <div class="config-col">
+            <h2>Love Station <i class="fas fa-heart" style="font-size: 0.8em; color: var(--primary);"></i></h2>
+            
+            <div class="section-title">1. Nội dung QR</div>
+            <div class="input-tabs">
+                <button class="tab-btn active" onclick="setTab('text')">Văn Bản</button>
+                <button class="tab-btn" onclick="setTab('link')">Link Web</button>
+                <button class="tab-btn" onclick="setTab('wifi')">Wifi</button>
+            </div>
+            
+            <div id="input-area">
+                <textarea id="msgInput" rows="3" placeholder="Nhập lời nhắn yêu thương..."></textarea>
+            </div>
 
-    function generateQR() {
-      const input = document.getElementById("customMessage").value.trim();
-      const message = input || "Gửi bạn lời yêu từ trái tim <3";
-      QRCode.toCanvas(document.getElementById("qrcode"), message, { width: 120 });
-    }
+            <div class="section-title">2. Giao diện QR</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <label>Màu Chính</label>
+                    <input type="color" id="qrColor" value="#ff4d6d" onchange="updatePreview()">
+                </div>
+                <div class="control-item">
+                    <label>Màu Nền QR</label>
+                    <input type="color" id="qrBgColor" value="#ffffff" onchange="updatePreview()">
+                </div>
+            </div>
 
-    function downloadQR() {
-      html2canvas(document.getElementById("heart-container")).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "qr_yeu_thuong.png";
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    }
+            <div class="control-item" style="margin-top: 10px;">
+                <label>Chèn Logo Giữa (Ảnh nhỏ)</label>
+                <label class="file-upload">
+                    <i class="fas fa-cloud-upload-alt"></i> Chọn ảnh logo...
+                    <input type="file" id="logoUpload" accept="image/*" onchange="uploadLogo(this)">
+                </label>
+            </div>
 
-    function startLyrics() {
-      setInterval(() => {
-        const now = Math.floor((Date.now() - startTime) / 1000);
-        if (currentLyricIndex < lyrics.length && now >= lyrics[currentLyricIndex].time) {
-          document.getElementById("lyrics-text").innerText = lyrics[currentLyricIndex].text;
-          currentLyricIndex++;
+            <div class="section-title">3. Trang trí & Nhạc</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <label>Sticker Góc</label>
+                    <select id="stickerSelect" onchange="updateStickers()">
+                        <option value="none">Không</option>
+                        <option value="heart">Trái tim bay</option>
+                        <option value="rose">Hoa hồng</option>
+                        <option value="bear">Gấu cute</option>
+                    </select>
+                </div>
+                <div class="control-item">
+                    <label>Bài hát</label>
+                    <select id="songSelect" onchange="changeSong()">
+                        <option value="S7ElVoYZN0g">Cứ Chill Thôi</option>
+                        <option value="v4p1V78q9oM">Mặt Trời Của Em</option>
+                        <option value="Ma8u2s2X6Fk">Em Đồng Ý</option>
+                        <option value="J9sJvQJ3Y5I">Perfect</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="control-item" style="margin-top: 10px;">
+                <label>Ngày bắt đầu yêu (để đếm ngày)</label>
+                <input type="date" id="dateInput" onchange="updateDays()">
+            </div>
+        </div>
+
+        <div class="preview-col">
+            <div id="capture-area">
+                <img src="https://cdn-icons-png.flaticon.com/512/210/210545.png" class="sticker s-tl" id="s1" style="display:none">
+                <img src="https://cdn-icons-png.flaticon.com/512/210/210545.png" class="sticker s-tr" id="s2" style="display:none">
+                <img src="https://cdn-icons-png.flaticon.com/512/210/210545.png" class="sticker s-bl" id="s3" style="display:none">
+                <img src="https://cdn-icons-png.flaticon.com/512/210/210545.png" class="sticker s-br" id="s4" style="display:none">
+
+                <h3 style="margin: 0; color: var(--primary); font-family: 'Pacifico', cursive;">Love You!</h3>
+                
+                <div id="qr-wrapper">
+                    <canvas id="qrcode"></canvas>
+                    <img id="logo-overlay" src="" alt="Logo">
+                </div>
+
+                <div class="days-counter" id="days-count">
+                    <i class="fas fa-heart"></i> Yêu nhau 1 ngày
+                </div>
+
+                <div class="visualizer" id="viz">
+                    <div class="bar" style="animation-delay: 0s"></div>
+                    <div class="bar" style="animation-delay: 0.2s"></div>
+                    <div class="bar" style="animation-delay: 0.4s"></div>
+                    <div class="bar" style="animation-delay: 0.1s"></div>
+                    <div class="bar" style="animation-delay: 0.3s"></div>
+                </div>
+                
+                <p id="preview-text" style="font-size: 13px; margin: 10px 0 0; color: #555; font-style: italic;">"Quét để nhận bất ngờ..."</p>
+            </div>
+
+            <div class="action-btns">
+                <button class="big-btn btn-create" onclick="generateQR(true)">
+                    <i class="fas fa-magic"></i> Tạo Mới
+                </button>
+                <button class="big-btn btn-save" onclick="downloadImage()">
+                    <i class="fas fa-download"></i> Tải Về
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="yt-player"></div>
+
+    <script>
+        // --- LOGIC ---
+        let player, isMuted = true;
+        let currentMode = 'text';
+
+        // 1. YouTube API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('yt-player', {
+                height: '1', width: '1',
+                videoId: 'S7ElVoYZN0g',
+                playerVars: { 'autoplay': 1, 'controls': 0, 'loop': 1, 'mute': 1, 'playlist': 'S7ElVoYZN0g' },
+                events: { 'onReady': (e) => e.target.playVideo() }
+            });
         }
-      }, 500);
-    }
 
-    function toggleMusic() {
-      const player = document.getElementById("ytplayer");
-      isMuted = !isMuted;
-      player.contentWindow.postMessage(JSON.stringify({ event: 'command', func: isMuted ? 'mute' : 'unMute', args: [] }), '*');
-      document.getElementById("toggleMusicBtn").innerText = isMuted ? "🔈" : "🔇";
-    }
+        function toggleMusic() {
+            if(!player) return;
+            isMuted = !isMuted;
+            if(isMuted) {
+                player.mute();
+                document.getElementById('musicToggle').innerHTML = '<i class="fas fa-music"></i>';
+                document.getElementById('viz').style.opacity = '0';
+            } else {
+                player.unMute();
+                player.setVolume(80);
+                document.getElementById('musicToggle').innerHTML = '<i class="fas fa-volume-up"></i>';
+                document.getElementById('viz').style.opacity = '1';
+            }
+        }
 
-    window.onload = () => {
-      generateQR();
-      startTime = Date.now();
-      currentLyricIndex = 0;
-      startLyrics();
-    };
-  </script>
+        function changeSong() {
+            if(player) player.loadVideoById(document.getElementById('songSelect').value);
+        }
+
+        // 2. TABS NHẬP LIỆU
+        function setTab(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const area = document.getElementById('input-area');
+            if(mode === 'text') area.innerHTML = '<textarea id="msgInput" rows="3" placeholder="Nhập lời nhắn..."></textarea>';
+            else if(mode === 'link') area.innerHTML = '<input type="text" id="msgInput" placeholder="Nhập link (https://...)">';
+            else area.innerHTML = '<input type="text" id="ssid" placeholder="Tên Wifi"><input type="text" id="pass" placeholder="Mật khẩu Wifi">';
+        }
+
+        // 3. TẠO QR CODE
+        function generateQR(showConfetti = false) {
+            let text = "";
+            if(currentMode === 'wifi') {
+                const ssid = document.getElementById('ssid').value;
+                const pass = document.getElementById('pass').value;
+                text = `WIFI:S:${ssid};T:WPA;P:${pass};;`;
+            } else {
+                text = document.getElementById('msgInput').value || "Love You 3000";
+            }
+
+            const colorDark = document.getElementById('qrColor').value;
+            const colorLight = document.getElementById('qrBgColor').value;
+
+            const canvas = document.getElementById('qrcode');
+            // Xóa canvas cũ
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            QRCode.toCanvas(canvas, text, {
+                width: 180,
+                margin: 1,
+                color: { dark: colorDark, light: colorLight },
+                errorCorrectionLevel: 'H' // Cao để chèn logo ko lỗi
+            }, function (error) {
+                if (error) console.error(error);
+            });
+
+            if(showConfetti) triggerConfetti();
+        }
+
+        // 4. XỬ LÝ ẢNH & LOGO
+        function uploadLogo(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.getElementById('logo-overlay');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function changeBackground(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.body.style.backgroundImage = `url(${e.target.result})`;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // 5. TIỆN ÍCH KHÁC
+        function updateStickers() {
+            const type = document.getElementById('stickerSelect').value;
+            const stickers = document.querySelectorAll('.sticker');
+            const urls = {
+                'heart': 'https://cdn-icons-png.flaticon.com/512/210/210545.png',
+                'rose': 'https://cdn-icons-png.flaticon.com/512/1828/1828970.png',
+                'bear': 'https://cdn-icons-png.flaticon.com/512/427/427518.png'
+            };
+            
+            stickers.forEach(s => {
+                if(type === 'none') s.style.display = 'none';
+                else {
+                    s.style.display = 'block';
+                    s.src = urls[type];
+                }
+            });
+        }
+
+        function updateDays() {
+            const start = new Date(document.getElementById('dateInput').value);
+            const now = new Date();
+            const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+            if(!isNaN(diff)) document.getElementById('days-count').innerHTML = `<i class="fas fa-heart"></i> Bên nhau ${diff} ngày`;
+        }
+
+        function updatePreview() { generateQR(); }
+
+        function triggerConfetti() {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+
+        function downloadImage() {
+            const element = document.getElementById("capture-area");
+            html2canvas(element, { scale: 3 }).then(canvas => {
+                const link = document.createElement("a");
+                link.download = "Love_Station_Gift.png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+                triggerConfetti();
+            });
+        }
+
+        function randomTheme() {
+            const colors = ['#ff9a9e', '#a18cd1', '#fbc2eb', '#fad0c4', '#ffecd2'];
+            const rand = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.background = `linear-gradient(135deg, ${rand} 0%, #fff 100%)`;
+        }
+
+        // Init
+        window.onload = function() {
+            generateQR();
+            document.getElementById('viz').style.opacity = '0'; // Mặc định ẩn viz
+        }
+    </script>
 </body>
 </html>
