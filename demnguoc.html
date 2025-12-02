@@ -3,52 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đếm ngược đến Tết Nguyên Đán 2026</title>
+    <title>Đếm ngược Tết Nguyên Đán 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #ffffff;
-            color: #000000;
+            /* Màu nền đỏ chuyển sắc đặc trưng ngày Tết */
+            background: linear-gradient(135deg, #8E0E00, #1F1C18);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #FFD700; /* Màu vàng kim */
+            overflow: hidden; /* Ẩn thanh cuộn cho hiệu ứng hoa rơi */
+        }
+
+        /* Hiệu ứng chuyển động nền */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1); /* Hiệu ứng kính mờ */
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
             text-align: center;
-            line-height: 1.6;
+            z-index: 10;
+            max-width: 90%;
         }
+
         h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
+            font-family: 'Dancing Script', cursive; /* Font thư pháp */
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            margin-top: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
+
         #currentDate {
-            font-size: 1.5em;
-            margin-bottom: 20px;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            color: #fff;
+            opacity: 0.9;
         }
+
         #countdown {
-            font-size: 2em;
-            padding: 10px 20px;
-            border: 2px solid #000000;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        /* Tạo các ô số riêng biệt */
+        .time-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
             border-radius: 10px;
-            display: inline-block;
+            min-width: 80px;
+            border: 1px solid #FFD700;
+        }
+
+        .time-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+            color: #fff;
+        }
+
+        .time-label {
+            font-size: 0.9em;
+            text-transform: uppercase;
+            color: #FFD700;
+        }
+
+        /* CSS cho hiệu ứng hoa rơi */
+        .flower {
+            position: absolute;
+            top: -10px;
+            background-color: #FFD700; /* Màu hoa mai */
+            border-radius: 50%;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+        
+        .flower:nth-child(odd) {
+            background-color: #ffb7b2; /* Màu hoa đào */
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2em; }
+            .time-box { min-width: 60px; padding: 10px; }
+            .time-value { font-size: 1.8em; }
         }
     </style>
 </head>
 <body>
 
-    <h1>Đếm ngược đến Tết Nguyên Đán 2026</h1>
-    <div id="currentDate"></div>
-    <div id="countdown"></div>
+    <div class="container">
+        <h1>Tết Nguyên Đán 2026</h1>
+        <div id="currentDate"></div>
+        <div id="countdown"></div>
+    </div>
 
     <script>
         function updateTime() {
             const now = new Date();
-            const currentDateElement = document.getElementById('currentDate');
-            currentDateElement.innerHTML = now.toLocaleString('vi-VN');
+            // Format ngày tháng đẹp hơn
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('currentDate').innerHTML = now.toLocaleDateString('vi-VN', options);
 
+            // Ngày mùng 1 Tết Âm Lịch 2026 (17/02/2026 Dương lịch)
             const lunarNewYear = new Date('2026-02-17T00:00:00');
             const timeDifference = lunarNewYear - now;
+
+            const countdownElement = document.getElementById('countdown');
 
             if (timeDifference > 0) {
                 const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
@@ -56,14 +139,48 @@
                 const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-                const countdownElement = document.getElementById('countdown');
-                countdownElement.innerHTML = `${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
+                // Cập nhật giao diện mới dạng ô
+                countdownElement.innerHTML = `
+                    <div class="time-box"><span class="time-value">${days}</span><span class="time-label">Ngày</span></div>
+                    <div class="time-box"><span class="time-value">${hours}</span><span class="time-label">Giờ</span></div>
+                    <div class="time-box"><span class="time-value">${minutes}</span><span class="time-label">Phút</span></div>
+                    <div class="time-box"><span class="time-value">${seconds}</span><span class="time-label">Giây</span></div>
+                `;
             } else {
-                countdownElement.innerHTML = "Chúc Mừng Năm Mới 2025!";
+                countdownElement.innerHTML = "<div style='font-size: 2em; color: #FFD700;'>🎆 Chúc Mừng Năm Mới 2026! 🎆</div>";
             }
         }
 
+        // Hàm tạo hiệu ứng hoa rơi
+        function createFlowers() {
+            const flower = document.createElement('div');
+            flower.classList.add('flower');
+            
+            // Kích thước ngẫu nhiên
+            const size = Math.random() * 15 + 10 + 'px';
+            flower.style.width = size;
+            flower.style.height = size;
+            
+            // Vị trí xuất phát ngẫu nhiên
+            flower.style.left = Math.random() * 100 + 'vw';
+            
+            // Thời gian rơi ngẫu nhiên
+            flower.style.animationDuration = Math.random() * 3 + 4 + 's';
+            
+            document.body.appendChild(flower);
+
+            // Xóa hoa sau khi rơi xong để tránh nặng máy
+            setTimeout(() => {
+                flower.remove();
+            }, 7000);
+        }
+
         setInterval(updateTime, 1000);
+        // Tạo hoa mỗi 300ms
+        setInterval(createFlowers, 300);
+        
+        // Chạy ngay lập tức để không bị delay 1s đầu
+        updateTime();
     </script>
 
 </body>
