@@ -6,156 +6,276 @@
   <title>Tính Điểm Trung Bình</title>
   <style>
     :root {
-      --primary-color: #007bff;
-      --danger-color: #dc3545;
-      --bg-light: #f4f4f4;
-      --text-dark: #333;
+      --primary: #4facfe;
+      --primary-dark: #00f2fe;
+      --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      --text-main: #2d3436;
+      --success: #00b894;
+      --warning: #fdcb6e;
+      --danger: #d63031;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg-light);
-      color: var(--text-dark);
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-gradient);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 20px;
+      color: var(--text-main);
     }
 
-    .calculator {
-      background: #fff;
-      padding: 30px 25px;
-      border-radius: 16px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
+    .card {
+      background: white;
       width: 100%;
-      text-align: center;
+      max-width: 420px;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
     }
 
     h2 {
+      text-align: center;
+      margin-top: 0;
+      color: #333;
+      font-weight: 700;
+    }
+
+    .input-group {
       margin-bottom: 20px;
-      color: var(--primary-color);
     }
 
     label {
       display: block;
-      margin: 10px 0 5px;
-      font-weight: 500;
-      text-align: left;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #555;
     }
 
     input[type="number"] {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      padding: 15px;
+      border: 2px solid #eee;
+      border-radius: 12px;
       font-size: 16px;
+      transition: border-color 0.3s;
+      outline: none;
     }
 
-    input[type="button"] {
-      width: 100%;
-      padding: 12px;
-      background-color: var(--primary-color);
-      color: white;
+    input[type="number"]:focus {
+      border-color: var(--primary);
+    }
+
+    input[type="number"].invalid {
+      border-color: var(--danger);
+      background-color: #fff0f0;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 15px;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: transform 0.2s, opacity 0.2s;
     }
 
-    input[type="button"]:hover {
-      background-color: #0056b3;
+    button:active { transform: scale(0.98); }
+
+    .btn-calc {
+      background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+      color: white;
     }
 
-    .result {
-      margin-top: 20px;
-      font-size: 18px;
+    .btn-reset {
+      background: #eee;
+      color: #666;
+      flex: 0.4;
     }
 
-    .result span {
+    .btn-reset:hover { background: #e0e0e0; }
+
+    /* Khu vực hiển thị kết quả */
+    .result-box {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 15px;
+      text-align: center;
+      display: none; /* Ẩn mặc định */
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .score-big {
+      font-size: 48px;
+      font-weight: 800;
+      margin: 10px 0;
+      line-height: 1;
+    }
+
+    .grade-badge {
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 20px;
+      color: white;
       font-weight: bold;
-      color: var(--primary-color);
-    }
-
-    .error {
-      color: var(--danger-color);
-      margin-top: 10px;
       font-size: 14px;
+      vertical-align: middle;
+      margin-left: 10px;
     }
 
-    @media (max-width: 480px) {
-      .calculator {
-        padding: 25px 15px;
-      }
+    /* Màu sắc theo điểm */
+    .color-good { color: var(--success); }
+    .bg-good { background-color: var(--success); }
+    
+    .color-mid { color: var(--warning); }
+    .bg-mid { background-color: var(--warning); } /* Cần text đen cho màu này nếu cần */
+    
+    .color-bad { color: var(--danger); }
+    .bg-bad { background-color: var(--danger); }
 
-      input[type="button"] {
-        font-size: 15px;
-      }
+    .error-text {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 5px;
+      display: none;
     }
+
   </style>
 </head>
 <body>
-  <div class="calculator">
-    <h2>Tính Điểm Trung Bình</h2>
 
-    <label for="diemQuaTrinh">Điểm Quá Trình:</label>
-    <input type="number" id="diemQuaTrinh" placeholder="Nhập điểm quá trình" min="0" max="10" step="0.01" />
+  <div class="card">
+    <h2>📊 Tính Điểm</h2>
 
-    <label for="diemThiCuoiKy">Điểm Thi Cuối Kỳ:</label>
-    <input type="number" id="diemThiCuoiKy" placeholder="Nhập điểm thi cuối kỳ" min="0" max="10" step="0.01" />
+    <div class="input-group">
+      <label for="diemQuaTrinh">Điểm Quá Trình </label>
+      <input type="number" id="diemQuaTrinh" placeholder="Ví dụ: 8.5" step="0.1" onkeypress="handleEnter(event)">
+      <div id="err-qt" class="error-text">Điểm không hợp lệ (0-10)</div>
+    </div>
 
-    <input type="button" value="Tính điểm" onclick="tinhDiem()" />
+    <div class="input-group">
+      <label for="diemThiCuoiKy">Điểm Thi Cuối Kỳ </label>
+      <input type="number" id="diemThiCuoiKy" placeholder="Ví dụ: 7.0" step="0.1" onkeypress="handleEnter(event)">
+      <div id="err-ck" class="error-text">Điểm không hợp lệ (0-10)</div>
+    </div>
 
-    <div id="errorMsg" class="error"></div>
+    <div class="btn-group">
+      <button class="btn-reset" onclick="resetForm()">↺ Lại</button>
+      <button class="btn-calc" onclick="tinhDiem()">Tính Ngay</button>
+    </div>
 
-    <div class="result">
-      Điểm Trung Bình: <span id="diemTrungBinh">--</span><br />
-      Hạng: <span id="hang">--</span>
+    <div class="result-box" id="resultBox">
+      <div>Điểm Trung Bình</div>
+      <div class="score-big" id="displayScore">--</div>
+      <div>
+        Xếp loại: <span id="displayGrade">--</span>
+        <span id="gradeBadge" class="grade-badge"></span>
+      </div>
     </div>
   </div>
 
   <script>
-    function tinhDiem() {
-      const diemQuaTrinh = parseFloat(document.getElementById('diemQuaTrinh').value);
-      const diemThiCuoiKy = parseFloat(document.getElementById('diemThiCuoiKy').value);
-      const errorMsg = document.getElementById('errorMsg');
+    // Hàm xử lý khi nhấn Enter
+    function handleEnter(e) {
+      if (e.key === 'Enter') {
+        tinhDiem();
+      }
+    }
 
-      if (
-        isNaN(diemQuaTrinh) || isNaN(diemThiCuoiKy) ||
-        diemQuaTrinh < 0 || diemQuaTrinh > 10 ||
-        diemThiCuoiKy < 0 || diemThiCuoiKy > 10
-      ) {
-        errorMsg.textContent = '⚠️ Vui lòng nhập điểm hợp lệ từ 0 đến 10!';
-        document.getElementById('diemTrungBinh').textContent = "--";
-        document.getElementById('hang').textContent = "--";
+    function resetForm() {
+      document.getElementById('diemQuaTrinh').value = '';
+      document.getElementById('diemThiCuoiKy').value = '';
+      document.getElementById('resultBox').style.display = 'none';
+      resetErrors();
+      document.getElementById('diemQuaTrinh').focus();
+    }
+
+    function resetErrors() {
+      document.getElementById('diemQuaTrinh').classList.remove('invalid');
+      document.getElementById('diemThiCuoiKy').classList.remove('invalid');
+      document.getElementById('err-qt').style.display = 'none';
+      document.getElementById('err-ck').style.display = 'none';
+    }
+
+    function tinhDiem() {
+      resetErrors();
+      
+      const inputQT = document.getElementById('diemQuaTrinh');
+      const inputCK = document.getElementById('diemThiCuoiKy');
+      
+      const qt = parseFloat(inputQT.value);
+      const ck = parseFloat(inputCK.value);
+      let hasError = false;
+
+      // Validate
+      if (isNaN(qt) || qt < 0 || qt > 10) {
+        inputQT.classList.add('invalid');
+        document.getElementById('err-qt').style.display = 'block';
+        hasError = true;
+      }
+      if (isNaN(ck) || ck < 0 || ck > 10) {
+        inputCK.classList.add('invalid');
+        document.getElementById('err-ck').style.display = 'block';
+        hasError = true;
+      }
+
+      if (hasError) {
+        document.getElementById('resultBox').style.display = 'none';
         return;
       }
 
-      errorMsg.textContent = '';
-      const diemTrungBinh = ((diemQuaTrinh + diemThiCuoiKy) / 2).toFixed(2);
+      // Tính toán (Giả sử tỷ lệ 50-50 như code cũ của bạn)
+      const dtb = (qt + ck) / 2;
+      const dtbFormatted = dtb.toFixed(2);
 
+      // Xếp loại
       let hang = '';
-      if (diemTrungBinh >= 8.5) hang = 'A';
-      else if (diemTrungBinh >= 7.8) hang = 'B+';
-      else if (diemTrungBinh >= 7.0) hang = 'B';
-      else if (diemTrungBinh >= 6.3) hang = 'C+';
-      else if (diemTrungBinh >= 5.5) hang = 'C';
-      else if (diemTrungBinh >= 4.8) hang = 'D+';
-      else if (diemTrungBinh >= 4.0) hang = 'D';
-      else if (diemTrungBinh >= 3.0) hang = 'F+';
-      else hang = 'F';
+      let colorClass = '';
+      let bgClass = '';
 
-      document.getElementById('diemTrungBinh').textContent = diemTrungBinh;
-      document.getElementById('hang').textContent = hang;
+      if (dtb >= 8.5) { hang = 'A'; colorClass = 'color-good'; bgClass = 'bg-good'; }
+      else if (dtb >= 7.8) { hang = 'B+'; colorClass = 'color-good'; bgClass = 'bg-good'; }
+      else if (dtb >= 7.0) { hang = 'B'; colorClass = 'color-good'; bgClass = 'bg-good'; }
+      else if (dtb >= 6.3) { hang = 'C+'; colorClass = 'color-mid'; bgClass = 'bg-mid'; }
+      else if (dtb >= 5.5) { hang = 'C'; colorClass = 'color-mid'; bgClass = 'bg-mid'; }
+      else if (dtb >= 4.8) { hang = 'D+'; colorClass = 'color-mid'; bgClass = 'bg-mid'; }
+      else if (dtb >= 4.0) { hang = 'D'; colorClass = 'color-bad'; bgClass = 'bg-bad'; }
+      else if (dtb >= 3.0) { hang = 'F+'; colorClass = 'color-bad'; bgClass = 'bg-bad'; }
+      else { hang = 'F'; colorClass = 'color-bad'; bgClass = 'bg-bad'; }
+
+      // Hiển thị kết quả
+      const resultBox = document.getElementById('resultBox');
+      const displayScore = document.getElementById('displayScore');
+      const displayGrade = document.getElementById('displayGrade');
+      const gradeBadge = document.getElementById('gradeBadge');
+
+      resultBox.style.display = 'block';
+      
+      // Reset màu cũ
+      displayScore.className = 'score-big ' + colorClass;
+      gradeBadge.className = 'grade-badge ' + bgClass;
+
+      displayScore.textContent = dtbFormatted;
+      displayGrade.textContent = hang;
+      gradeBadge.textContent = hang;
     }
   </script>
 </body>
