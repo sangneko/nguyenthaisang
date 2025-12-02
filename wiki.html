@@ -3,260 +3,280 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wiki Trích Dẫn Đa Ngôn Ngữ</title>
+  <title>Wiki Clean Reader</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png" />
   <style>
     :root {
-      --bg-light: #f9f9f9;
-      --bg-dark: #121212;
-      --text-light: #333;
-      --text-dark: #e0e0e0;
-      --highlight: #3b82f6;
+      --bg-light: #f3f4f6;
+      --bg-dark: #18181b;
+      --card-light: #ffffff;
+      --card-dark: #27272a;
+      --text-light: #1f2937;
+      --text-dark: #e5e7eb;
+      --highlight: #2563eb;
+      --highlight-hover: #1d4ed8;
+      --border-radius: 8px;
     }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg-light);
       color: var(--text-light);
-      padding: 20px;
+      padding: 40px 20px;
       margin: 0;
-      transition: all 0.3s ease-in-out;
+      transition: background 0.3s ease, color 0.3s ease;
+      line-height: 1.6;
     }
+
     body.dark {
       background: var(--bg-dark);
       color: var(--text-dark);
     }
+
     h1 {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 30px;
+      font-weight: 700;
+      color: var(--highlight);
     }
-    form, .controls {
+
+    .controls {
+      background: var(--card-light);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      margin: 0 auto 30px auto;
+      transition: background 0.3s ease;
+    }
+
+    body.dark .controls {
+      background: var(--card-dark);
+    }
+
+    form#searchForm {
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      flex-direction: row;
       gap: 10px;
-      margin-bottom: 20px;
-    }
-    input, select, button {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
       width: 100%;
-      max-width: 400px;
     }
+
+    @media (max-width: 600px) {
+      form#searchForm {
+        flex-direction: column;
+      }
+    }
+
+    input, select, button {
+      padding: 12px 15px;
+      font-size: 16px;
+      border-radius: var(--border-radius);
+      border: 1px solid #d1d5db;
+      outline: none;
+      transition: all 0.2s;
+      background: #fff;
+      color: #333;
+    }
+    
+    body.dark input, body.dark select, body.dark button {
+      background: #3f3f46;
+      border-color: #52525b;
+      color: #fff;
+    }
+
+    input { flex-grow: 1; }
+    select { width: auto; min-width: 150px; cursor: pointer; }
+
+    input:focus, select:focus {
+      border-color: var(--highlight);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
     button {
       cursor: pointer;
-      transition: all 0.3s;
+      font-weight: 600;
     }
-    button:hover {
-      transform: scale(1.05);
-      background-color: #2563eb;
-      color: white;
-    }
-    #results {
-      max-width: 1000px;
-      margin: auto;
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    body.dark #results {
-      background: #1e1e1e;
-    }
-    img.thumbnail {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-      margin-top: 15px;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-    img.thumbnail:hover {
-      transform: scale(1.02);
-    }
-    .quote {
-      background: #f0f0f0;
-      padding: 10px;
-      border-left: 5px solid var(--highlight);
-      margin: 15px 0;
-      border-radius: 5px;
-    }
-    body.dark .quote {
-      background: #2a2a2a;
-      border-left-color: #90caf9;
-    }
-    .last-edited {
-      font-size: 0.9em;
-      color: #777;
-      margin-top: 10px;
-    }
-    .fav-btn {
-      background: #ff4d4f;
+
+    button[type="submit"] {
+      background-color: var(--highlight);
       color: white;
       border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
+      min-width: 100px;
+    }
+    button[type="submit"]:hover {
+      background-color: var(--highlight-hover);
+      transform: translateY(-1px);
+    }
+
+    #themeToggle {
+      margin-top: 10px;
+      width: 100%;
+      background: transparent;
+      border: 1px dashed #9ca3af;
+      color: inherit;
+    }
+    #themeToggle:hover {
+      border-color: var(--highlight);
+      color: var(--highlight);
+    }
+
+    #results {
+      max-width: 800px;
+      margin: auto;
+      background: var(--card-light);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+    body.dark #results {
+      background: var(--card-dark);
+    }
+
+    img.thumbnail {
+      float: left;
+      margin-right: 20px;
+      margin-bottom: 10px;
+      max-width: 150px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .quote {
+      background: rgba(37, 99, 235, 0.1);
+      padding: 20px;
+      border-left: 4px solid var(--highlight);
+      margin: 20px 0;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      font-style: italic;
+      font-size: 1.1em;
+    }
+    body.dark .quote {
+      background: rgba(37, 99, 235, 0.15);
+    }
+
+    .last-edited {
+      font-size: 0.85em;
+      color: #6b7280;
+      margin-top: 15px;
+      clear: both;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 10px;
+    }
+
+    .fav-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      width: auto;
+      display: inline-block;
       margin-top: 10px;
     }
+    .fav-btn:hover { background: #dc2626; }
+
     .favorites {
-      margin-top: 30px;
-      max-width: 900px;
+      margin-top: 40px;
+      max-width: 800px;
       margin-left: auto;
       margin-right: auto;
     }
-    #favList {
-      list-style: none;
-      padding-left: 0;
+    
+    #filterFav {
+      margin-bottom: 15px;
     }
+
     #favList li {
-      background: #fff;
-      padding: 10px;
-      margin-bottom: 8px;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      background: var(--card-light);
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border-left: 4px solid #ef4444;
+      list-style: none;
     }
     body.dark #favList li {
-      background: #2c2c2c;
+      background: var(--card-dark);
     }
+
     .tab-buttons {
       display: flex;
-      justify-content: center;
       gap: 10px;
-      margin-top: 15px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 10px;
     }
+    
     .tab-buttons button {
+      width: auto;
+      background: transparent;
+      border: none;
+      color: #6b7280;
       padding: 8px 16px;
-      border-radius: 5px;
-      background: #e0e0e0;
+      border-radius: var(--border-radius);
     }
-    body.dark .tab-buttons button {
-      background: #333;
-      color: #fff;
+    
+    .tab-buttons button:hover {
+      background: #f3f4f6;
+      color: var(--highlight);
+      transform: none;
     }
-    @media (max-width: 600px) {
-      input, select, button {
-        max-width: 90%;
-      }
+    
+    body.dark .tab-buttons button:hover {
+      background: #3f3f46;
     }
+
+    /* --- CLEANER CSS --- */
+    /* Ẩn các class rác của wiki bằng CSS để đảm bảo */
+    .reference, .reflist, .mw-references-wrap, .mw-editsection, 
+    .hatnote, .ambox, .navbox, .catlinks, .authority-control, .portal, .printfooter {
+        display: none !important;
+    }
+
+    /* Style lại link trong phần chi tiết: Bỏ gạch chân, bỏ màu xanh */
+    #detailTab a {
+        text-decoration: none !important;
+        color: inherit !important;
+        pointer-events: none;
+        cursor: text;
+    }
+
+    #detailTab img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        margin: 10px 0;
+    }
+
   </style>
 </head>
 <body>
-  <h1>🔍 Tìm Trích Dẫn Wikipedia</h1>
+
+  <h1>🔍 Wiki Clean Reader</h1>
 
   <div class="controls">
     <form id="searchForm">
-      <input type="text" id="searchInput" placeholder="Nhập từ khóa (ví dụ: Albert Einstein)" required />
+      <input type="text" id="searchInput" placeholder="Nhập từ khóa..." required />
       <select id="langSelect">
-        <option value="en">English</option>
-  <option value="vi">Tiếng Việt</option>
-  <option value="es">Español</option>
-  <option value="fr">Français</option>
-  <option value="de">Deutsch</option>
-  <option value="ru">Русский</option>
-  <option value="zh">中文</option>
-  <option value="ja">日本語</option>
-  <option value="pt">Português</option>
-  <option value="it">Italiano</option>
-  <option value="ar">العربية</option>
-  <option value="ko">한국어</option>
-  <option value="pl">Polski</option>
-  <option value="nl">Nederlands</option>
-  <option value="tr">Türkçe</option>
-  <option value="uk">Українська</option>
-  <option value="cs">Čeština</option>
-  <option value="th">ไทย</option>
-  <option value="sv">Svenska</option>
-  <option value="fi">Suomi</option>
-  <option value="no">Norsk</option>
-  <option value="da">Dansk</option>
-  <option value="id">Bahasa Indonesia</option>
-  <option value="ms">Bahasa Melayu</option>
-  <option value="ro">Română</option>
-  <option value="he">עברית</option>
-  <option value="el">Ελληνικά</option>
-  <option value="hu">Magyar</option>
-  <option value="bg">Български</option>
-  <option value="sr">Српски / Srpski</option>
-  <option value="hr">Hrvatski</option>
-  <option value="sk">Slovenčina</option>
-  <option value="sl">Slovenščina</option>
-  <option value="et">Eesti</option>
-  <option value="lt">Lietuvių</option>
-  <option value="lv">Latviešu</option>
-  <option value="hi">हिन्दी</option>
-  <option value="bn">বাংলা</option>
-  <option value="ur">اردو</option>
-      <option value="ab">Abkhazian</option>
-  <option value="af">Afrikaans</option>
-  <option value="ar">العربية (Arabic)</option>
-  <option value="az">Azerbaijani</option>
-  <option value="ba">Bashkir</option>
-  <option value="be">Belarusian</option>
-  <option value="bg">Български (Bulgarian)</option>
-  <option value="bn">বাংলা (Bengali)</option>
-  <option value="bs">Bosnian</option>
-  <option value="ca">Català (Catalan)</option>
-  <option value="ceb">Cebuano</option>
-  <option value="cs">Čeština (Czech)</option>
-  <option value="cv">Chuvash</option>
-  <option value="cy">Cymraeg (Welsh)</option>
-  <option value="da">Dansk (Danish)</option>
-  <option value="de">Deutsch (German)</option>
-  <option value="el">Ελληνικά (Greek)</option>
-  <option value="en">English</option>
-  <option value="eo">Esperanto</option>
-  <option value="es">Español (Spanish)</option>
-  <option value="et">Eesti (Estonian)</option>
-  <option value="eu">Euskara (Basque)</option>
-  <option value="fa">فارسی (Persian)</option>
-  <option value="fi">Suomi (Finnish)</option>
-  <option value="fr">Français (French)</option>
-  <option value="ga">Gaeilge (Irish)</option>
-  <option value="gl">Galego (Galician)</option>
-  <option value="gu">ગુજરાતી (Gujarati)</option>
-  <option value="he">עברית (Hebrew)</option>
-  <option value="hi">हिन्दी (Hindi)</option>
-  <option value="hr">Hrvatski (Croatian)</option>
-  <option value="ht">Kreyòl ayisyen (Haitian)</option>
-  <option value="hu">Magyar (Hungarian)</option>
-  <option value="hy">Հայերեն (Armenian)</option>
-  <option value="id">Bahasa Indonesia</option>
-  <option value="is">Íslenska (Icelandic)</option>
-  <option value="it">Italiano</option>
-  <option value="ja">日本語 (Japanese)</option>
-  <option value="ka">ქართული (Georgian)</option>
-  <option value="kn">ಕನ್ನಡ (Kannada)</option>
-  <option value="ko">한국어 (Korean)</option>
-  <option value="la">Latin</option>
-  <option value="lt">Lietuvių (Lithuanian)</option>
-  <option value="lv">Latviešu (Latvian)</option>
-  <option value="mk">Македонски (Macedonian)</option>
-  <option value="ml">മലയാളം (Malayalam)</option>
-  <option value="mr">मराठी (Marathi)</option>
-  <option value="ms">Bahasa Melayu</option>
-  <option value="mt">Malti (Maltese)</option>
-  <option value="nl">Nederlands (Dutch)</option>
-  <option value="no">Norsk (Norwegian)</option>
-  <option value="pl">Polski (Polish)</option>
-  <option value="pt">Português</option>
-  <option value="ro">Română (Romanian)</option>
-  <option value="ru">Русский (Russian)</option>
-  <option value="sa">संस्कृतम् (Sanskrit)</option>
-  <option value="sh">Serbo‑Croatian</option>
-  <option value="sk">Slovenčina (Slovak)</option>
-  <option value="sl">Slovenščina (Slovenian)</option>
-  <option value="sq">Shqip (Albanian)</option>
-  <option value="sv">Svenska (Swedish)</option>
-  <option value="ta">தமிழ் (Tamil)</option>
-  <option value="te">తెలుగు (Telugu)</option>
-  <option value="th">ไทย (Thai)</option>
-  <option value="tr">Türkçe (Turkish)</option>
-  <option value="uk">Українська (Ukrainian)</option>
-  <option value="ur">اردو (Urdu)</option>
-        <!-- Thêm nếu cần -->
+        <optgroup label="Phổ biến nhất">
+            <option value="vi">Tiếng Việt</option>
+            <option value="en">English</option>
+            <option value="zh">中文</option>
+            <option value="es">Español</option>
+            <option value="ja">日本語</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="ru">Русский</option>
+            <option value="ko">한국어</option>
+        </optgroup>
+        <optgroup label="Châu Á & Khác">
+            <option value="th">ไทย</option>
+            <option value="id">Indonesia</option>
+            <option value="ms">Melayu</option>
+            <option value="it">Italiano</option>
+            <option value="pt">Português</option>
+        </optgroup>
       </select>
-      <button type="submit">Tìm</button>
+      <button type="submit">Tìm kiếm</button>
     </form>
     <button onclick="toggleTheme()" id="themeToggle">🌙 Chế độ tối</button>
   </div>
@@ -271,16 +291,25 @@
   </div>
 
   <div class="favorites">
-    <h2>❤️ Trích dẫn yêu thích</h2>
-    <input type="text" id="filterFav" placeholder="Lọc trích dẫn..." />
+    <h2>❤️ Trích dẫn đã lưu</h2>
+    <input type="text" id="filterFav" placeholder="Lọc danh sách đã lưu..." />
     <ul id="favList"></ul>
   </div>
 
   <script>
     const form = document.getElementById('searchForm');
+    const searchInput = document.getElementById('searchInput');
+    const langSelect = document.getElementById('langSelect');
     const summaryTab = document.getElementById('summaryTab');
     const detailTab = document.getElementById('detailTab');
     const favList = document.getElementById('favList');
+    const resultsDiv = document.getElementById('results');
+
+    langSelect.addEventListener('change', () => {
+        if(searchInput.value.trim() !== "") {
+            searchWiki(searchInput.value.trim(), langSelect.value);
+        }
+    });
 
     function toggleTheme() {
       document.body.classList.toggle('dark');
@@ -293,17 +322,25 @@
 
     function saveFavorite(title, extract) {
       const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
-      favs.push({ title, extract });
-      localStorage.setItem('favorites', JSON.stringify(favs));
-      loadFavorites();
+      if(!favs.some(f => f.title === title)) {
+          favs.push({ title, extract });
+          localStorage.setItem('favorites', JSON.stringify(favs));
+          loadFavorites();
+      } else {
+          alert('Đã lưu rồi!');
+      }
     }
 
     function loadFavorites() {
       const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
       favList.innerHTML = '';
-      favs.forEach(fav => {
+      if (favs.length === 0) {
+          favList.innerHTML = '<p style="text-align:center; color:gray">Chưa có mục nào.</p>';
+          return;
+      }
+      favs.reverse().forEach(fav => {
         const li = document.createElement('li');
-        li.innerHTML = `<strong>${fav.title}:</strong> ${fav.extract}`;
+        li.innerHTML = `<strong>${fav.title}</strong><br><span style="font-size:0.9em; opacity:0.8">${fav.extract}</span>`;
         favList.appendChild(li);
       });
     }
@@ -316,12 +353,63 @@
       });
     });
 
+    // --- HÀM DỌN DẸP MẠNH MẼ ---
+    function cleanWikiContent(htmlContent) {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlContent;
+
+        // 1. Xóa các class rác thông thường (Navbox, Category, Refs)
+        const junkSelectors = [
+            'sup.reference', '.reflist', '.refbegin', '.mw-references-wrap', 
+            '.mw-editsection', '.ambox', '.hatnote', '.navbox', 
+            '.catlinks', '.authority-control', '.portal', '.printfooter',
+            '.sistersitebox' // Hộp dự án anh em
+        ];
+        tempDiv.querySelectorAll(junkSelectors.join(', ')).forEach(el => el.remove());
+
+        // 2. Xóa các Section "Liên kết ngoài", "Xem thêm", "Đọc thêm"
+        // (Tìm H2 chứa ID/Text xấu -> Xóa H2 và nội dung bên dưới cho đến H2 tiếp theo)
+        const headers = tempDiv.querySelectorAll('h2');
+        
+        // Danh sách ID/Từ khóa cần xóa (bao gồm cả tiếng Anh và Việt phổ biến)
+        const badKeywords = [
+            'External_links', 'See_also', 'Further_reading', 'Notes', 'References', // Tiếng Anh
+            'Liên_kết_ngoài', 'Xem_thêm', 'Đọc_thêm', 'Tham_khảo', 'Chú_thích'      // Tiếng Việt
+        ];
+
+        headers.forEach(h2 => {
+            const headline = h2.querySelector('.mw-headline');
+            // Kiểm tra xem ID của headline có chứa từ khóa xấu không
+            if (headline && badKeywords.some(key => headline.id.includes(key))) {
+                
+                // Bắt đầu xóa từ H2 này
+                let currentNode = h2;
+                // Xóa tiếp các anh em (siblings) phía sau cho đến khi gặp H2 khác hoặc hết bài
+                while (currentNode) {
+                    let nextNode = currentNode.nextElementSibling;
+                    currentNode.remove();
+                    
+                    // Nếu node tiếp theo là H2 thì dừng lại (đã sang phần khác)
+                    if (nextNode && nextNode.tagName === 'H2') break;
+                    
+                    currentNode = nextNode;
+                }
+            }
+        });
+
+        return tempDiv.innerHTML;
+    }
+
     async function searchWiki(term, lang) {
-      summaryTab.innerHTML = `<p>⏳ Đang tìm kiếm...</p>`;
+      resultsDiv.style.display = 'block';
+      summaryTab.innerHTML = `<p style="text-align:center">⏳ Đang tải (${lang})...</p>`;
       detailTab.innerHTML = "";
 
       try {
         const summaryRes = await fetch(`https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`);
+        
+        if (!summaryRes.ok) throw new Error('Not found');
+
         const summary = await summaryRes.json();
 
         const metaRes = await fetch(`https://${lang}.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=timestamp&format=json&origin=*&titles=${encodeURIComponent(term)}`);
@@ -332,31 +420,38 @@
         const fullRes = await fetch(`https://${lang}.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(term)}&format=json&origin=*`);
         const fullData = await fullRes.json();
 
+        const safeTitle = summary.title.replace(/'/g, "\\'");
+        const safeExtract = summary.extract.replace(/'/g, "\\'").replace(/\n/g, " ");
+        
+        // Gọi hàm dọn dẹp mới
+        const cleanedDetail = cleanWikiContent(fullData.parse?.text["*"] || "");
+
         summaryTab.innerHTML = `
-          <h2>${summary.title}</h2>
+          <h2 style="margin-top:0">${summary.title}</h2>
           ${summary.thumbnail ? `<a href="${summary.content_urls.desktop.page}" target="_blank"><img src="${summary.thumbnail.source}" class="thumbnail" alt="${summary.title}" /></a>` : ''}
           <div class="quote">${summary.extract}</div>
-          <div class="last-edited">🕓 Sửa lần cuối: ${new Date(lastEdited).toLocaleString()}</div>
-          <button class="fav-btn" onclick="saveFavorite('${summary.title}', \`${summary.extract.replace(/`/g, "\\`")}\`)">❤️ Lưu trích dẫn</button>
+          <div class="last-edited">🕓 Sửa lần cuối: ${new Date(lastEdited).toLocaleString('vi-VN')}</div>
+          <button class="fav-btn" onclick="saveFavorite('${safeTitle}', '${safeExtract}')">❤️ Lưu trích dẫn</button>
+          <div style="clear:both"></div>
         `;
 
         detailTab.innerHTML = `
           <h3>Nội dung chi tiết</h3>
-          <div>${fullData.parse?.text["*"] || "Không tìm thấy nội dung chi tiết."}</div>
+          <div style="overflow-x:auto">${cleanedDetail || "Không tìm thấy nội dung chi tiết."}</div>
         `;
 
         showTab('summary');
 
       } catch (e) {
-        summaryTab.innerHTML = `<p>❌ Không thể tìm thấy thông tin. Hãy thử lại.</p>`;
+        summaryTab.innerHTML = `<p style="text-align:center; color: #d32f2f">❌ Không tìm thấy. Thử đổi ngôn ngữ hoặc từ khóa khác.</p>`;
         detailTab.innerHTML = '';
       }
     }
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const term = document.getElementById('searchInput').value.trim();
-      const lang = document.getElementById('langSelect').value;
+      const term = searchInput.value.trim();
+      const lang = langSelect.value;
       if (term) searchWiki(term, lang);
     });
 
