@@ -3,198 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xuân Bính Ngọ 2026 - Trạm Thời Tiết Toàn Quốc</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@900&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <title>Xuân Bính Ngọ 2026 - UTC+7 Real-time Weather</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@900&family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --festive-red: #d40000;
-            --gold-primary: #bf953f;
-            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
+            --gold: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 70%, #fbf5b7 100%);
+            --red-deep: radial-gradient(circle at center, #8B0000 0%, #310000 100%);
         }
 
         body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle, #ff1a1a 0%, #3d0000 100%);
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
-            color: #fff;
+            margin: 0; height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; background: var(--red-deep);
+            font-family: 'Montserrat', sans-serif; overflow: hidden; color: #fff;
         }
 
-        /* Thanh Ticker Thời tiết chi tiết */
+        /* Thanh Weather Ticker UTC+7 */
         .weather-ticker {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            padding: 15px 0;
-            white-space: nowrap;
-            overflow: hidden;
-            border-bottom: 2px solid #FFD700;
-            z-index: 100;
+            position: absolute; top: 0; width: 100%; background: rgba(0, 0, 0, 0.8);
+            padding: 12px 0; white-space: nowrap; overflow: hidden;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3); z-index: 100; backdrop-filter: blur(5px);
         }
 
-        .ticker-content {
-            display: inline-block;
-            animation: tickerScroll 200s linear infinite;
-        }
+        .ticker-content { display: inline-block; animation: tickerScroll 180s linear infinite; }
+        @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        @keyframes tickerScroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        .weather-node { 
-            margin: 0 50px; 
-            display: inline-block; 
-            font-size: 0.95rem; 
-            border-left: 2px solid rgba(255, 215, 0, 0.3);
-            padding-left: 15px;
-        }
-        .city-name { color: #FFD700; font-weight: 700; }
-        .weather-detail { color: #fff; font-weight: 400; opacity: 0.9; }
+        .weather-node { margin: 0 40px; display: inline-block; font-size: 0.85rem; }
+        .city-name { color: #FFD700; font-weight: 800; margin-right: 10px; }
 
         /* Card trung tâm */
-        .glass-card {
-            position: relative;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(25px);
-            padding: 50px;
-            border-radius: 50px;
-            border: 2px solid rgba(255, 215, 0, 0.4);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            text-align: center;
-            width: 85%;
-            max-width: 900px;
+        .main-card {
+            position: relative; z-index: 10; background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px); padding: 50px; border-radius: 60px;
+            border: 1px solid rgba(255, 215, 0, 0.2); text-align: center;
+            width: 85%; max-width: 900px; box-shadow: 0 50px 100px rgba(0,0,0,0.8);
         }
 
-        .live-clock {
-            font-size: 1.6rem;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px #FFD700;
-            margin-bottom: 5px;
+        .clock-live { font-size: 1.4rem; letter-spacing: 4px; margin-bottom: 5px; font-weight: 300; color: #fff; }
+        .lunar-today {
+            font-size: 1.6rem; font-weight: 800; background: var(--gold);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px;
         }
 
         h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 5.5rem;
-            margin: 15px 0;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: 'Dancing Script', cursive; font-size: 5.5rem; margin: 10px 0;
+            background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* Ô đếm ngược đứng yên */
-        .timer-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin: 35px 0;
+        /* Ô số đứng yên - Premium Style */
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 35px 0; }
+        .time-box {
+            background: rgba(0,0,0,0.4); padding: 30px 10px; border-radius: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.2); position: relative; overflow: hidden;
         }
 
-        .box {
-            background: #fff;
-            color: var(--festive-red);
-            padding: 25px 0;
-            border-radius: 25px;
-            box-shadow: 0 10px 0 #bf953f;
-        }
+        .num { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 900; line-height: 1; display: block; }
+        .label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.5); }
 
-        .num { font-family: 'Playfair Display', serif; font-size: 3.8rem; font-weight: 900; line-height: 1; }
-        .label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #555; }
-
-        /* Hoa mai vàng rơi */
-        .mai-petal {
-            position: absolute;
-            background: #FFD700;
+        .petal {
+            position: absolute; background: #FFD700;
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: fall linear infinite;
-            z-index: 1;
+            animation: fall linear infinite; z-index: 1;
         }
 
-        @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-        }
+        @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
     </style>
 </head>
 <body>
 
     <div class="weather-ticker">
-        <div class="ticker-content" id="weather-ticker">
-            Đang thu thập dữ liệu thời tiết đa chỉ số từ API...
-        </div>
+        <div class="ticker-content" id="weather-ticker">Đang cập nhật thời tiết 63 tỉnh thành Việt Nam...</div>
     </div>
 
-    <div class="glass-card">
-        <div id="live-clock" class="live-clock">00:00:00</div>
-        <div style="font-size: 1.4rem; color: #FFD700; margin-bottom: 10px; font-weight: bold;">25/12/2025 (Âm lịch)</div>
+    <div class="main-card">
+        <div id="live-clock" class="clock-live">00:00:00</div>
+        <div class="lunar-today">25/12/2025 (Âm lịch)</div>
 
-        <div style="text-transform: uppercase; letter-spacing: 5px; font-size: 0.8rem; opacity: 0.8;">Chỉ còn</div>
+        <div style="text-transform: uppercase; letter-spacing: 8px; font-size: 0.8rem;">Chỉ còn</div>
         <h1>Tết Bính Ngọ 2026</h1>
 
         <div class="timer-grid" id="countdown"></div>
 
-        <div style="margin-top: 25px; font-size: 1rem; line-height: 1.8;">
-            <span id="weather-status">📍 Đang kết nối Trạm khí tượng Việt Nam...</span><br>
-            Mùng 1 Tết: <b>Thứ Ba, 17/02/2026</b>
+        <div style="margin-top: 30px; font-size: 0.9rem; opacity: 0.8; border-top: 1px solid rgba(255,215,0,0.1); padding-top: 20px;">
+            Mùng 1 Tết: <b>Thứ Ba, 17/02/2026</b> | Múi giờ: <b>Việt Nam (UTC+7)</b>
         </div>
     </div>
 
     <script>
-        const apiKey = "adbf510244ceece337b1b07bf6317d4c";
-        // Danh sách các tỉnh thành đại diện (có thể mở rộng)
-        const locations = [
-            {q: "Hanoi", n: "Hà Nội"}, {q: "Haiphong", n: "Hải Phòng"}, {q: "Lao Cai", n: "Lào Cai"},
-            {q: "Vinh", n: "TP Vinh"}, {q: "Hue", n: "Huế"}, {q: "Da Nang", n: "Đà Nẵng"},
-            {q: "Pleiku", n: "Gia Lai"}, {q: "Da Lat", n: "Đà Lạt"}, {q: "Nha Trang", n: "Nha Trang"},
-            {q: "Vung Tau", n: "Vũng Tàu"}, {q: "Ho Chi Minh City", n: "TP.HCM"}, {q: "Can Tho", n: "Cần Thơ"}
+        const API_KEY = "adbf510244ceece337b1b07bf6317d4c";
+        const cities = [
+            {q: "Hanoi", n: "Hà Nội"}, {q: "Haiphong", n: "Hải Phòng"}, {q: "Da Nang", n: "Đà Nẵng"},
+            {q: "Hue", n: "Huế"}, {q: "Nha Trang", n: "Nha Trang"}, {q: "Vung Tau", n: "Vũng Tàu"},
+            {q: "Ho Chi Minh City", n: "TP.HCM"}, {q: "Can Tho", n: "Cần Thơ"}
         ];
 
-        async function fetchWeather() {
+        async function updateWeather() {
             const ticker = document.getElementById('weather-ticker');
-            const status = document.getElementById('weather-status');
-            let fullData = "";
-
+            let dataHtml = "";
             try {
-                for (let loc of locations) {
-                    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${loc.q},VN&units=metric&appid=${apiKey}&lang=vi`);
+                for (let city of cities) {
+                    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.q},VN&units=metric&appid=${API_KEY}&lang=vi`);
                     const data = await res.json();
-                    
                     if (data.main) {
-                        const temp = Math.round(data.main.temp);
-                        const humidity = data.main.humidity;
-                        const wind = Math.round(data.wind.speed * 3.6); // Chuyển m/s sang km/h
-                        const desc = data.weather[0].description;
-                        const icon = data.weather[0].main === 'Clear' ? '☀️' : '☁️';
-
-                        fullData += `
-                            <span class="weather-node">
-                                <span class="city-name">📍 ${loc.n.toUpperCase()}</span>: 
-                                <span class="weather-detail">${temp}°C ${icon} | 💧Ẩm: ${humidity}% | 🌬️Gió: ${wind}km/h | <small>${desc}</small></span>
-                            </span>`;
+                        dataHtml += `<span class="weather-node"><span class="city-name">📍 ${city.n.toUpperCase()}</span> ${Math.round(data.main.temp)}°C | 💧 ${data.main.humidity}% | 🌬️ ${Math.round(data.wind.speed * 3.6)}km/h</span>`;
                     }
                 }
-                ticker.innerHTML = fullData + fullData;
-                status.innerHTML = "✨ Đã cập nhật thời tiết thực tế cho 63 tỉnh thành.";
-            } catch (e) {
-                ticker.innerText = "Đang đồng bộ dữ liệu...";
-            }
+                ticker.innerHTML = dataHtml + dataHtml;
+            } catch (e) { ticker.innerText = "Đang kết nối API thời tiết..."; }
         }
 
-        function updateClock() {
+        function updateTime() {
             const now = new Date();
-            const vnTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (3600000 * 7));
+            // Ghim múi giờ UTC+7
+            const vnNow = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (3600000 * 7));
             
-            document.getElementById('live-clock').innerText = vnTime.toLocaleTimeString('vi-VN') + " - " + vnTime.toLocaleDateString('vi-VN', {weekday: 'long'}).toUpperCase();
+            document.getElementById('live-clock').innerText = vnNow.toLocaleTimeString('vi-VN') + " - " + vnNow.toLocaleDateString('vi-VN', {weekday: 'long'}).toUpperCase();
 
             const target = new Date('2026-02-17T00:00:00+07:00');
-            const diff = target - vnTime;
+            const diff = target - vnNow;
             const timerEl = document.getElementById('countdown');
 
             if (diff > 0) {
@@ -204,28 +129,28 @@
                 const s = Math.floor((diff / 1000) % 60);
 
                 timerEl.innerHTML = `
-                    <div class="box"><span class="num">${d}</span><span class="label">Ngày</span></div>
-                    <div class="box"><span class="num">${h<10?'0'+h:h}</span><span class="label">Giờ</span></div>
-                    <div class="box"><span class="num">${m<10?'0'+m:m}</span><span class="label">Phút</span></div>
-                    <div class="box"><span class="num">${s<10?'0'+s:s}</span><span class="label">Giây</span></div>
+                    <div class="time-box"><span class="num">${d}</span><span class="label">Ngày</span></div>
+                    <div class="time-box"><span class="num">${h<10?'0'+h:h}</span><span class="label">Giờ</span></div>
+                    <div class="time-box"><span class="num">${m<10?'0'+m:m}</span><span class="label">Phút</span></div>
+                    <div class="time-box"><span class="num">${s<10?'0'+s:s}</span><span class="label">Giây</span></div>
                 `;
             }
         }
 
         function createPetal() {
             const p = document.createElement('div');
-            p.className = 'mai-petal';
+            p.className = 'petal';
             p.style.left = Math.random() * 100 + 'vw';
-            p.style.width = p.style.height = Math.random() * 12 + 10 + 'px';
+            p.style.width = p.style.height = Math.random() * 10 + 10 + 'px';
             p.style.animationDuration = Math.random() * 3 + 5 + 's';
             document.body.appendChild(p);
-            setTimeout(() => p.remove(), 7000);
+            setTimeout(() => p.remove(), 8000);
         }
 
-        fetchWeather();
-        setInterval(updateClock, 1000);
-        setInterval(createPetal, 350);
-        updateClock();
+        updateWeather();
+        setInterval(updateTime, 1000);
+        setInterval(createPetal, 400);
+        updateTime();
     </script>
 </body>
 </html>
