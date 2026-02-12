@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đếm Ngược Tết Bính Ngọ 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <title>Tết Bính Ngọ 2026 - Rực Rỡ Sống Động</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@900&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #4a0404;
-            --card-bg: rgba(20, 0, 0, 0.6);
-            --gold-light: #fcf6ba;
-            --gold-dark: #bf953f;
+            --bright-red: #ff0000;
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
         }
 
         body {
@@ -19,212 +17,194 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle, #800000 0%, #330000 100%);
+            background: radial-gradient(circle, #cc0000 0%, #660000 100%);
             font-family: 'Montserrat', sans-serif;
-            color: white;
             overflow: hidden;
+            color: #fff;
         }
 
-        /* Hiệu ứng pháo hoa nền */
-        body::after {
-            content: "";
+        /* Hiệu ứng Pháo hoa giả lập bằng CSS */
+        .firework {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(circle, rgba(255,215,0,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            z-index: 1;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 2px #FFD700;
+            animation: firework-explode 2s infinite;
+            opacity: 0;
         }
 
-        .container {
+        @keyframes firework-explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(30); opacity: 0; }
+        }
+
+        .main-card {
             position: relative;
             z-index: 10;
-            width: 90%;
-            max-width: 900px;
-            background: var(--card-bg);
-            padding: 50px 20px;
-            border-radius: 40px;
-            border: 2px solid #5e0a0a;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
-            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 40px;
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            text-align: center;
+            width: 85%;
+            max-width: 850px;
+            animation: card-bounce 4s ease-in-out infinite;
         }
 
-        /* Tiêu đề mạ vàng */
+        @keyframes card-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
         h1 {
             font-family: 'Dancing Script', cursive;
             font-size: 5rem;
-            margin: 0;
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
+            margin: 10px 0;
+            background: var(--gold-gradient);
             -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine-text 3s linear infinite;
         }
 
-        .lunar-today {
-            color: #FFD700;
-            font-weight: 600;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
+        @keyframes shine-text {
+            to { background-position: 200% center; }
         }
 
-        .solar-today {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
-
-        /* Countdown Style ảnh 2 */
-        .countdown-grid {
+        /* Countdown Boxes với hiệu ứng Pulse */
+        .timer-wrap {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
         }
 
-        .time-item {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid #bf953f;
+        .box {
+            background: #fff;
+            color: #cc0000;
+            padding: 20px;
             border-radius: 20px;
-            padding: 25px;
-            min-width: 100px;
-            box-shadow: inset 0 0 15px rgba(191, 149, 63, 0.2);
+            min-width: 85px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            animation: box-pulse 2s infinite alternate;
         }
 
-        .time-num {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            display: block;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        @keyframes box-pulse {
+            from { transform: scale(1); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+            to { transform: scale(1.05); box-shadow: 0 15px 35px rgba(255, 215, 0, 0.4); }
         }
 
-        .time-label {
-            font-size: 0.8rem;
-            color: #bf953f;
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-top: 5px;
-        }
+        .num { font-family: 'Playfair Display', serif; font-size: 3.2rem; font-weight: 900; display: block; }
+        .label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #555; }
 
-        /* Thông tin Tết chi tiết */
-        .footer-info {
-            margin-top: 40px;
-            line-height: 1.8;
-        }
-
-        .footer-info b { color: #FFD700; font-size: 1.2rem; }
-
-        /* Lồng đèn treo */
+        /* Lồng đèn di chuyển linh hoạt */
         .lantern {
             position: absolute;
-            top: -10px;
-            width: 80px;
-            z-index: 5;
-            animation: swing 3s infinite ease-in-out alternate;
+            top: -20px;
+            width: 100px;
+            animation: swing 2.5s infinite ease-in-out alternate;
             transform-origin: top center;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
         }
-        .lantern-left { left: 5%; }
-        .lantern-right { right: 5%; animation-delay: 1s; }
+        .left { left: 5%; }
+        .right { right: 5%; animation-delay: 1.2s; }
 
         @keyframes swing {
-            from { transform: rotate(-6deg); }
-            to { transform: rotate(6deg); }
+            from { transform: rotate(-12deg); }
+            to { transform: rotate(12deg); }
         }
 
-        /* Cánh hoa rơi */
-        .petal {
+        /* Hoa rơi xoay tròn */
+        .flower {
             position: absolute;
-            top: -20px;
-            background: #ffb7b2;
-            border-radius: 150% 0 150% 0;
-            animation: fall linear infinite;
+            background: #FFD700;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: flower-fall linear infinite;
         }
 
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(540deg); }
-        }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 3rem; }
-            .time-item { min-width: 70px; padding: 15px; }
-            .time-num { font-size: 2rem; }
+        @keyframes flower-fall {
+            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); }
+            50% { transform: translateY(50vh) rotate(180deg) translateX(20px); }
+            100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); }
         }
     </style>
 </head>
 <body>
 
-    <img src="https://img.icons8.com/papercut/100/chinese-lantern.png" class="lantern lantern-left" alt="lantern">
-    <img src="https://img.icons8.com/papercut/100/chinese-lantern.png" class="lantern lantern-right" alt="lantern">
+    <div class="firework" style="top: 20%; left: 15%; animation-delay: 0s;"></div>
+    <div class="firework" style="top: 10%; left: 80%; animation-delay: 0.5s;"></div>
+    <div class="firework" style="top: 70%; left: 10%; animation-delay: 1.2s;"></div>
+    <div class="firework" style="top: 60%; left: 85%; animation-delay: 1.8s;"></div>
 
-    <div class="container">
-        <div id="solar-txt" class="solar-today">HÔM NAY: THỨ NĂM, NGÀY 12/02/2026</div>
-        <div class="lunar-today">25/12/2025 (ÂM LỊCH)</div>
-        
-        <h1>Tết Bính Ngọ 2026</h1>
-        
-        <div style="margin: 20px 0; font-size: 1.2rem; color: #ccc;">Chỉ còn</div>
+    <img src="https://img.icons8.com/color/144/chinese-lantern.png" class="lantern left">
+    <img src="https://img.icons8.com/color/144/chinese-lantern.png" class="lantern right">
 
-        <div class="countdown-grid" id="timer">
-            </div>
+    <div class="main-card">
+        <div style="font-size: 0.9rem; letter-spacing: 2px; color: #fff5cc;">
+            <span id="solar-txt">HÔM NAY: ...</span><br>
+            <strong style="font-size: 1.4rem; color: #FFD700;">25/12/2025 (Âm lịch)</strong>
+        </div>
 
-        <div class="footer-info">
-            Là đến <b>Tết Nguyên Đán 2026</b><br>
-            Tết Nguyên Đán diễn ra vào Thứ Ba, 17/02/2026 (Dương lịch)<br>
-            <span style="opacity: 0.7;">Nhằm ngày 01/01/2026 (Âm lịch)</span>
+        <h1 id="title">Tết Bính Ngọ 2026</h1>
+        <div style="text-transform: uppercase; letter-spacing: 6px; font-weight: bold; margin: 10px 0;">Chỉ còn</div>
+
+        <div class="timer-wrap" id="timer"></div>
+
+        <div style="line-height: 1.6; margin-top: 20px;">
+            <span style="font-size: 1.1rem;">Là đến <b>Tết Nguyên Đán 2026</b></span><br>
+            Thứ Ba, ngày 17/02/2026 Dương lịch<br>
+            <small>(Nhằm ngày 01/01/2026 Âm lịch)</small>
         </div>
     </div>
 
     <script>
-        function updateTime() {
+        function update() {
             const now = new Date();
-            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const vnNow = new Date(utc + (3600000 * 7));
+            const vnTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (3600000 * 7));
 
-            // Hiển thị ngày dương
             const opt = { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' };
-            document.getElementById('solar-txt').innerText = "HÔM NAY: " + vnNow.toLocaleDateString('vi-VN', opt).toUpperCase();
+            document.getElementById('solar-txt').innerText = "HÔM NAY: " + vnTime.toLocaleDateString('vi-VN', opt).toUpperCase();
 
-            // Đích đến: 17/02/2026
             const tet = new Date('2026-02-17T00:00:00+07:00');
-            const diff = tet - vnNow;
+            const diff = tet - vnTime;
 
             const timerEl = document.getElementById('timer');
-
             if (diff > 0) {
-                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-                const m = Math.floor((diff / 1000 / 60) % 60);
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff / 3600000) % 24);
+                const m = Math.floor((diff / 60000) % 60);
                 const s = Math.floor((diff / 1000) % 60);
 
                 timerEl.innerHTML = `
-                    <div class="time-item"><span class="time-num">${d}</span><span class="time-label">Ngày</span></div>
-                    <div class="time-item"><span class="time-num">${h < 10 ? '0'+h : h}</span><span class="time-label">Giờ</span></div>
-                    <div class="time-item"><span class="time-num">${m < 10 ? '0'+m : m}</span><span class="time-label">Phút</span></div>
-                    <div class="time-item"><span class="time-num">${s < 10 ? '0'+s : s}</span><span class="time-label">Giây</span></div>
+                    <div class="box"><span class="num">${d}</span><span class="label">Ngày</span></div>
+                    <div class="box"><span class="num">${h<10?'0'+h:h}</span><span class="label">Giờ</span></div>
+                    <div class="box"><span class="num">${m<10?'0'+m:m}</span><span class="label">Phút</span></div>
+                    <div class="box"><span class="num">${s<10?'0'+s:s}</span><span class="label">Giây</span></div>
                 `;
             } else {
-                timerEl.innerHTML = "<h1>CHÚC MỪNG NĂM MỚI!</h1>";
+                document.getElementById('title').innerText = "CHÚC MỪNG NĂM MỚI!";
+                timerEl.innerHTML = "<h2>XUÂN BÍNH NGỌ 2026</h2>";
             }
         }
 
-        // Tạo cánh hoa đào rơi
-        function createPetal() {
-            const petal = document.createElement('div');
-            petal.className = 'petal';
-            petal.style.left = Math.random() * 100 + 'vw';
-            petal.style.width = Math.random() * 10 + 10 + 'px';
-            petal.style.height = petal.style.width;
-            petal.style.opacity = Math.random();
-            petal.style.animationDuration = Math.random() * 3 + 4 + 's';
-            document.body.appendChild(petal);
-            setTimeout(() => petal.remove(), 7000);
+        function createFlower() {
+            const f = document.createElement('div');
+            f.className = 'flower';
+            f.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 12 + 10 + 'px';
+            f.style.width = f.style.height = size;
+            f.style.animationDuration = Math.random() * 3 + 5 + 's';
+            f.style.opacity = Math.random();
+            document.body.appendChild(f);
+            setTimeout(() => f.remove(), 8000);
         }
 
-        setInterval(updateTime, 1000);
-        setInterval(createPetal, 400);
-        updateTime();
+        setInterval(update, 1000);
+        setInterval(createFlower, 250);
+        update();
     </script>
 </body>
 </html>
