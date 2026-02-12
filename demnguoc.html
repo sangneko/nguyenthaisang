@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xuân Bính Ngọ 2026 - UTC+7 Real-time</title>
+    <title>Tết Bính Ngọ 2026 - Ép Buộc UTC+7</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@900&family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,7 +17,6 @@
             font-family: 'Montserrat', sans-serif; overflow: hidden; color: #fff;
         }
 
-        /* Thanh Weather Ticker 63 Tỉnh Thành */
         .weather-ticker {
             position: absolute; top: 0; width: 100%; background: rgba(0, 0, 0, 0.85);
             padding: 15px 0; white-space: nowrap; overflow: hidden;
@@ -33,11 +32,10 @@
         }
         .city-name { color: #FFD700; font-weight: 800; margin-right: 10px; }
 
-        /* Card trung tâm Premium */
         .glass-card {
             position: relative; z-index: 10; background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(30px); padding: 55px 70px; border-radius: 60px;
-            border: 1px solid rgba(255, 215, 0, 0.3); text-align: center;
+            border: 2px solid rgba(255, 215, 0, 0.3); text-align: center;
             width: 85%; max-width: 1000px; box-shadow: 0 40px 80px rgba(0,0,0,0.8);
         }
 
@@ -53,7 +51,6 @@
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
         }
 
-        /* Countdown Grid - Cố định (Đã bỏ nhún nhảy) */
         .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 40px 0; }
         .time-box {
             background: rgba(0,0,0,0.4); padding: 35px 10px; border-radius: 35px;
@@ -65,7 +62,6 @@
 
         .footer { font-size: 1rem; opacity: 0.8; margin-top: 30px; border-top: 1px solid rgba(255,215,0,0.1); padding-top: 25px; }
 
-        /* Trang trí hoa mai */
         .petal {
             position: absolute; background: #FFD700;
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
@@ -77,14 +73,12 @@
 <body>
 
     <div class="weather-ticker">
-        <div class="ticker-content" id="weather-ticker">
-            Đang đồng bộ trạm khí tượng thực tế cho 63 tỉnh thành Việt Nam...
-        </div>
+        <div class="ticker-content" id="weather-ticker">Đang đồng bộ dữ liệu API thời tiết 63 tỉnh thành...</div>
     </div>
 
     <div class="glass-card">
-        <div style="font-size: 0.75rem; color: #FFD700; margin-bottom: 10px; letter-spacing: 3px; font-weight: 600;">MÚI GIỜ: VIỆT NAM (UTC+7)</div>
-        <div id="live-clock" class="live-clock">00:00:00</div>
+        <div style="background: #FFD700; color: #000; display: inline-block; padding: 2px 15px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; margin-bottom: 15px;">FIXED: VIETNAM TIME (UTC+7)</div>
+        <div id="live-clock" class="live-clock">--:--:--</div>
         <div class="lunar-today">25/12/2025 (Âm lịch)</div>
 
         <div style="text-transform: uppercase; letter-spacing: 8px; font-size: 0.8rem; font-weight: 600;">Chỉ còn</div>
@@ -94,14 +88,14 @@
 
         <div class="footer">
             Mùng 1 Tết: <b>Thứ Ba, 17/02/2026</b><br>
-            
+            Ép múi giờ hệ thống sang Việt Nam để tránh sai lệch tại Mỹ.
         </div>
     </div>
 
     <script>
         const apiKey = "adbf510244ceece337b1b07bf6317d4c";
         const locations = [
-            {q: "An Giang", n: "An Giang"}, {q: "Vung Tau", n: "Bà Rịa - Vũng Tàu"}, {q: "Bac Giang", n: "Bắc Giang"},
+            {q: "An Giang", n: "An Giang"}, {q: "Vung Tau", n: "Vũng Tàu"}, {q: "Bac Giang", n: "Bắc Giang"},
             {q: "Bac Kan", n: "Bắc Kạn"}, {q: "Bac Lieu", n: "Bạc Liêu"}, {q: "Bac Ninh", n: "Bắc Ninh"},
             {q: "Ben Tre", n: "Bến Tre"}, {q: "Binh Dinh", n: "Bình Định"}, {q: "Binh Duong", n: "Bình Dương"},
             {q: "Binh Phuoc", n: "Bình Phước"}, {q: "Binh Thuan", n: "Bình Thuận"}, {q: "Ca Mau", n: "Cà Mau"},
@@ -128,17 +122,12 @@
             const ticker = document.getElementById('weather-ticker');
             let weatherData = "";
             try {
-                // Lấy mẫu ngẫu nhiên 20 tỉnh mỗi đợt để tối ưu API
-                const sample = locations.sort(() => 0.5 - Math.random()).slice(0, 20);
+                const sample = locations.sort(() => 0.5 - Math.random()).slice(0, 15);
                 for (let city of sample) {
                     const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.q},VN&units=metric&appid=${apiKey}&lang=vi`);
                     const data = await res.json();
                     if (data.main) {
-                        weatherData += `
-                            <span class="weather-node">
-                                <span class="city-name">📍 ${city.n.toUpperCase()}</span>
-                                ${Math.round(data.main.temp)}°C | 💧 ${data.main.humidity}% | 🌬️ ${Math.round(data.wind.speed * 3.6)}km/h | <small>${data.weather[0].description}</small>
-                            </span>`;
+                        weatherData += `<span class="weather-node"><span class="city-name">📍 ${city.n.toUpperCase()}</span> ${Math.round(data.main.temp)}°C | 💧 ${data.main.humidity}% | 🌬️ ${Math.round(data.wind.speed * 3.6)}km/h</span>`;
                     }
                 }
                 ticker.innerHTML = weatherData + weatherData;
@@ -146,17 +135,21 @@
         }
 
         function updateTime() {
+            // 1. Lấy thời gian hiện tại của thiết bị
             const now = new Date();
-            // XỬ LÝ GHIM GIỜ: Tính toán UTC sau đó ép cộng 7 tiếng (Giờ Hà Nội)
+            // 2. Chuyển sang miligiây và cộng thêm offset của thiết bị để về UTC 0
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const vnNow = new Date(utc + (3600000 * 7));
+            // 3. Ép cộng thêm đúng 7 tiếng (25200000ms) cho Việt Nam
+            const vnNow = new Date(utc + 25200000);
             
-            // Đồng hồ live luôn hiển thị giờ VN bất kể vị trí người xem
-            document.getElementById('live-clock').innerText = vnNow.toLocaleTimeString('vi-VN') + " - " + vnNow.toLocaleDateString('vi-VN', {weekday: 'long'}).toUpperCase();
+            // Hiển thị đồng hồ (Giờ Hà Nội)
+            document.getElementById('live-clock').innerText = vnNow.toLocaleTimeString('vi-VN', {hour12: false}) + " - " + vnNow.toLocaleDateString('vi-VN', {weekday: 'long'}).toUpperCase();
 
-            // Mốc Tết Nguyên Đán: 17/02/2026 tại VN
-            const target = new Date('2026-02-17T00:00:00+07:00');
-            const diff = target - vnNow;
+            // Mốc Tết Nguyên Đán Bính Ngọ (17/02/2026 00:00:00 UTC+7)
+            // Chú ý: Dùng mốc thời gian cố định miligiây để không bị nhảy giờ
+            const targetTime = new Date('2026-02-17T00:00:00+07:00').getTime();
+            const diff = targetTime - vnNow.getTime();
+            
             const timerEl = document.getElementById('countdown');
 
             if (diff > 0) {
@@ -187,7 +180,7 @@
         }
 
         updateWeather();
-        setInterval(updateWeather, 600000); // Cập nhật thời tiết mỗi 10 phút
+        setInterval(updateWeather, 600000);
         setInterval(updateTime, 1000);
         setInterval(createPetal, 400);
         updateTime();
