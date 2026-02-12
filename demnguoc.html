@@ -3,201 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tết Bính Ngọ 2026 - Ép Buộc UTC+7</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@900&family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
+    <title>Xuân Bính Ngọ 2026 - Giờ Việt Nam Chuẩn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@900&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 70%, #fbf5b7 100%);
-            --red-royal: radial-gradient(circle at center, #990000 0%, #330000 100%);
+            --gold: #FFD700;
+            --red-bg: #800000;
+            --dark-overlay: rgba(0, 0, 0, 0.6);
         }
 
         body {
-            margin: 0; height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; background: var(--red-royal);
-            font-family: 'Montserrat', sans-serif; overflow: hidden; color: #fff;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #a30000 0%, #3d0000 100%);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            color: #fff;
         }
 
-        /* Thanh Weather Ticker 63 Tỉnh Thành */
+        /* --- THANH THỜI TIẾT --- */
         .weather-ticker {
-            position: absolute; top: 0; width: 100%; background: rgba(0, 0, 0, 0.85);
-            padding: 15px 0; white-space: nowrap; overflow: hidden;
-            border-bottom: 2px solid rgba(255, 215, 0, 0.4); z-index: 100; backdrop-filter: blur(10px);
+            position: absolute; top: 0; width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gold);
+            white-space: nowrap; overflow: hidden; z-index: 100;
+        }
+        .ticker-content { display: inline-block; animation: ticker 250s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        
+        .weather-item {
+            display: inline-block; margin: 0 40px; font-size: 0.9rem;
+            color: #eee;
+        }
+        .weather-item b { color: var(--gold); margin-right: 5px; }
+
+        /* --- THẺ CHÍNH --- */
+        .main-card {
+            position: relative; z-index: 10;
+            background: rgba(40, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            padding: 50px 80px;
+            border-radius: 40px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            width: 80%; max-width: 1000px;
         }
 
-        .ticker-content { display: inline-block; animation: tickerScroll 350s linear infinite; }
-        @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        .weather-node { 
-            margin: 0 50px; display: inline-block; font-size: 0.9rem; 
-            border-left: 1px solid rgba(255, 215, 0, 0.3); padding-left: 20px;
+        /* Đồng hồ thời gian thực */
+        .real-time {
+            font-size: 1.8rem; letter-spacing: 3px;
+            color: #fff; font-weight: 300;
+            text-shadow: 0 0 10px var(--gold);
+            margin-bottom: 5px;
         }
-        .city-name { color: #FFD700; font-weight: 800; margin-right: 10px; }
-
-        /* Card trung tâm Premium */
-        .glass-card {
-            position: relative; z-index: 10; background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(30px); padding: 50px 70px; border-radius: 60px;
-            border: 1px solid rgba(255, 215, 0, 0.3); text-align: center;
-            width: 85%; max-width: 1000px; box-shadow: 0 40px 80px rgba(0,0,0,0.8);
-        }
-
-        .live-clock { font-size: 1.5rem; letter-spacing: 4px; margin-bottom: 5px; font-weight: 300; text-shadow: 0 0 10px #FFD700; }
-        .lunar-today {
-            font-size: 1.7rem; font-weight: 800; background: var(--gold);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px;
+        .lunar-date {
+            color: var(--gold); font-size: 1.5rem; font-weight: bold; margin-bottom: 30px;
         }
 
         h1 {
-            font-family: 'Dancing Script', cursive; font-size: 6rem; margin: 10px 0;
-            background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            font-family: 'Dancing Script', cursive; font-size: 6rem;
+            margin: 0 0 40px 0;
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #aa771c);
+            -webkit-background-clip: text; color: transparent;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
         }
 
-        /* Countdown Grid Tĩnh (Đã bỏ nhún nhảy) */
-        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 40px 0; }
+        /* Ô Đếm Ngược ĐỨNG YÊN (Static) */
+        .countdown-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px;
+            margin-bottom: 40px;
+        }
         .time-box {
-            background: rgba(0,0,0,0.4); padding: 35px 10px; border-radius: 35px;
-            border: 1px solid rgba(255, 215, 0, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            background: #4a0000; /* Đỏ đậm sang trọng */
+            border: 1px solid #bf953f;
+            border-radius: 20px;
+            padding: 30px 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        .num {
+            font-family: 'Playfair Display', serif; font-size: 4.5rem;
+            font-weight: 900; line-height: 1; display: block;
+            color: #fff; text-shadow: 2px 2px 0 #000;
+        }
+        .label {
+            font-size: 0.9rem; text-transform: uppercase; margin-top: 10px;
+            color: var(--gold); letter-spacing: 2px;
         }
 
-        .num { font-family: 'Playfair Display', serif; font-size: 4.5rem; font-weight: 900; line-height: 1; display: block; margin-bottom: 5px; }
-        .label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.6); }
+        .footer { font-size: 0.9rem; opacity: 0.8; border-top: 1px solid #555; padding-top: 20px; }
 
-        .footer { font-size: 1rem; opacity: 0.8; margin-top: 30px; border-top: 1px solid rgba(255,215,0,0.1); padding-top: 25px; }
-
-        /* Trang trí hoa mai */
+        /* Hiệu ứng hoa rơi */
         .petal {
-            position: absolute; background: #FFD700;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: fall linear infinite; z-index: 1;
+            position: absolute; background: var(--gold);
+            width: 10px; height: 10px; opacity: 0.8;
+            border-radius: 100% 0 100% 0;
+            animation: fall linear infinite;
         }
-        @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+        @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
     </style>
 </head>
 <body>
 
     <div class="weather-ticker">
-        <div class="ticker-content" id="weather-ticker">
-            Đang cập nhật thời tiết thực tế 63 tỉnh thành Việt Nam...
+        <div class="ticker-content" id="weather-list">
+            Đang tải dữ liệu thời tiết 63 tỉnh thành...
         </div>
     </div>
 
-    <div class="glass-card">
-        <div style="font-size: 0.75rem; color: #FFD700; margin-bottom: 10px; letter-spacing: 3px; font-weight: 600; border: 1px solid #FFD700; padding: 4px 15px; border-radius: 20px; display: inline-block;">FORCED: VIETNAM TIME (UTC+7)</div>
+    <div class="main-card">
+        <div style="font-size: 0.7rem; color: #888; margin-bottom: 10px; letter-spacing: 2px;">TIMEZONE: ASIA/HO_CHI_MINH</div>
         
-        <div id="live-clock" class="live-clock">00:00:00</div>
-        <div class="lunar-today">25/12/2025 (Âm lịch)</div>
+        <div id="vn-clock" class="real-time">--:--:--</div>
+        <div class="lunar-date">25/12/2025 (Âm lịch)</div>
 
-        <div style="text-transform: uppercase; letter-spacing: 8px; font-size: 0.8rem; font-weight: 600;">Chỉ còn</div>
+        <div style="font-size: 1rem; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 10px;">Chỉ còn</div>
         <h1>Tết Bính Ngọ 2026</h1>
 
-        <div class="timer-grid" id="countdown"></div>
+        <div class="countdown-grid" id="countdown"></div>
 
         <div class="footer">
             Mùng 1 Tết: <b>Thứ Ba, 17/02/2026</b><br>
-            <i></i>
+            Hệ thống hiển thị chuẩn giờ Việt Nam (UTC+7)
         </div>
     </div>
 
     <script>
+        // 1. CẤU HÌNH API & TỈNH THÀNH
         const apiKey = "adbf510244ceece337b1b07bf6317d4c";
-        const locations = [
-            {q: "An Giang", n: "An Giang"}, {q: "Vung Tau", n: "Bà Rịa - Vũng Tàu"}, {q: "Bac Giang", n: "Bắc Giang"},
-            {q: "Bac Kan", n: "Bắc Kạn"}, {q: "Bac Lieu", n: "Bạc Liêu"}, {q: "Bac Ninh", n: "Bắc Ninh"},
-            {q: "Ben Tre", n: "Bến Tre"}, {q: "Binh Dinh", n: "Bình Định"}, {q: "Binh Duong", n: "Bình Dương"},
-            {q: "Binh Phuoc", n: "Bình Phước"}, {q: "Binh Thuan", n: "Bình Thuận"}, {q: "Ca Mau", n: "Cà Mau"},
-            {q: "Can Tho", n: "Cần Thơ"}, {q: "Cao Bang", n: "Cao Bằng"}, {q: "Da Nang", n: "Đà Nẵng"},
-            {q: "Dak Lak", n: "Đắk Lắk"}, {q: "Dak Nong", n: "Đắk Nông"}, {q: "Dien Bien Phu", n: "Điện Biên"},
-            {q: "Dong Nai", n: "Đồng Nai"}, {q: "Dong Thap", n: "Đồng Tháp"}, {q: "Gia Lai", n: "Gia Lai"},
-            {q: "Ha Giang", n: "Hà Giang"}, {q: "Ha Nam", n: "Hà Nam"}, {q: "Hanoi", n: "Hà Nội"},
-            {q: "Ha Tinh", n: "Hà Tĩnh"}, {q: "Hai Duong", n: "Hải Dương"}, {q: "Haiphong", n: "Hải Phòng"},
-            {q: "Hau Giang", n: "Hậu Giang"}, {q: "Hoa Binh", n: "Hòa Bình"}, {q: "Hung Yen", n: "Hưng Yên"},
-            {q: "Khanh Hoa", n: "Khánh Hòa"}, {q: "Kien Giang", n: "Kiên Giang"}, {q: "Kon Tum", n: "Kon Tum"},
-            {q: "Lai Chau", n: "Lai Châu"}, {q: "Lam Dong", n: "Lâm Đồng"}, {q: "Lang Son", n: "Lạng Sơn"},
-            {q: "Lao Cai", n: "Lào Cai"}, {q: "Long An", n: "Long An"}, {q: "Nam Dinh", n: "Nam Định"},
-            {q: "Nghe An", n: "Nghệ An"}, {q: "Ninh Binh", n: "Ninh Bình"}, {q: "Ninh Thuan", n: "Ninh Thuan"},
-            {q: "Phu Tho", n: "Phú Thọ"}, {q: "Phu Yen", n: "Phú Yên"}, {q: "Quang Binh", n: "Quảng Bình"},
-            {q: "Quang Nam", n: "Quảng Nam"}, {q: "Quang Ngai", n: "Quảng Ngãi"}, {q: "Quang Ninh", n: "Quảng Ninh"},
-            {q: "Quang Tri", n: "Quảng Trị"}, {q: "Soc Trang", n: "Sóc Trăng"}, {q: "Son La", n: "Sơn La"},
-            {q: "Tay Ninh", n: "Tây Ninh"}, {q: "Thai Binh", n: "Thái Bình"}, {q: "Thai Nguyen", n: "Thái Nguyên"},
-            {q: "Thanh Hoa", n: "Thanh Hóa"}, {q: "Thua Thien Hue", n: "Thừa Thiên Huế"}, {q: "Tien Giang", n: "Tiền Giang"},
-            {q: "Ho Chi Minh City", n: "TP.HCM"}, {q: "Tra Vinh", n: "Trà Vinh"}, {q: "Tuyen Quang", n: "Tuyên Quang"},
-            {q: "Vinh Long", n: "Vĩnh Long"}, {q: "Vinh Phuc", n: "Vĩnh Phúc"}, {q: "Yen Bai", n: "Yên Bái"}
+        const provinces = [
+            "An Giang", "Ba Ria - Vung Tau", "Bac Giang", "Bac Kan", "Bac Lieu", "Bac Ninh", "Ben Tre", 
+            "Binh Dinh", "Binh Duong", "Binh Phuoc", "Binh Thuan", "Ca Mau", "Can Tho", "Cao Bang", 
+            "Da Nang", "Dak Lak", "Dak Nong", "Dien Bien", "Dong Nai", "Dong Thap", "Gia Lai", "Ha Giang", 
+            "Ha Nam", "Hanoi", "Ha Tinh", "Hai Duong", "Haiphong", "Hau Giang", "Hoa Binh", "Hung Yen", 
+            "Khanh Hoa", "Kien Giang", "Kon Tum", "Lai Chau", "Lam Dong", "Lang Son", "Lao Cai", "Long An", 
+            "Nam Dinh", "Nghe An", "Ninh Binh", "Ninh Thuan", "Phu Tho", "Phu Yen", "Quang Binh", "Quang Nam", 
+            "Quang Ngai", "Quang Ninh", "Quang Tri", "Soc Trang", "Son La", "Tay Ninh", "Thai Binh", 
+            "Thai Nguyen", "Thanh Hoa", "Hue", "Tien Giang", "Ho Chi Minh City", "Tra Vinh", "Tuyen Quang", 
+            "Vinh Long", "Vinh Phuc", "Yen Bai"
         ];
 
-        async function updateWeather() {
-            const ticker = document.getElementById('weather-ticker');
-            let weatherData = "";
-            try {
-                const sample = locations.sort(() => 0.5 - Math.random()).slice(0, 20);
-                for (let city of sample) {
-                    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.q},VN&units=metric&appid=${apiKey}&lang=vi`);
-                    const data = await res.json();
-                    if (data.main) {
-                        weatherData += `
-                            <span class="weather-node">
-                                <span class="city-name">📍 ${city.n.toUpperCase()}</span>
-                                ${Math.round(data.main.temp)}°C | 💧 ${data.main.humidity}% | 🌬️ ${Math.round(data.wind.speed * 3.6)}km/h | <small>${data.weather[0].description}</small>
-                            </span>`;
-                    }
-                }
-                ticker.innerHTML = weatherData + weatherData;
-            } catch (e) { ticker.innerText = "Đang đồng bộ dữ liệu API thời tiết..."; }
-        }
+        // 2. HÀM XỬ LÝ THỜI GIAN "CỨNG" (Silver Bullet Function)
+        function updateCore() {
+            // Lấy thời điểm hiện tại
+            const now = new Date();
 
-        function updateTime() {
-            // Lấy thời gian của VPS (Giờ Mỹ)
-            const deviceDate = new Date();
-            
-            // Ép buộc tính toán theo giờ Việt Nam (UTC+7) bất kể VPS ở đâu
-            // Chuyển đổi sang miligiây gốc, trừ đi độ lệch múi giờ cục bộ của VPS để về UTC 0
-            const utcTime = deviceDate.getTime() + (deviceDate.getTimezoneOffset() * 60000);
-            
-            // Cộng thêm đúng 7 tiếng (7 * 3600 * 1000 miligiây) cho giờ Việt Nam
-            const vnNow = new Date(utcTime + 25200000);
-            
-            // Cập nhật đồng hồ Live (Luôn hiển thị giờ VN)
-            document.getElementById('live-clock').innerText = vnNow.toLocaleTimeString('vi-VN', {hour12: false}) + " - " + vnNow.toLocaleDateString('vi-VN', {weekday: 'long'}).toUpperCase();
+            // A. ĐỒNG HỒ LIVE: Sử dụng Intl.DateTimeFormat để ÉP BUỘC múi giờ Vietnam
+            // Cách này không quan tâm giờ máy tính là gì, nó tự convert sang giờ VN.
+            const timeString = new Intl.DateTimeFormat('vi-VN', {
+                timeZone: 'Asia/Ho_Chi_Minh',
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            }).format(now);
 
-            // Mốc Tết Nguyên Đán: 17/02/2026 00:00:00 Giờ Hà Nội
-            // Sử dụng mốc thời gian tuyệt đối để không bị nhảy giờ
-            const targetTime = new Date('2026-02-17T00:00:00+07:00').getTime();
-            const diff = targetTime - vnNow.getTime();
-            
+            const dateString = new Intl.DateTimeFormat('vi-VN', {
+                timeZone: 'Asia/Ho_Chi_Minh',
+                weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
+            }).format(now);
+
+            document.getElementById('vn-clock').innerHTML = `${timeString} <span style="font-size:0.6em">| ${dateString.toUpperCase()}</span>`;
+
+
+            // B. ĐẾM NGƯỢC: Tính toán dựa trên chênh lệch Timestamp (Toàn cầu như nhau)
+            // Mốc Tết: 00:00:00 17/02/2026 (GMT+7)
+            const targetTime = new Date("2026-02-17T00:00:00+07:00").getTime();
+            const currentTime = now.getTime();
+            const diff = targetTime - currentTime;
+
             const timerEl = document.getElementById('countdown');
 
             if (diff > 0) {
-                const d = Math.floor(diff / 86400000);
-                const h = Math.floor((diff / 3600000) % 24);
-                const m = Math.floor((diff / 60000) % 60);
-                const s = Math.floor((diff / 1000) % 60);
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                // Format số 0 ở đầu
+                const fh = h < 10 ? '0' + h : h;
+                const fm = m < 10 ? '0' + m : m;
+                const fs = s < 10 ? '0' + s : s;
 
                 timerEl.innerHTML = `
                     <div class="time-box"><span class="num">${d}</span><span class="label">Ngày</span></div>
-                    <div class="time-box"><span class="num">${h < 10 ? '0' + h : h}</span><span class="label">Giờ</span></div>
-                    <div class="time-box"><span class="num">${m < 10 ? '0' + m : m}</span><span class="label">Phút</span></div>
-                    <div class="time-box"><span class="num">${s < 10 ? '0' + s : s}</span><span class="label">Giây</span></div>
+                    <div class="time-box"><span class="num">${fh}</span><span class="label">Giờ</span></div>
+                    <div class="time-box"><span class="num">${fm}</span><span class="label">Phút</span></div>
+                    <div class="time-box"><span class="num">${fs}</span><span class="label">Giây</span></div>
                 `;
             } else {
-                timerEl.innerHTML = "<h2 style='grid-column: span 4;'>CHÚC MỪNG NĂM MỚI!</h2>";
+                timerEl.innerHTML = "<h2 style='grid-column: span 4; color: var(--gold); font-size: 3em;'>CHÚC MỪNG NĂM MỚI!</h2>";
             }
         }
 
+        // 3. HÀM API THỜI TIẾT (Lấy ngẫu nhiên 15 tỉnh để tránh lỗi quá tải API Free)
+        async function fetchWeather() {
+            const container = document.getElementById('weather-list');
+            let html = "";
+            
+            // Trộn danh sách và lấy 15 tỉnh
+            const randomList = provinces.sort(() => 0.5 - Math.random()).slice(0, 15);
+
+            for (const city of randomList) {
+                try {
+                    // Gọi API
+                    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},VN&units=metric&appid=${apiKey}&lang=vi`);
+                    const data = await res.json();
+                    
+                    if(data.main) {
+                        const temp = Math.round(data.main.temp);
+                        const icon = data.weather[0].main === 'Rain' ? '🌧️' : (data.weather[0].main === 'Clouds' ? '☁️' : '☀️');
+                        // Tên hiển thị ngắn gọn
+                        const displayName = city.replace("Ba Ria - Vung Tau", "Vũng Tàu").replace("Ho Chi Minh City", "TP.HCM").replace("Thua Thien Hue", "Huế");
+                        
+                        html += `<span class="weather-item"><b>📍 ${displayName.toUpperCase()}</b> ${temp}°C ${icon}</span>`;
+                    }
+                } catch(e) { console.log(e); }
+            }
+            // Nhân đôi để chạy chữ không bị đứt quãng
+            container.innerHTML = html + html; 
+        }
+
+        // 4. HIỆU ỨNG HOA RƠI
         function createPetal() {
             const p = document.createElement('div');
             p.className = 'petal';
             p.style.left = Math.random() * 100 + 'vw';
-            p.style.width = p.style.height = Math.random() * 10 + 10 + 'px';
-            p.style.animationDuration = Math.random() * 3 + 5 + 's';
+            p.style.animationDuration = Math.random() * 3 + 4 + 's';
             document.body.appendChild(p);
-            setTimeout(() => p.remove(), 8000);
+            setTimeout(() => p.remove(), 7000);
         }
 
-        updateWeather();
-        setInterval(updateWeather, 600000);
-        setInterval(updateTime, 1000);
-        setInterval(createPetal, 400);
-        updateTime();
+        // KHỞI CHẠY
+        fetchWeather(); // Gọi thời tiết 1 lần đầu
+        setInterval(updateCore, 1000); // Cập nhật giờ mỗi giây
+        setInterval(createPetal, 300); // Tạo hoa
+        updateCore(); // Chạy ngay lập tức
     </script>
 </body>
 </html>
