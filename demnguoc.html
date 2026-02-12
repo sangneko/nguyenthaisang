@@ -36,7 +36,7 @@
         /* Card trung tâm Premium */
         .glass-card {
             position: relative; z-index: 10; background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(30px); padding: 60px 70px; border-radius: 60px;
+            backdrop-filter: blur(30px); padding: 55px 70px; border-radius: 60px;
             border: 1px solid rgba(255, 215, 0, 0.3); text-align: center;
             width: 85%; max-width: 1000px; box-shadow: 0 40px 80px rgba(0,0,0,0.8);
         }
@@ -53,7 +53,7 @@
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
         }
 
-        /* Countdown Grid Tĩnh (Đã bỏ nhún nhảy) */
+        /* Countdown Grid - Cố định (Đã bỏ nhún nhảy) */
         .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 40px 0; }
         .time-box {
             background: rgba(0,0,0,0.4); padding: 35px 10px; border-radius: 35px;
@@ -78,12 +78,12 @@
 
     <div class="weather-ticker">
         <div class="ticker-content" id="weather-ticker">
-            Đang cập nhật dữ liệu khí tượng 63 tỉnh thành Việt Nam...
+            Đang đồng bộ trạm khí tượng thực tế cho 63 tỉnh thành Việt Nam...
         </div>
     </div>
 
     <div class="glass-card">
-        <div style="font-size: 0.7rem; color: #FFD700; margin-bottom: 10px; letter-spacing: 2px;">GIỜ VIỆT NAM (UTC+7)</div>
+        <div style="font-size: 0.75rem; color: #FFD700; margin-bottom: 10px; letter-spacing: 3px; font-weight: 600;">MÚI GIỜ: VIỆT NAM (UTC+7)</div>
         <div id="live-clock" class="live-clock">00:00:00</div>
         <div class="lunar-today">25/12/2025 (Âm lịch)</div>
 
@@ -128,7 +128,7 @@
             const ticker = document.getElementById('weather-ticker');
             let weatherData = "";
             try {
-                // Do tài khoản miễn phí giới hạn request/phút, lấy mẫu ngẫu nhiên 20 tỉnh mỗi lần cập nhật
+                // Lấy mẫu ngẫu nhiên 20 tỉnh mỗi đợt để tối ưu API
                 const sample = locations.sort(() => 0.5 - Math.random()).slice(0, 20);
                 for (let city of sample) {
                     const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.q},VN&units=metric&appid=${apiKey}&lang=vi`);
@@ -142,18 +142,19 @@
                     }
                 }
                 ticker.innerHTML = weatherData + weatherData;
-            } catch (e) { ticker.innerText = "Đang đồng bộ trạm khí tượng..."; }
+            } catch (e) { ticker.innerText = "Đang kết nối lại trạm khí tượng..."; }
         }
 
         function updateTime() {
             const now = new Date();
-            // CHÌA KHÓA: Ghim múi giờ UTC+7 bất kể vị trí thiết bị
+            // XỬ LÝ GHIM GIỜ: Tính toán UTC sau đó ép cộng 7 tiếng (Giờ Hà Nội)
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
             const vnNow = new Date(utc + (3600000 * 7));
             
+            // Đồng hồ live luôn hiển thị giờ VN bất kể vị trí người xem
             document.getElementById('live-clock').innerText = vnNow.toLocaleTimeString('vi-VN') + " - " + vnNow.toLocaleDateString('vi-VN', {weekday: 'long'}).toUpperCase();
 
-            // Đích đến: Giao thừa 2026 tại VN
+            // Mốc Tết Nguyên Đán: 17/02/2026 tại VN
             const target = new Date('2026-02-17T00:00:00+07:00');
             const diff = target - vnNow;
             const timerEl = document.getElementById('countdown');
