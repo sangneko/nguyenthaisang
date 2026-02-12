@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đếm Ngược Tết Bính Ngọ 2026</title>
+    <title>Đếm Ngược Tết Bính Ngọ 2026 (UTC+8)</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&family=Montserrat:wght@400&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,7 +26,6 @@
             position: relative;
         }
 
-        /* Họa tiết nền truyền thống (CSS Pattern) */
         .bg-pattern {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -58,11 +57,10 @@
             50% { transform: translateY(-10px); }
         }
 
-        /* Tiêu đề mạ vàng */
         h1 {
             font-family: 'Dancing Script', cursive;
             font-size: 4.5em;
-            margin: 0 0 20px 0;
+            margin: 0 0 10px 0;
             background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
             -webkit-background-clip: text;
             background-clip: text;
@@ -72,8 +70,16 @@
             background-size: 200% auto;
         }
 
-        @keyframes shine {
-            to { background-position: 200% center; }
+        @keyframes shine { to { background-position: 200% center; } }
+
+        #timezone-badge {
+            font-size: 0.8em;
+            color: #fff;
+            background: rgba(255, 215, 0, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            display: inline-block;
         }
 
         #currentDate {
@@ -83,11 +89,10 @@
             margin-bottom: 40px;
             text-transform: uppercase;
             border-bottom: 1px solid rgba(255,215,0,0.3);
-            display: inline-block;
+            display: block;
             padding-bottom: 10px;
         }
 
-        /* Countdown Grid */
         #countdown {
             display: flex;
             flex-wrap: wrap;
@@ -101,28 +106,7 @@
             border-radius: 15px;
             min-width: 90px;
             border: 1px solid rgba(255, 215, 0, 0.4);
-            position: relative;
-            overflow: hidden;
             transition: transform 0.3s;
-        }
-
-        .time-box:hover {
-            transform: translateY(-5px);
-            border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-        }
-
-        /* Hiệu ứng bóng lóa trên ô thời gian */
-        .time-box::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            transform: rotate(45deg);
-            pointer-events: none;
         }
 
         .time-value {
@@ -144,7 +128,6 @@
             font-weight: bold;
         }
 
-        /* --- Lồng đèn trang trí (CSS Thuần) --- */
         .lantern-container {
             position: absolute;
             top: -20px;
@@ -155,58 +138,28 @@
         .lantern-left { left: 10%; }
         .lantern-right { right: 10%; animation-delay: 1s; }
 
-        .lantern-string {
-            height: 60px;
-            width: 2px;
-            background: #d4af37;
-            margin: 0 auto;
-        }
+        .lantern-string { height: 60px; width: 2px; background: #d4af37; margin: 0 auto; }
         .lantern-body {
-            width: 80px;
-            height: 60px;
+            width: 80px; height: 60px;
             background: radial-gradient(circle, #ff4d4d, #990000);
             border-radius: 20px;
             border: 2px solid #d4af37;
-            position: relative;
             box-shadow: 0 0 20px rgba(255, 77, 77, 0.6);
         }
-        /* Đai lồng đèn */
-        .lantern-body::before, .lantern-body::after {
-            content: '';
-            position: absolute;
-            width: 100%; height: 8px;
-            background: #d4af37;
-            left: 0;
-        }
-        .lantern-body::before { top: 0; border-radius: 15px 15px 0 0; }
-        .lantern-body::after { bottom: 0; border-radius: 0 0 15px 15px; }
 
-        .lantern-tassel {
-            width: 4px; height: 40px;
-            background: #d4af37;
-            margin: 0 auto;
-            position: relative;
-        }
+        .lantern-tassel { width: 4px; height: 40px; background: #d4af37; margin: 0 auto; position: relative; }
         .lantern-tassel::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: -10px;
+            content: ''; position: absolute; bottom: 0; left: -10px;
             width: 24px; height: 30px;
             background: repeating-linear-gradient(90deg, #d4af37, #d4af37 2px, transparent 2px, transparent 4px);
         }
 
-        @keyframes swing {
-            from { transform: rotate(-5deg); }
-            to { transform: rotate(5deg); }
-        }
+        @keyframes swing { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
 
-        /* --- Hoa rơi (Cải tiến hình dáng) --- */
         .flower {
             position: absolute;
             top: -20px;
-            width: 20px;
-            height: 20px;
-            /* Tạo hình bông hoa 5 cánh bằng clip-path */
+            width: 20px; height: 20px;
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
             opacity: 0.8;
             pointer-events: none;
@@ -214,9 +167,7 @@
             animation: fall linear infinite;
         }
 
-        /* Màu hoa đào */
         .flower.peach { background: radial-gradient(circle, #ffb7b2, #ff9a9e); }
-        /* Màu hoa mai */
         .flower.ochna { background: radial-gradient(circle, #fff200, #ffcc00); }
 
         @keyframes fall {
@@ -228,7 +179,6 @@
             h1 { font-size: 2.8em; }
             .time-box { min-width: 70px; padding: 15px; }
             .time-value { font-size: 2.2em; }
-            .lantern-container { transform: scale(0.7); top: -10px; }
         }
     </style>
 </head>
@@ -249,81 +199,77 @@
 
     <div class="container">
         <h1>Tết Bính Ngọ 2026</h1>
+        <div id="timezone-badge">Múi giờ: UTC +8</div>
         <div id="currentDate"></div>
         <div id="countdown"></div>
     </div>
 
     <script>
-        function updateTime() {
+        function getUTC8Time() {
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            // Viết hoa chữ cái đầu cho thứ ngày
-            let dateStr = now.toLocaleDateString('vi-VN', options);
-            dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+            // Lấy thời gian UTC sau đó cộng thêm 8 tiếng (8 * 60 * 60 * 1000 ms)
+            const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+            return new Date(utcTime + (3600000 * 8));
+        }
+
+        function updateTime() {
+            const nowUTC8 = getUTC8Time();
             
+            // Định dạng hiển thị ngày giờ hiện tại theo UTC+8
+            const options = { 
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', 
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                timeZone: 'Etc/GMT-8' // Đảm bảo hiển thị đúng text UTC+8
+            };
+            
+            let dateStr = nowUTC8.toLocaleDateString('vi-VN', options);
+            dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
             document.getElementById('currentDate').innerHTML = dateStr;
 
-            // Ngày mùng 1 Tết Âm Lịch 2026 (17/02/2026 Dương lịch)
-            const lunarNewYear = new Date('2026-02-17T00:00:00');
-            const timeDifference = lunarNewYear - now;
+            // Mốc Mùng 1 Tết Bính Ngọ 2026: 17/02/2026 00:00:00 (UTC+8)
+            const targetDate = new Date('2026-02-17T00:00:00+08:00');
+            const diff = targetDate - nowUTC8;
+
             const countdownElement = document.getElementById('countdown');
 
-            if (timeDifference > 0) {
-                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+            if (diff > 0) {
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
 
-                const formatNum = (num) => num < 10 ? `0${num}` : num;
+                const format = (n) => n < 10 ? `0${n}` : n;
 
                 countdownElement.innerHTML = `
-                    <div class="time-box"><span class="time-value">${days}</span><span class="time-label">Ngày</span></div>
-                    <div class="time-box"><span class="time-value">${formatNum(hours)}</span><span class="time-label">Giờ</span></div>
-                    <div class="time-box"><span class="time-value">${formatNum(minutes)}</span><span class="time-label">Phút</span></div>
-                    <div class="time-box"><span class="time-value">${formatNum(seconds)}</span><span class="time-label">Giây</span></div>
+                    <div class="time-box"><span class="time-value">${d}</span><span class="time-label">Ngày</span></div>
+                    <div class="time-box"><span class="time-value">${format(h)}</span><span class="time-label">Giờ</span></div>
+                    <div class="time-box"><span class="time-value">${format(m)}</span><span class="time-label">Phút</span></div>
+                    <div class="time-box"><span class="time-value">${format(s)}</span><span class="time-label">Giây</span></div>
                 `;
             } else {
                 countdownElement.innerHTML = `
                     <div style='font-family: "Dancing Script"; font-size: 3em; color: #FFD700; text-shadow: 0 0 20px #ff0000;'>
                         🎆 Chúc Mừng Năm Mới! 🎆<br>
-                        <span style="font-size: 0.5em; font-family: Montserrat">Vạn Sự Như Ý - An Khang Thịnh Vượng</span>
+                        <span style="font-size: 0.5em; font-family: Montserrat">Bính Ngọ 2026 - An Khang Thịnh Vượng</span>
                     </div>
                 `;
-                // Xóa lồng đèn và container khi đến giờ
-                document.querySelector('.lantern-left').style.display = 'none';
-                document.querySelector('.lantern-right').style.display = 'none';
+                document.querySelectorAll('.lantern-container').forEach(el => el.style.display = 'none');
             }
         }
 
         function createFlowers() {
             const flower = document.createElement('div');
-            flower.classList.add('flower');
-            
-            // Random loại hoa (Mai hoặc Đào)
-            const type = Math.random() > 0.5 ? 'peach' : 'ochna';
-            flower.classList.add(type);
-
-            // Kích thước ngẫu nhiên
-            const size = Math.random() * 15 + 15 + 'px'; // To hơn một chút
-            flower.style.width = size;
-            flower.style.height = size;
-            
-            // Vị trí xuất phát
+            flower.classList.add('flower', Math.random() > 0.5 ? 'peach' : 'ochna');
+            const size = Math.random() * 15 + 15 + 'px';
+            flower.style.width = flower.style.height = size;
             flower.style.left = Math.random() * 100 + 'vw';
-            
-            // Thời gian rơi và lắc lư
-            const duration = Math.random() * 5 + 5 + 's';
-            flower.style.animationDuration = duration;
-            
+            flower.style.animationDuration = Math.random() * 5 + 5 + 's';
             document.body.appendChild(flower);
-
-            setTimeout(() => {
-                flower.remove();
-            }, 10000);
+            setTimeout(() => flower.remove(), 10000);
         }
 
         setInterval(updateTime, 1000);
-        setInterval(createFlowers, 400); // Mật độ hoa vừa phải
+        setInterval(createFlowers, 400);
         updateTime();
     </script>
 </body>
